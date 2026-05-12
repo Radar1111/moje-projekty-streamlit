@@ -49,7 +49,7 @@ def sprawdz_i_dalej(klucz):
 # PANEL BOCZNY (SIDEBAR)
 with st.sidebar:
     st.header("Panel sterowania")
-    wybrany_numer = st.selectbox("Który rozdział?", range(1, 2)) 
+    wybrany_numer = st.selectbox("Który rozdział?", range(1, 3)) 
     wybrany_tryb = st.radio("Czego się uczysz:", ["Polski na Angielski", "Angielski na Polski"])
 
     # NAPRAWIONE MAPOWANIE JĘZYKÓW
