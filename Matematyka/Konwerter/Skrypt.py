@@ -122,4 +122,4 @@ st.divider()
 st.caption("Najcierpliwszy portal do matematyki - klasa 4")
 st.caption("Created by Radar | Software Development")
 st.caption("Grafika: Menorek | Youtuber")
-st.caption("Tester: Bat0nik"
+st.caption("Tester: Bat0nik")
