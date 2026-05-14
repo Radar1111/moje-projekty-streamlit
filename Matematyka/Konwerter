@@ -1,0 +1,125 @@
+import streamlit as st
+import random
+
+st.set_page_config(page_title="Szkolny Konwerter", page_icon="🎓")
+
+# DANE
+data = {
+    "Odległość 📏": {
+        "Metry (m)": 1, "Kilometry (km)": 1000, "Decymetry (dm)": 0.1,
+        "Centymetry (cm)": 0.01, "Milimetry (mm)": 0.001
+    },
+    "Masa ⚖️": {
+        "Kilogramy (kg)": 1, "Dekagramy (dag)": 0.01, "Gramy (g)": 0.001, "Tony (t)": 1000
+    },
+    "Czas ⏰": {
+        "Godzina": 1, "Minuta (min)": 1 / 60, "Sekunda (s)": 1 / 3600, "Doba": 24
+    }
+}
+
+# WSKAZÓWKI
+wskazowki = {
+    "Odległość 📏": "Pamiętaj: 1 km = 1000 m, a 1 cm = 10 mm. Przesuwaj przecinek w prawo przy mnożeniu!",
+    "Masa ⚖️": "Ważne: 1 kg to 100 dag, a 1 dag to 10 g. Tona to aż 1000 kilogramów!",
+    "Czas ⏰": "Uwaga! Czas przeliczamy przez 60 (minuty, sekundy), a nie przez 100!"
+}
+
+st.title("🎓 Super Konwerter dla Klasy 4")
+
+# SEKCJA KONWERTERA
+kategoria = st.selectbox("Wybierz co chcesz zmierzyć:", list(data.keys()))
+
+col1, col2 = st.columns(2)
+with col1:
+    wartosc = st.number_input("Wpisz liczbę:", value=1.0)
+    jednostki = list(data[kategoria].keys())
+    z_jednostki = st.selectbox("Z:", jednostki)
+with col2:
+    na_jednostke = st.selectbox("Na:", jednostki)
+
+bazowa = wartosc * data[kategoria][z_jednostki]
+wynik = bazowa / data[kategoria][na_jednostke]
+
+st.success(f"Wynik: **{wynik:.4f} {na_jednostke}**")
+
+# Wyświetlanie wskazówki
+st.info(f"💡 **Wskazówka:** {wskazowki[kategoria]}")
+
+st.divider()
+
+# PROSTY TEST
+st.subheader("🧠 Szybki Quiz: Sprawdź się!")
+
+# Inicjalizacja stanu quizu, żeby pytanie nie zmieniało się przy każdym kliknięciu
+if 'pytanie' not in st.session_state:
+    st.session_state.pytanie = "Ile metrów ma 1 kilometr?"
+    st.session_state.poprawna = "1000"
+
+st.write(st.session_state.pytanie)
+odpowiedz = st.text_input("Twoja odpowiedź:")
+
+if st.button("Sprawdź!"):
+    if odpowiedz == st.session_state.poprawna:
+        st.balloons()
+        st.success("Brawo! Świetnie Ci idzie! 🎉")
+    else:
+        st.error("Spróbuj jeszcze raz! Podpowiedź: kilo- oznacza tysiąc.")
+
+# Przycisk do losowania nowego pytania
+if st.button("Nowe pytanie"):
+    pytania = [
+        ("Ile centymetrów ma 1 metr?", "100"),
+        ("Ile milimetrów ma 1 centymetr?", "10"),
+        ("Ile metrów ma 1 kilometr?", "1000"),
+        ("Ile minut ma jedna godzina?", "60"),
+        ("Ile godzin ma doba?", "24"),
+        ("Ile minut ma kwadrans?", "15"),
+        ("Ile gramów ma 1 dekagram?", "10"),
+        ("Ile dekagramów ma 1 kilogram?", "100"),
+        ("Ile kilogramów ma 1 tona?", "1000")
+    ]
+    p, o = random.choice(pytania)
+    st.session_state.pytanie = p
+    st.session_state.poprawna = o
+    st.rerun()
+
+st.divider()
+
+# ŚCIĄGA
+with st.expander("📝 Otwórz ściągę z jednostkami (do zeszytu!)"):
+    st.write("Warto zapamiętać te zasady. Możesz je przepisać do zeszytu!")
+
+    tab1, tab2, tab3 = st.tabs(["📏 Odległość", "⚖️ Masa", "⏰ Czas"])
+
+    with tab1:
+        st.markdown("""
+        - **1 km** = 1000 m
+        - **1 m** = 100 cm = 10 dm
+        - **1 dm** = 10 cm
+        - **1 cm** = 10 mm
+        """)
+
+    with tab2:
+        st.markdown("""
+        - **1 tona (t)** = 1000 kg
+        - **1 kg** = 100 dag = 1000 g
+        - **1 dag** = 10 g
+        - **1 g** = 1000 mg
+        """)
+
+    with tab3:
+        st.markdown("""
+        - **1 doba** = 24 godziny
+        - **1 godzina** = 60 minut
+        - **1 minuta** = 60 sekund
+        - **Kwadrans** = 15 minut
+        """)
+
+
+
+# STOPKA 
+st.divider()
+st.caption("Najcierpliwszy portal do matematyki - klasa 4")
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik"
