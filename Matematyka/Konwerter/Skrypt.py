@@ -3,17 +3,29 @@ import random
 
 st.set_page_config(page_title="Szkolny Konwerter", page_icon="🎓")
 
-# DANE
+# DANE - Wszystkie jednostki odniesione do wspólnej bazy wewnątrz kategorii
+# Odległość: baza to Milimetry (mm)
+# Masa: baza to Gramy (g)
+# Czas: baza to Sekundy (s)
 data = {
     "Odległość 📏": {
-        "Metry (m)": 1, "Kilometry (km)": 1000, "Decymetry (dm)": 0.1,
-        "Centymetry (cm)": 0.01, "Milimetry (mm)": 0.001
+        "Kilometry (km)": 1000000,
+        "Metry (m)": 1000,
+        "Decymetry (dm)": 100,
+        "Centymetry (cm)": 10,
+        "Milimetry (mm)": 1
     },
     "Masa ⚖️": {
-        "Kilogramy (kg)": 1, "Dekagramy (dag)": 0.01, "Gramy (g)": 0.001, "Tony (t)": 1000
+        "Tony (t)": 1000000,
+        "Kilogramy (kg)": 1000,
+        "Dekagramy (dag)": 10,
+        "Gramy (g)": 1
     },
     "Czas ⏰": {
-        "Godzina": 1, "Minuta (min)": 1 / 60, "Sekunda (s)": 1 / 3600, "Doba": 24
+        "Doba": 86400,
+        "Godzina": 3600,
+        "Minuta (min)": 60,
+        "Sekunda (s)": 1
     }
 }
 
@@ -31,16 +43,26 @@ kategoria = st.selectbox("Wybierz co chcesz zmierzyć:", list(data.keys()))
 
 col1, col2 = st.columns(2)
 with col1:
-    wartosc = st.number_input("Wpisz liczbę:", value=1.0)
+    # Format "%.4f" zapobiega ucinaniu widoku przez Streamlit i blokuje notację naukową (E)
+    wartosc = st.number_input("Wpisz liczbę:", value=1.0, min_value=0.0, format="%.4f", step=0.0001)
     jednostki = list(data[kategoria].keys())
     z_jednostki = st.selectbox("Z:", jednostki)
 with col2:
     na_jednostke = st.selectbox("Na:", jednostki)
 
+# Logika konwersji
 bazowa = wartosc * data[kategoria][z_jednostki]
 wynik = bazowa / data[kategoria][na_jednostke]
 
-st.success(f"Wynik: **{wynik:.4f} {na_jednostke}**")
+# Bezpieczne formatowanie
+wartosc_formatowana = f"{wartosc:.10f}".rstrip('0').rstrip('.') if '.' in f"{wartosc:.10f}" else f"{wartosc}"
+wynik_formatowany = f"{wynik:.10f}".rstrip('0').rstrip('.') if '.' in f"{wynik:.10f}" else f"{wynik}"
+
+# Zabezpieczenie na wypadek, gdyby po usunięciu zer nic nie zostało (np. dla liczby 0)
+if wartosc_formatowana == "": wartosc_formatowana = "0"
+if wynik_formatowany == "": wynik_formatowany = "0"
+
+st.success(f"Wynik: **{wartosc_formatowana} {z_jednostki}** to dokładnie **{wynik_formatowany} {na_jednostke}**")
 
 # Wyświetlanie wskazówki
 st.info(f"💡 **Wskazówka:** {wskazowki[kategoria]}")
@@ -50,23 +72,32 @@ st.divider()
 # PROSTY TEST
 st.subheader("🧠 Szybki Quiz: Sprawdź się!")
 
-# Inicjalizacja stanu quizu, żeby pytanie nie zmieniało się przy każdym kliknięciu
 if 'pytanie' not in st.session_state:
     st.session_state.pytanie = "Ile metrów ma 1 kilometr?"
     st.session_state.poprawna = "1000"
+    st.session_state.odpowiedz_klucz = 0  # Do czyszczenia pola tekstowego
 
-st.write(st.session_state.pytanie)
-odpowiedz = st.text_input("Twoja odpowiedź:")
+st.write(f"**Pytanie:** {st.session_state.pytanie}")
 
-if st.button("Sprawdź!"):
-    if odpowiedz == st.session_state.poprawna:
+# Używamy klucza dynamicznego, 
+odpowiedz = st.text_input("Twoja odpowiedź (wpisz samą liczbę):", key=f"quiz_ans_{st.session_state.odpowiedz_klucz}")
+
+col_btn1, col_btn2 = st.columns(2)
+
+with col_btn1:
+    sprawdz = st.button("Sprawdź!")
+with col_btn2:
+    nowe_pytanie = st.button("Nowe pytanie 🔁")
+
+if sprawdz:
+    # .strip() usuwa przypadkowe spacje wpisane przez dziecko na klawiaturze
+    if odpowiedz.strip() == st.session_state.poprawna:
         st.balloons()
         st.success("Brawo! Świetnie Ci idzie! 🎉")
     else:
-        st.error("Spróbuj jeszcze raz! Podpowiedź: kilo- oznacza tysiąc.")
+        st.error("Spróbuj jeszcze raz! Podpowiedź: przeczytaj uważnie ściągawkę poniżej.")
 
-# Przycisk do losowania nowego pytania
-if st.button("Nowe pytanie"):
+if nowe_pytanie:
     pytania = [
         ("Ile centymetrów ma 1 metr?", "100"),
         ("Ile milimetrów ma 1 centymetr?", "10"),
@@ -79,8 +110,13 @@ if st.button("Nowe pytanie"):
         ("Ile kilogramów ma 1 tona?", "1000")
     ]
     p, o = random.choice(pytania)
+    # Zapobiegamy wylosowaniu tego samego pytania dwa razy z rzędu
+    while p == st.session_state.pytanie:
+        p, o = random.choice(pytania)
+
     st.session_state.pytanie = p
     st.session_state.poprawna = o
+    st.session_state.odpowiedz_klucz += 1  # Zmiana klucza automatycznie czyści pole tekstowe
     st.rerun()
 
 st.divider()
@@ -114,8 +150,6 @@ with st.expander("📝 Otwórz ściągę z jednostkami (do zeszytu!)"):
         - **1 minuta** = 60 sekund
         - **Kwadrans** = 15 minut
         """)
-
-
 
 # STOPKA
 st.divider()
