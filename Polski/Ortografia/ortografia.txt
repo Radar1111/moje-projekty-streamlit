@@ -1,0 +1,136 @@
+latwy,góra,Wysoka g...ra
+latwy,chleb,Smaczny ...leb
+latwy,rzeka,Nad brzegiem ...eki
+latwy,góra,Wędrowiec wspiął się na wysoką g...rę
+latwy,pszczoła,Na kwiatku usiadła pracowita p...oła
+latwy,żaba,W stawie głośno zarechotała zielona ...aba
+latwy,chleb,Na śniadanie zjadłem świeży ...leb
+latwy,ucho,Słoń ma bardzo duże u...o
+latwy,ogród,Ogr...d warzywny
+latwy,córka,Piękna c...rka
+latwy,wózek,W...zek dziecięcy
+latwy,ósemka,Okrągła ...semka
+latwy,król,Wielki kr...l
+latwy,pióro,Pi...ro ptaka
+latwy,róża,Kolczasta r...ża
+latwy,miód,Słodki mi...d
+latwy,jaskółka,Zwinna jask...łka
+latwy,uśmiech,Szeroki ...śmiech
+latwy,kukułka,Ptak k...k...łka
+latwy,zasuwka,Zamkowa zas...wka
+latwy,budowa,B...dowa budynku
+latwy,maluje,Malarz mal...je
+latwy,lustro,Wielkie l...stro
+latwy,kupować,K...pować auto
+latwy,papuga,Kolorowa pap...ga
+latwy,rysunek,Rys...nek techniczny
+latwy,arbuz,Soczysty arb...z
+latwy,rzeka,Żółta ...eka
+latwy,orzech,Laskowy o...ech
+latwy,grzyb,Jadalny g...yb
+latwy,krzak,Gęsty k...ak
+łatwy,morze,Mo...e Bałtyckie
+latwy,rzodkiewka,Piękna ...odkiewka
+latwy,talerz,Płytki tale...
+latwy,rząd,Mniejszościowy ...ąd
+latwy,brzoza,Biała b...oza
+latwy,drzewo,Wysokie d...ewo
+latwy,żaba,Zielona ...aba
+latwy,żółw,...ółw ze skorupą
+latwy,żarówka,Świeci ...arówka
+latwy,koleżanka,Serdeczna kole...anka
+latwy,wieża,Krzywa wie...a
+latwy,dyżur,Ostry dy...ur
+latwy,bagaż,Podręczny baga...
+latwy,młodzież,Zaradna młodzie...
+latwy,żyrafa,...yrafa żyje w Afryce
+latwy,mucha,Natrętna mu...a
+latwy,ucho,U...o od śledzia
+latwy,chmura,Biała ...mura
+latwy,orzech,Twardy orze...
+latwy,herbata,Mocna ...erbata
+latwy,hak,Kapitan ...ak
+latwy,hałas,Uliczny ...ałas
+latwy,huśtawka,...ustawka na placu zabaw
+latwy,rzodkiewka,Czerwona ...odkiewka
+latwy,hokej,...okej na lodzie
+sredni,kałuża,Głęboka ka...u...a
+sredni,kszyk,Nad błotem przeleciał ptak o nazwie k...yk
+sredni,huk,Nagle rozległ się potężny ...uk
+sredni,wyjątek,To jest bardzo rzadki wyj...tek
+sredni,uśmiech,Na jej twarzy pojawił się szeroki uśmie...
+sredni,kałuża,Po deszczu na drodze została wielka kału...a
+sredni,żółw,Powoli po trawie dreptał mały ż...łw
+sredni,szczegół,Znaczący szczeg...ł
+sredni,próchnieć,Zepsute drzewo zacznie pr...chnieć
+sredni,włóczęga,Pod sklepem stał wł...częga
+sredni,wiewiórka,W parku była wiewi...rka
+sredni,płótno,Białe pł...tno
+sredni,przepiórka,Na polu była przepi...rka
+sredni,skuwka,Sk...wka od długopisu
+sredni,dopóki,Dop...ki jesteśmy
+sredni,gżegżółka,Kukułka to inaczej g...eg...ółka
+sredni,rzeżucha,...eżucha wyrosła w doniczce
+sredni,chrząszcz,Ch...ąszcz to owad
+sredni,jarzębina,Ja...ębina na drzewie
+sredni,spostrzeżenie,Trafne spost...eżenie
+sredni,pszczoła,W ulu mieszka p...czoła
+sredni,kształt,To ma okrągły k...tałt
+sredni,bukszpan,Buk...pan to roślina
+sredni,mżawka,Pana m...awka
+sredni,abażur,Lampa ma aba...ur
+sredni,błahy,Bła...y problem
+sredni,czyha,Tam czy...a tygrys
+sredni,harmider,Ale tu ...armider
+sredni,wierzba,Wie...ba to drzewo
+sredni,hipopotam,...ipopotam leży w wodzie
+sredni,horyzont,Daleko tam widać ...oryzont
+sredni,druh,Mój wierny dru...
+sredni,bohater,Super bo...ater
+sredni,hymn,...ymn państwowy
+sredni,wzdłuż,Wzdł...ż rzeki
+sredni,wkrótce,Wkr...tce idziemy
+sredni,nieprzyjaciel,Niep...yjaciel
+sredni,północ,24 to inaczej p...łnoc
+sredni,południe,Naprzeciw północy jest poł...dnie
+sredni,zewnątrz,Na zewnąt... pomieszczenia
+sredni,wewnątrz,Wewnąt... pomieszczenia
+sredni,kątomierz,Weź kątomie... na matematykę
+sredni,nietoperz,Nietope... lata w nocy
+sredni,porzeczka,Po...eczka jest pyszna
+sredni,stalówka,Stal...wka to część pióra wiecznego
+sredni,nóżka,Nó...ka od stołka
+sredni,kożuch,Zimowy koż...ch
+sredni,hoży,Urodziwy to inaczej ho...y
+sredni,chyży,Nie bądź taki chy...y
+sredni,prószy,Śnieg pr...szy
+trudny,gżegżółka,Kuka g...eg...ółka
+trudny,sczesnąć,Musisz to s...esnąć
+trudny,rząd,W kinie zajęliśmy pierwszy ...ąd
+trudny,wszechobecny,Wsze...obecny zapach kwiatów
+trudny,półmrok,Tajemniczy p...łmrok
+trudny,wsuwka,Moje włosy zdobi ws...wka
+trudny,pszczyna,P...czyna to miasto w Polsce
+trudny,okuniew,...kuniew to miasto w Polsce
+trudny,hejnał,...ejnał z wieży Mariackiej
+trudny,hołubić,Trzeba ...ołubić Piotrka
+trudny,niechlujny,Rysunek jest niechl...jny
+trudny,hardy,Ostatnio jesteś bardzo ...ardy
+trudny,wataha,Wata...a wilków
+trudny,druh,Mój wierny dru...
+trudny,błahy,Bła...y powód
+trudny,czyhać,Czy...ać na okazję
+trudny,hierarchia,Hierar...ia rządowa
+trudny,małżeństwo,Mał...eństwo
+trudny,arcyksiążę,Dziś przybywa arcyksią...ę
+trudny,wahadło,W zegarze bije wa...adło
+trudny,wiraż,Wira... drogi
+trudny,różańcowy,Kółko r...żańcowe
+trudny,wziąć,Wzi...ć nogi za pas
+trudny,kompendium,Kompendi...m wiedzy
+trudny,temperament,T...peram...nt to fundament naszej osobowości
+trudny,konstytucja,Konstyt...cja 3 Maja
+trudny,abstrakcja,Ten obraz to czysta a...strakcja
+trudny,hipokryzja,Dwulicowość to inaczej ...ipokryzja
+trudny,zhardzieć,Musimy z...ardzieć żeby przetrwać
+trudny,egzemplarz,Unikatowy egzempla..
