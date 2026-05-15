@@ -8,7 +8,7 @@ st.set_page_config(
 )
 
 
-# --- WCZYTYWANIE BAZY Z PLIKU TXT (ZABEZPIECZONE POD STREAMLIT CLOUD) ---
+# WCZYTYWANIE BAZY Z PLIKU TXT
 def wczytaj_zadania(nazwa_pliku):
     zadania = {"latwy": [], "sredni": [], "trudny": []}
 
@@ -54,11 +54,11 @@ if "gra_uruchomiona" not in st.session_state:
 
 st.title("🏆 Mistrz Ortografii")
 
-# --- MENU GŁÓWNE ---
+# MENU GŁÓWNE 
 if not st.session_state.gra_uruchomiona:
     st.markdown("### Przygotuj się do nauki!")
 
-    # Szuka pliku bezpośrednio obok Skrypt.py w strukturze Polski/Ortografia/
+    # Szuka pliku 
     baza = wczytaj_zadania("ortografia.txt")
 
     if baza:
@@ -88,7 +88,7 @@ if not st.session_state.gra_uruchomiona:
             else:
                 st.error(f"Poziom '{poziom}' jest pusty w pliku txt.")
 
-# --- EKRAN GRY ---
+# EKRAN GRY 
 else:
     pytania = st.session_state.pytania
     idx = st.session_state.numer_pytania
