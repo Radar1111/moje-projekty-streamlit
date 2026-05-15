@@ -1,7 +1,7 @@
 latwy,góra,Wysoka g...ra
 latwy,chleb,Smaczny ...leb
-latwy,rzeka,Nad brzegiem ...eki
-latwy,góra,Wędrowiec wspiął się na wysoką g...rę
+latwy,rzeka,Płynie ...eka
+latwy,góra,Wysoką g...ra
 latwy,pszczoła,Na kwiatku usiadła pracowita p...oła
 latwy,żaba,W stawie głośno zarechotała zielona ...aba
 latwy,chleb,Na śniadanie zjadłem świeży ...leb
@@ -91,7 +91,7 @@ sredni,hymn,...ymn państwowy
 sredni,wzdłuż,Wzdł...ż rzeki
 sredni,wkrótce,Wkr...tce idziemy
 sredni,nieprzyjaciel,Niep...yjaciel
-sredni,północ,24 to inaczej p...łnoc
+sredni,północ,24 godzina to inaczej p...łnoc
 sredni,południe,Naprzeciw północy jest poł...dnie
 sredni,zewnątrz,Na zewnąt... pomieszczenia
 sredni,wewnątrz,Wewnąt... pomieszczenia
@@ -125,7 +125,7 @@ trudny,małżeństwo,Mał...eństwo
 trudny,arcyksiążę,Dziś przybywa arcyksią...ę
 trudny,wahadło,W zegarze bije wa...adło
 trudny,wiraż,Wira... drogi
-trudny,różańcowy,Kółko r...żańcowe
+trudny,różańcowe,Kółko r...żańcowe
 trudny,wziąć,Wzi...ć nogi za pas
 trudny,kompendium,Kompendi...m wiedzy
 trudny,temperament,T...peram...nt to fundament naszej osobowości
