@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import random
+import os
 
 st.set_page_config(page_title="Master Jezykow", layout="wide")
 
@@ -12,37 +13,41 @@ SPECIAL_CHARS = {
     "Angielski": []
 }
 
+# --- TUTAJ WKLEJ SWOJE LINKI Z PRZYCISKU RAW NA HUGGING FACE ---
+URL_SLOWA = "https://huggingface.co/datasets/Radar1111/baza-jezykowa/raw/main/jezyki_slowa.csv"
+URL_ZDANIA = "https://huggingface.co"
 
-@st.cache_data
+@st.cache_data(ttl=3600)
 def load_words():
     try:
-        # Najpierw czytamy tylko nagłówki, żeby znać oryginalne kolumny
-        naglowki = list(pd.read_csv("jezyki_slowa.csv", nrows=0).columns)
-
-        # Wczytujemy dane, ignorując nadmiarowe przecinki na końcach linii
+        token = st.secrets.get("HF_TOKEN") if "HF_TOKEN" in st.secrets else os.getenv("HF_TOKEN")
+        naglowki_auth = {"Authorization": f"Bearer {token}"} if token else None
+        
+        naglowki = list(pd.read_csv(URL_SLOWA, storage_options=naglowki_auth, nrows=0).columns)
         dane = pd.read_csv(
-            "jezyki_slowa.csv",
-            sep=',',
-            encoding='utf-8-sig',
+            URL_SLOWA, 
+            sep=',', 
+            encoding='utf-8-sig', 
+            storage_options=naglowki_auth,
             usecols=range(len(naglowki))
         )
         dane.columns = dane.columns.str.strip()
         return dane
     except Exception as e:
-        st.error(f"Problem z plikiem slowek: {e}")
-        return pd.DataFrame(
-            columns=['rozdzial', 'polski', 'angielsk', 'niemiecki', 'hiszpanski', 'wloski', 'francuski'])
+        st.error(f"Problem z pobraniem bazy z Hugging Face: {e}")
+        return pd.DataFrame(columns=['rozdzial', 'polski', 'angielsk', 'niemiecki', 'hiszpanski', 'wloski', 'francuski'])
 
-
-@st.cache_data
+@st.cache_data(ttl=3600)
 def load_sentences():
     try:
-        dane = pd.read_csv("jezyki_zdania.csv", sep=',', encoding='utf-8-sig')
+        token = st.secrets.get("HF_TOKEN") if "HF_TOKEN" in st.secrets else os.getenv("HF_TOKEN")
+        naglowki_auth = {"Authorization": f"Bearer {token}"} if token else None
+        
+        dane = pd.read_csv(URL_ZDANIA, sep=',', encoding='utf-8-sig', storage_options=naglowki_auth)
         dane.columns = dane.columns.str.strip()
         return dane
     except Exception:
         return None
-
 
 baza_slowa = load_words()
 baza_zdania = load_sentences()
@@ -74,10 +79,9 @@ with tab_slowka:
     if baza_slowa.empty:
         st.warning("Tabela jest pusta. Sprawdz komunikat bledu powyzej.")
     else:
-        # Konwersja kolumny na liczby, ignorując ewentualne teksty/błędy w pliku
         baza_slowa['rozdzial'] = pd.to_numeric(baza_slowa['rozdzial'], errors='coerce')
         baza_slowa = baza_slowa.dropna(subset=['rozdzial'])
-
+        
         min_r = int(baza_slowa['rozdzial'].min())
         max_r = int(baza_slowa['rozdzial'].max())
 
