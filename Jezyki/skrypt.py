@@ -13,7 +13,6 @@ SPECIAL_CHARS = {
     "Angielski": []
 }
 
-# --- TUTAJ WKLEJ SWOJE LINKI Z PRZYCISKU RAW NA HUGGING FACE ---
 URL_SLOWA = "https://huggingface.co/datasets/Radar1111/baza-jezykowa/raw/main/jezyki_slowa.csv"
 URL_ZDANIA = "https://huggingface.co"
 
@@ -92,8 +91,13 @@ with tab_slowka:
         dane_roz = baza_slowa[baza_slowa['rozdzial'] == nr_roz]
         tryb_s = st.radio("Wybierz tryb pracy:", ["Nauka", "Quiz"], horizontal=True, key="mode_s")
 
+        kolumna_wymowa = f"{kolumna_jezyk}_wym"
+
         if tryb_s == "Nauka":
-            st.table(dane_roz[['polski', kolumna_jezyk]])
+            if kolumna_wymowa in dane_roz.columns:
+                st.table(dane_roz[['polski', kolumna_jezyk, kolumna_wymowa]])
+            else:
+                st.table(dane_roz[['polski', kolumna_jezyk]])
         else:
             if st.session_state.get('last_id') != nr_roz:
                 st.session_state.slowo_id = random.choice(dane_roz.index)
@@ -102,6 +106,10 @@ with tab_slowka:
 
             slowo_pl = baza_slowa.loc[st.session_state.slowo_id, 'polski']
             poprawna = str(baza_slowa.loc[st.session_state.slowo_id, kolumna_jezyk])
+            
+            wymowa_txt = ""
+            if kolumna_wymowa in baza_slowa.columns:
+                wymowa_txt = str(baza_slowa.loc[st.session_state.slowo_id, kolumna_wymowa])
 
             with st.container(border=True):
                 st.subheader(f"Jak przetlumaczysz: {slowo_pl}?")
@@ -124,7 +132,11 @@ with tab_slowka:
                 if c1.button("Sprawdz", use_container_width=True):
                     st.session_state.total += 1
                     if user_ans.lower().strip() == poprawna.lower().strip():
-                        st.success(f"Prawidlowo! Wynik: {poprawna}")
+                        komunikat = f"Prawidlowo! Wynik: {poprawna}"
+                        if wymowa_txt and wymowa_txt.lower() != 'nan':
+                            komunikat += f" (Wymowa: [{wymowa_txt}])"
+                        st.success(komunikat)
+                        
                         st.session_state.score += 1
                         st.session_state.slowo_id = random.choice(dane_roz.index)
                         st.session_state.input_val = ""
