@@ -47,6 +47,7 @@ if tryb == "Działania (+/-)":
 
             if round(wynik_user, 1) == poprawny:
                 st.success("Brawo! Poprawny wynik!")
+                st.balloons()
             else:
                 st.error(f"Prawie! Poprawny wynik to {poprawny}. Spróbuj jeszcze raz")
                 st.info("Wskazówka: Podpisz przecinek pod przecinkiem!")
@@ -81,6 +82,7 @@ elif tryb == "Porównywanie (< = >)":
         if wybór_czysty in ["<", "=", ">"]:
             if wybór_czysty == poprawny_znak:
                 st.success("Świetnie! Znak jest poprawny!!")
+                st.balloons()
             else:
                 st.error(f"Nie, poprawny znak to : {poprawny_znak}")
         else:
@@ -123,6 +125,7 @@ elif tryb == "Zamiana ułamków":
             wynik_user = float(odp_z.replace(',', '.').strip())
             if wynik_user == poprawny_dz:
                 st.success("Doskonale! Umiesz zamieniać ułamki!")
+                st.balloons()
             else:
                 st.error(f"Błąd. Poprawny zapis to {poprawny_dz}")
         except ValueError:
