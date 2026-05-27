@@ -144,43 +144,66 @@ elif strona == "Quiz wiedzy":
             }
         ]
 
+    # Inicjalizacja stanu sprawdzenia quizu
+    if 'quiz_sprawdzony' not in st.session_state:
+        st.session_state.quiz_sprawdzony = False
+    if 'zapisane_odpowiedzi' not in st.session_state:
+        st.session_state.zapisane_odpowiedzi = {}
+
     # Formularz wyświetlający quiz
     with st.form("formularz_quizu"):
         odpowiedzi_uzytkownika = {}
         for p in st.session_state.baza_pytan:
-            st.markdown(f"##### Pytanie {p['id']}: {p['pytanie']}")
-            # Dodano index=None, żeby domyślnie żadna odpowiedź nie była zaznaczona
-            odpowiedzi_uzytkownika[p['id']] = st.radio(
+            # Wymuszamy unikalny i bezpieczny klucz tekstowy
+            klucz_pytania = str(p['id'])
+
+            st.markdown(f"##### Pytanie {klucz_pytania}: {p['pytanie']}")
+            odpowiedzi_uzytkownika[klucz_pytania] = st.radio(
                 "Wybierz odpowiedź:",
                 p['opcje'],
-                key=f"pyt_{p['id']}",
+                key=f"pyt_{klucz_pytania}",
                 index=None
             )
             st.write("")
 
         przycisk_sprawdz = st.form_submit_button("Sprawdź odpowiedzi")
 
-    # Logika sprawdzania po kliknięciu przycisku
+    # Logika po kliknięciu przycisku
     if przycisk_sprawdz:
+        # Sprawdzanie czy użytkownik pominął jakieś pytania
+        puste_pytania = [k for k, v in odpowiedzi_uzytkownika.items() if v is None]
+
+        if puste_pytania:
+            st.warning(
+                f"Proszę odpowiedzieć na wszystkie pytania! Brak odpowiedzi na pytania nr: {', '.join(puste_pytania)}")
+            st.session_state.quiz_sprawdzony = False
+        else:
+            st.session_state.quiz_sprawdzony = True
+            st.session_state.zapisane_odpowiedzi = odpowiedzi_uzytkownika
+
+    # Wyświetlanie wyników (poza formularzem)
+    if st.session_state.quiz_sprawdzony:
         punkty = 0
         ilosc_pytan = len(st.session_state.baza_pytan)
-
-        # Sprawdzanie czy użytkownik odpowiedział na wszystkie pytania
-        puste_pytania = [k for k, v in odpowiedzenie_uzytkownika.items() if
-                         v is None] if 'odpowiedzi_uzytkownika' in locals() else []
+        st.markdown("### Wyniki quizu:")
 
         for p in st.session_state.baza_pytan:
-            ans = odpowiedzi_uzytkownika[p['id']]
+            # Używamy dokładnie tego samego klucza tekstowego co w formularzu
+            klucz_pytania = str(p['id'])
+            ans = st.session_state.zapisane_odpowiedzi.get(klucz_pytania)
+
             if ans == p['poprawna']:
                 punkty += 1
-                st.success(f"Pytanie {p['id']}: Poprawnie!")
+                st.success(f"**Pytanie {klucz_pytania}**: Poprawnie! (Twoja odpowiedź: {ans})")
             else:
-                st.error(f"Pytanie {p['id']}: Błędna odpowiedź lub brak wyboru. Poprawna to: **{p['poprawna']}**")
+                st.error(
+                    f"**Pytanie {klucz_pytania}**: Błędna odpowiedź. Twoja odpowiedź: *{ans}*. Poprawna to: **{p['poprawna']}**")
 
         # Wyświetlenie końcowego wyniku
         st.metric(label="Twój końcowy wynik to:", value=f"{punkty} / {ilosc_pytan}")
         if punkty == ilosc_pytan:
             st.balloons()
+            st.success("Doskonale! Wszystkie odpowiedzi są poprawne! 🌟")
 st.divider()
 st.caption("Najcierpliwszy portal do przyrody - klasa 4")
 st.caption("Created by Radar | Software Development")
