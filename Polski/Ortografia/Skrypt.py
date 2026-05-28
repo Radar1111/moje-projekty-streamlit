@@ -3,7 +3,7 @@ import streamlit as st
 
 # Konfiguracja strony
 st.set_page_config(
-    page_title="Pro Trener Ortografii", page_icon="🏆", layout="centered"
+    page_title="Quiz Ortografiiczny Żorża", page_icon="🏆", layout="centered"
 )
 
 
