@@ -3,7 +3,7 @@ import random
 import streamlit as st
 
 st.set_page_config(
-    page_title="Pro Trener Ortografii", page_icon="🏆", layout="centered"
+    page_title="Quiz Ortograficzny Żorża", page_icon="🏆", layout="centered"
 )
 
 
@@ -38,7 +38,7 @@ if "gra_uruchomiona" not in st.session_state:
     st.session_state.pokazuj_wyjasnienie = False
     st.session_state.typ_bledu = None
 
-st.title("🏆 Mistrz Ortografii")
+st.title("Quiz Ortograficzny Żorża")
 
 if not st.session_state.gra_uruchomiona:
     st.markdown("### Przygotuj się do nauki!")
