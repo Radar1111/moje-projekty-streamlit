@@ -9,8 +9,7 @@ st.set_page_config(page_title="Znaki Drogowe: Nauka i Quiz", page_icon="🚗", l
 # Funkcja wczytująca bazę danych z zewnętrznego pliku JSON
 def load_questions_from_json():
     try:
-        with open("moje-projekty-streamlit/Technika/ZnakiDrogowe
-/questions.json", "r", encoding="utf-8") as file:
+        with open("Technika/ZnakiDrogowe/questions.json", "r", encoding="utf-8") as file:
             data = json.load(file)
             # Zapewnienie, że każde pytanie ma przypisaną kategorię (nawet jeśli jej brakuje w JSON)
             for item in data:
