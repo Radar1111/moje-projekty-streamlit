@@ -1,0 +1,523 @@
+[
+    {
+        "id": 1,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/PL_road_sign_A-7.svg/330px-PL_road_sign_A-7.svg.png",
+        "question": "Co oznacza ten znak ostrzegawczy?",
+        "options": ["Ustąp pierwszeństwa", "Stop", "Skrzyżowanie równorzędne", "Droga z pierwszeństwem"],
+        "answer": "Ustąp pierwszeństwa"
+    },
+    {
+        "id": 2,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/PL_road_sign_B-20.svg/250px-PL_road_sign_B-20.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail",
+        "question": "Jak nazywa się ten znak zakazu?",
+        "options": ["Zakaz wjazdu", "Stop", "Zakaz ruchu", "Koniec pierwszeństwa"],
+        "answer": "Stop"
+    },
+    {
+        "id": 3,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/PL_road_sign_B-2.svg/250px-PL_road_sign_B-2.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail",
+        "question": "Co wskazuje ten znak?",
+        "options": ["Droga jednokierunkowa", "Zakaz ruchu w obu kierunkach", "Zakaz wjazdu", "Przejście dla pieszych"],
+        "answer": "Zakaz wjazdu"
+    },
+    {
+        "id": 4,
+        "category": "informacyjny",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/PL_road_sign_D-6.svg/250px-PL_road_sign_D-6.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail",
+        "question": "Jaki to znak informacyjny?",
+        "options": ["Dzieci", "Uwaga piesi", "Przejście dla pieszych", "Strefa zamieszkania"],
+        "answer": "Przejście dla pieszych"
+    },
+    {
+        "id": 5,
+        "category": "informacyjny",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/PL_road_sign_C-12.svg/250px-PL_road_sign_C-12.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail",
+        "question": "Co nakazuje ten niebieski znak?",
+        "options": ["Ruch okrężny (Rondo)", "Nakaz jazdy w prawo", "Nakaz jazdy prosto", "Droga bez wylotu"],
+        "answer": "Ruch okrężny (Rondo)"
+    },
+    {
+        "id": 6,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/PL_road_sign_A-3.svg/330px-PL_road_sign_A-3.svg.png",
+        "question": "Co oznacza ten znak ostrzegawczy?",
+        "options": ["Niebezpieczny zakręt", "Dwa niebezpieczne zakręty pierwszy w lewo", "Nakaz jazdy zygzakiem", "Niebezpieczne zakręty pierwszy w prawo"],
+        "answer": "Niebezpieczne zakręty pierwszy w prawo"
+    },
+    {
+        "id": 7,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/PL_road_sign_A-4.svg/330px-PL_road_sign_A-4.svg.png",
+        "question": "Co oznacza ten znak ostrzegawczy?",
+        "options": ["Niebezpieczny zakręt", "Niebezpieczne zakręty pierwszy w lewo", "Nakaz jazdy zygzakiem", " Dwa niebezpieczne zakręty pierwszy w prawo"],
+        "answer": "Niebezpieczne zakręty pierwszy w lewo"
+    },
+    {
+        "id": 8,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/PL_road_sign_A-5.svg/330px-PL_road_sign_A-5.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Niebezpieczny zakręty", "Skrzyżowanie", "Skrzyżowanie dróg równorzędnych", " Dwa niebezpieczne zakręty pierwszy w prawo"],
+        "answer": "Skrzyżowanie dróg równorzędnych"
+    },
+    {
+        "id": 9,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/PL_road_sign_A-6a.svg/330px-PL_road_sign_A-6a.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Niebezpieczny zakręty o obu stronach", "Skrzyżowanie z drogą podporządkowaną wystepującą po obu stronach", "Skrzyżowanie dróg", "Trzy niebezpieczne zakręty pierwszy w prawo"],
+        "answer": "Skrzyżowanie z drogą podporządkowaną wystepującą po obu stronach"
+    },
+    {
+        "id": 10,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/PL_road_sign_A-6b.svg/330px-PL_road_sign_A-6b.svg.png",
+        "question": "Co oznacza ten znak ostrzegawczy?",
+        "options": ["Skrzyżowanie z drogą podporządkowaną wystepującą po prawej stronie", "Skrzyżowanie z drogą podporządkowaną wystepującą po obu stronach", "Skrzyżowanie dróg", "Uwaga z lewej strony"],
+        "answer": "Skrzyżowanie z drogą podporządkowaną wystepującą po prawej stronie"
+    },
+    {
+        "id": 11,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/PL_road_sign_A-6c.svg/330px-PL_road_sign_A-6c.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Skrzyżowanie z droga podporządkowaną wystepującą po prawej stronie", "Skrzyżowanie z drogą podporządkowaną wystepującą po obu stronach", "Skrzyżowanie dróg", "Skrzyżowanie z drogą podporządkowaną wystepującą po lewej stronie"],
+        "answer": "Skrzyżowanie z drogą podporządkowaną wystepującą po lewej stronie"
+    },
+    {
+        "id": 12,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/PL_road_sign_A-1.svg/330px-PL_road_sign_A-1.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Niebezpieczny zakręt w lewo", "Niebezpieczny zakręt", "Niebezpieczny zakręt w prawo", "Wlot drogi"],
+        "answer": "Niebezpieczny zakręt w prawo"
+    },
+    {
+        "id": 13,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/PL_road_sign_A-2.svg/330px-PL_road_sign_A-2.svg.png",
+        "question": "Co oznacza ten znak ostrzegawczy?",
+        "options": ["Niebezpieczny zakręt w lewo", "Niebezpieczny zakręt", "Niebezpieczny zakręt w prawo", "Wlot drogi"],
+        "answer": "Niebezpieczny zakręt w lewo"
+    },
+    {
+        "id": 14,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/PL_road_sign_A-24.svg/330px-PL_road_sign_A-24.svg.png",
+        "question": "Co oznacza ten znak ostrzegawczy?",
+        "options": ["Niebezpieczny zakręt w lewo", "Rowerzyści", "Niebezpieczny zakręt w prawo", "Wlot drogi"],
+        "answer": "Rowerzyści"
+    },
+    {
+        "id": 15,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/PL_road_sign_A-6d.svg/330px-PL_road_sign_A-6d.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Niebezpieczny zakręt w lewo", "Niebezpieczny zakręt", "Niebezpieczny zakręt w prawo", "Wlot drogi jednokierunkowej z prawej strony"],
+        "answer": "Wlot drogi jednokierunkowej z prawej strony"
+    },
+    {
+        "id": 16,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/PL_road_sign_A-6e.svg/330px-PL_road_sign_A-6e.svg.png",
+        "question": "Co oznacza ten znak ostrzegawczy?",
+        "options": ["Niebezpieczny zakręt w lewo", "Wlot drogi jednokierunkowej z lewej strony", "Niebezpieczny zakręt w prawo", "Wlot drogi jednokierunkowej z prawej strony"],
+        "answer": "Wlot drogi jednokierunkowej z lewej strony"
+    },
+    {
+        "id": 17,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/PL_road_sign_A-8.svg/330px-PL_road_sign_A-8.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Skrzyżowanie o ruchu okrężnym", "Wlot drogi jednokierunkowej z lewej strony", "Niebezpieczny zakręt w prawo", "Wlot drogi"],
+        "answer": "Skrzyżowanie o ruchu okrężnym"
+    },
+    {
+        "id": 18,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/PL_road_sign_A-9.svg/330px-PL_road_sign_A-9.svg.png",
+        "question": "Co oznacza ten znak ostrzegawczy?",
+        "options": ["Przejazd kolejowy z zaporami", "Przejazd kolejowy bez zaporami", "Niebezpieczna zakręt lokomotywa", "Wlot drogi"],
+        "answer": "Przejazd kolejowy z zaporami"
+    },
+    {
+        "id": 19,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/PL_road_sign_A-10.svg/330px-PL_road_sign_A-10.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Przejazd kolejowy z zaporami", "Przejazd kolejowy bez zapór", "Niebezpieczna zakręt lokomotywa", "Wlot drogi"],
+        "answer": "Przejazd kolejowy bez zapór"
+    },
+    {
+        "id": 20,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/PL_road_sign_A-21.svg/330px-PL_road_sign_A-21.svg.png",
+        "question": "Co oznacza ten znak ostrzegawczy?",
+        "options": ["Przejazd kolejowy z zaporami", "Przejazd kolejowy bez zaporami", "Tramwaj", "Lokomotywa"],
+        "answer": "Tramwaj"
+    },
+    {
+        "id": 20,
+        "category": "ostrzegawcze",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/PL_road_sign_A-20.svg/330px-PL_road_sign_A-20.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Odcinek drogi o ruchu dwukierunkowym", "Przejazd kolejowy bez zaporami", "Wlot drogi", "Lokomotywa"],
+        "answer": "Odcinek drogi o ruchu dwukierunkowym"
+    },
+    {
+        "id": 21,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/PL_road_sign_B-1.svg/250px-PL_road_sign_B-1.svg.png",
+        "question": "Co oznacza ten znak zakazu?",
+        "options": ["Zakaz wjazdy", "Zakaz ruchu w obu kierunkach", "Zakaz skręcania", "Ograniczenie prędkości"],
+        "answer": "Zakaz ruchu w obu kierunkach"
+    },
+    {
+        "id": 22,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/PL_road_sign_B-2.svg/250px-PL_road_sign_B-2.svg.png",
+        "question": "Co oznacza ten znak zakazu?",
+        "options": ["Zakaz wjazdy", "Zakaz ruchu w obu kierunkach", "Zakaz skręcania", "Ograniczenie prędkości"],
+        "answer": "Zakaz wjazdy"
+    },
+    {
+        "id": 23,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/PL_road_sign_B-20.svg/250px-PL_road_sign_B-20.svg.png",
+        "question": "Co oznacza ten znak zakazu?",
+        "options": ["Zakaz wjazdy", "Zakaz ruchu w obu kierunkach", "Stop", "Ograniczenie prędkości"],
+        "answer": "Stop"
+    },
+    {
+        "id": 24,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/PL_road_sign_B-21.svg/250px-PL_road_sign_B-21.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Zakaz wjazdy", "Zakaz ruchu w obu kierunkach", "Stop", "Zakaz skręcania w lewo"],
+        "answer": "Zakaz skręcania w lewo"
+    },
+    {
+        "id": 25,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/PL_road_sign_B-22.svg/250px-PL_road_sign_B-22.svg.png",
+        "question": "Co oznacza ten znak zakazu?",
+        "options": ["Zakaz wjazdy", "Zakaz ruchu w obu kierunkach", "Zakaz skręcania w prawo", "Zakaz skręcania w lewo"],
+        "answer": "Zakaz skręcania w prawo"
+    },
+     {
+        "id": 26,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/PL_road_sign_B-23.svg/250px-PL_road_sign_B-23.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Zakaz zawracania", "Zakaz ruchu w obu kierunkach", "Zakaz skręcania w prawo", "Zakaz skręcania w lewo"],
+        "answer": "Zakaz zawracania"
+    },
+    {
+        "id": 27,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/PL_road_sign_B-9.svg/250px-PL_road_sign_B-9.svg.png",
+        "question": "Co oznacza ten znak zakazu?",
+        "options": ["Zakaz zawracania", "Zakaz ruchu w obu kierunkach rowerów", "Zakaz wjazdu rowerów", "Zakaz skręcania w lewo"],
+        "answer": "Zakaz wjazdu rowerów"
+    },
+    {
+        "id": 28,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/PL_road_sign_B-25.svg/250px-PL_road_sign_B-25.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Zakaz zawracania", "Zakaz ruchu w obu kierunkach rowerów", "Zakaz wjazdu rowerów", "Zakaz wyprzedzania"],
+        "answer": "Zakaz wyprzedzania"
+    },
+    {
+        "id": 29,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/PL_road_sign_B-29.svg/250px-PL_road_sign_B-29.svg.png",
+        "question": "Co oznacza ten znak zakazu?",
+        "options": ["Zakaz używania sygnałów dzwiękowych", "Zakaz ruchu w obu kierunkach rowerów", "Zakaz wjazdu rowerów", "Zakaz wyprzedzania"],
+        "answer": "Zakaz używania sygnałów dzwiękowych"
+    },
+    {
+        "id": 30,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/PL_road_sign_B-33-50.svg/250px-PL_road_sign_B-33-50.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Zakaz używania sygnałów dzwiękowych", "Zakaz ruchu w obu kierunkach rowerów", "Ograniczene prędkości", "Zakaz wyprzedzania"],
+        "answer": "Ograniczene prędkości"
+    },
+    {
+        "id": 31,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/PL_road_sign_B-34-50.svg/250px-PL_road_sign_B-34-50.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Zakaz używania sygnałów dzwiękowych", "Koniec ograniczenia prędkości", "Ograniczene prędkości", "Zakaz wyprzedzania"],
+        "answer": "Koniec ograniczenia prędkości"
+    },
+    {
+        "id": 32,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/PL_road_sign_B-24.svg/250px-PL_road_sign_B-24.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Koniec zakazu zawracania", "Koniec ograniczenia prędkości", "Ograniczene prędkości", "Zakaz wyprzedzania"],
+        "answer": "Koniec zakazu zawracania"
+    },
+    {
+        "id": 33,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/PL_road_sign_B-27.svg/250px-PL_road_sign_B-27.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Koniec zakazu zawracania", "Koniec ograniczenia prędkości", "Koniec zakazu wyprzedzania", "Zakaz wyprzedzania"],
+        "answer": "Koniec zakazu wyprzedzania"
+    },
+    {
+        "id": 34,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/PL_road_sign_B-35.svg/250px-PL_road_sign_B-35.svg.png",
+        "question": "Co oznacza ten znak zakazu?",
+        "options": ["Zakaz postoju", "Koniec ograniczenia prędkości", "Koniec zakazu wyprzedzania", "Zakaz zatrzymywania się"],
+        "answer": "Zakaz postoju"
+    },
+    {
+        "id": 35,
+        "category": "zakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/PL_road_sign_B-36.svg/250px-PL_road_sign_B-36.svg.png",
+        "question": "Co oznacza ten znak zakazu?",
+        "options": ["Zakaz postoju", "Koniec ograniczenia prędkości", "Koniec zakazu wyprzedzania", "Zakaz zatrzymywania się"],
+        "answer": "Zakaz zatrzymywania się"
+    },
+    {
+        "id": 36,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/PL_road_sign_C-1.svg/250px-PL_road_sign_C-1.svg.png",
+        "question": "Co oznacza ten znak nakazu?",
+        "options": ["Nakaz jazdy w prawo przed znakiem", "Koniec ograniczenia prędkości", "Nakaz jazdy w lewo przed znakiem", "Zakaz zatrzymywania się"],
+        "answer": "Nakaz jazdy w prawo przed znakiem"
+    },
+    {
+        "id": 37,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/PL_road_sign_C-3.svg/250px-PL_road_sign_C-3.svg.png",
+        "question": "Co oznacza ten znak nakazu?",
+        "options": ["Nakaz jazdy w prawo przed znakiem", "Koniec ograniczenia prędkości", "Nakaz jazdy w lewo przed znakiem", "Zakaz zatrzymywania się"],
+        "answer": "Nakaz jazdy w lewo przed znakiem"
+    },
+    {
+        "id": 38,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/PL_road_sign_C-2.svg/250px-PL_road_sign_C-2.svg.png",
+        "question": "Co oznacza ten znak nakazu?",
+        "options": ["Nakaz jazdy w prawo przed znakiem", "Nakaz jazdy w prawo za znakiem", "Nakaz jazdy w lewo przed znakiem", "Zakaz zatrzymywania się"],
+        "answer": "Nakaz jazdy w prawo za znakiem"
+    },
+    {
+        "id": 38,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/PL_road_sign_C-4.svg/250px-PL_road_sign_C-4.svg.png",
+        "question": "Co oznacza ten znak nakazu?",
+        "options": ["Nakaz jazdy w prawo przed znakiem", "Nakaz jazdy w prawo za znakiem", "Nakaz jazdy w lewo przed znakiem", "Nakaz jazdy w lewo za znakiem"],
+        "answer": "Nakaz jazdy w lewo za znakiem"
+    },
+    {
+        "id": 39,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/PL_road_sign_C-5.svg/250px-PL_road_sign_C-5.svg.png",
+        "question": "Co oznacza ten znak nakazu?",
+        "options": ["Nakaz jazdy prosto", "Nakaz jazdy w prawo za znakiem", "Nakaz jazdy w lewo przed znakiem", "Nakaz jazdy w lewo za znakiem"],
+        "answer": "Nakaz jazdy prosto"
+    },
+    {
+        "id": 40,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/PL_road_sign_C-6.svg/250px-PL_road_sign_C-6.svg.png",
+        "question": "Co oznacza ten znak nakazu?",
+        "options": ["Nakaz jazdy prosto", "Nakaz jazdy w prawo za znakiem", "Nakaz jazdy prosto lub w prawo", "Nakaz jazdy w lewo za znakiem"],
+        "answer": "Nakaz jazdy prosto lub w prawo"
+    },
+    {
+        "id": 41,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PL_road_sign_C-7.svg/250px-PL_road_sign_C-7.svg.png",
+        "question": "Co oznacza ten znak nakazu?",
+        "options": ["Nakaz jazdy prosto lub w lewo", "Nakaz jazdy w prawo za znakiem", "Nakaz jazdy prosto lub w prawo", "Nakaz jazdy w lewo za znakiem"],
+        "answer": "Nakaz jazdy prosto lub w lewo"
+    },
+    {
+        "id": 42,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/PL_road_sign_C-8.svg/250px-PL_road_sign_C-8.svg.png",
+        "question": "Co oznacza ten znak nakazu?",
+        "options": ["Nakaz jazdy prosto lub w lewo", "Nakaz jazdy w prawo lub w lewo", "Nakaz jazdy prosto lub w prawo", "Nakaz jazdy w lewo za znakiem"],
+        "answer": "Nakaz jazdy w prawo lub w lewo"
+    },
+     {
+        "id": 43,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/PL_road_sign_C-12.svg/250px-PL_road_sign_C-12.svg.png",
+        "question": "Co oznacza ten znak nakazu?",
+        "options": ["Ruch okrężny", "Nakaz jazdy w prawo lub w lewo", "Nakaz jazdy prosto lub w prawo", "Nakaz jazdy w lewo za znakiem"],
+        "answer": "Ruch okrężny"
+    },
+    {
+        "id": 44,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/PL_road_sign_C-9.svg/250px-PL_road_sign_C-9.svg.png",
+        "question": "Co oznacza ten znak nakazu?",
+        "options": ["Ruch okrężny", "Nakaz jazdy w prawo lub w lewo", "Nakaz jazdy prosto lub w prawo", "Nakaz jazdy z prawej strony znaku"],
+        "answer": "Nakaz jazdy z prawej strony znaku"
+    },
+    {
+        "id": 45,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/PL_road_sign_C-10.svg/250px-PL_road_sign_C-10.svg.png",
+        "question": "Co oznacza ten znak nakazu?",
+        "options": ["Ruch okrężny", "Nakaz jazdy z lewej strony znaku", "Nakaz jazdy prosto lub w prawo", "Nakaz jazdy z prawej strony znaku"],
+        "answer": "Nakaz jazdy z lewej strony znaku"
+    },
+    {
+        "id": 46,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/PL_road_sign_C-11.svg/250px-PL_road_sign_C-11.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Nakaz jazdy z prawej lub lewej strony znaku", "Nakaz jazdy z lewej strony znaku", "Nakaz jazdy prosto lub w prawo", "Nakaz jazdy z prawej strony znaku"],
+        "answer": "Nakaz jazdy z prawej lub lewej strony znaku"
+    },
+    {
+        "id": 47,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/PL_road_sign_C-13.svg/250px-PL_road_sign_C-13.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Nakaz jazdy z prawej lub lewej strony znaku", "Droga dla rowerów", "Nakaz jazdy prosto lub w prawo", "Nakaz jazdy z prawej strony znaku"],
+        "answer": "Droga dla rowerów"
+    },
+    {
+        "id": 48,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/PL_road_sign_C-13a.svg/250px-PL_road_sign_C-13a.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Koniec drogi dla rowerów", "Droga dla rowerów", "Nakaz jazdy prosto lub w prawo", "Nakaz jazdy z prawej strony znaku"],
+        "answer": "Koniec drogi dla rowerów"
+    },
+    {
+        "id": 49,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/PL_road_sign_C-16.svg/250px-PL_road_sign_C-16.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Koniec drogi dla rowerów", "Droga dla rowerów", "Droga dla pieszych", "Nakaz jazdy z prawej strony znaku"],
+        "answer": "Droga dla pieszych"
+    },
+    {
+        "id": 50,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/PL_road_sign_C-13-16a.svg/250px-PL_road_sign_C-13-16a.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Koniec drogi dla rowerów", "Droga dla rowerów", "Droga dla pieszych", "Droga pieszo-rowerowa ruch rowerów lewą stroną drogi i ruch pieszych prawą stroną drogi"],
+        "answer": "Droga pieszo-rowerowa ruch rowerów lewą stroną drogi i ruch pieszych prawą stroną drogi"
+    },
+    {
+        "id": 51,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/PL_road_sign_C-13-16b.svg/250px-PL_road_sign_C-13-16b.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Droga pieszo-rowerowa ruch pieszych lewą stroną drogi i ruch rowerów prawą stroną drogi", "Droga dla rowerów", "Droga dla pieszych", "Droga pieszo-rowerowa ruch rowerów lewą stroną drogi i ruch pieszych prawą stroną drogi"],
+        "answer": "Droga pieszo-rowerowa ruch pieszych lewą stroną drogi i ruch rowerów prawą stroną drogi"
+    },
+    {
+        "id": 52,
+        "category": "nakazu",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/PL_road_sign_C-13-16.svg/250px-PL_road_sign_C-13-16.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Droga pieszo-rowerowa ruch pieszych lewą stroną drogi i ruch rowerów prawą stroną drogi", "Droga pieszo-rowerowa piesi i rowerzyści poruszają się dowolną stroną drogi", "Droga dla pieszych", "Droga pieszo-rowerowa ruch rowerów lewą stroną drogi i ruch pieszych prawą stroną drogi"],
+        "answer": "Droga pieszo-rowerowa piesi i rowerzyści poruszają się dowolną stroną drogi"
+    },
+    {
+        "id": 53,
+        "category": "informacyjny",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/PL_road_sign_D-1.svg/250px-PL_road_sign_D-1.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Droga z pierwszeństwem", "Droga pieszo-rowerowa ", "Droga dla pieszych", "Koniec drogi z pierwszeństwem"],
+        "answer": "Droga z pierwszeństwem"
+    },
+    {
+        "id": 54,
+        "category": "informacyjny",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/PL_road_sign_D-2.svg/250px-PL_road_sign_D-2.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Droga z pierwszeństwem", "Droga pieszo-rowerowa ", "Droga dla pieszych", "Koniec drogi z pierwszeństwem"],
+        "answer": "Koniec drogi z pierwszeństwem"
+    },
+    {
+        "id": 55,
+        "category": "informacyjny",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/PL_road_sign_D-3.svg/250px-PL_road_sign_D-3.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Droga z pierwszeństwem", "Droga pieszo-rowerowa ", "Droga jednokierunkowa", "Koniec drogi z pierwszeństwem"],
+        "answer": "Droga jednokierunkowa"
+    },
+    {
+        "id": 56,
+        "category": "informacyjny",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/PL_road_sign_D-4a.svg/250px-PL_road_sign_D-4a.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Droga z pierwszeństwem", "Droga bez przejazdu", "Droga jednokierunkowa", "Koniec drogi z pierwszeństwem"],
+        "answer": "Droga bez przejazdu"
+    },
+    {
+        "id": 57,
+        "category": "informacyjny",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/PL_road_sign_D-6.svg/250px-PL_road_sign_D-6.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Droga z pierwszeństwem", "Droga bez przejazdu", "Droga jednokierunkowa", "Przejście dla pieszych"],
+        "answer": "Przejście dla pieszych"
+    },
+    {
+        "id": 58,
+        "category": "informacyjny",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/PL_road_sign_D-6a.svg/250px-PL_road_sign_D-6a.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Droga z pierwszeństwem", "Droga bez przejazdu", "Przejazd dla rowerów", "Przejście dla pieszych"],
+        "answer": "Przejazd dla rowerów"
+    },
+    {
+        "id": 59,
+        "category": "informacyjny",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/PL_road_sign_D-6b.svg/250px-PL_road_sign_D-6b.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Przejście dla pieszych i przejazd dla rowerów", "Droga bez przejazdu", "Przejazd dla rowerów", "Przejście dla pieszych"],
+        "answer": "Przejście dla pieszych i przejazd dla rowerów"
+    },
+    {
+        "id": 60,
+        "category": "informacyjny",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/PL_road_sign_D-7.svg/250px-PL_road_sign_D-7.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Przejście dla pieszych i przejazd dla rowerów", "Droga ekspresowa", "Przejazd dla rowerów", "Przejście dla pieszych"],
+        "answer": "Droga ekspresowa"
+    },
+    {
+        "id": 61,
+        "category": "informacyjny",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/PL_road_sign_D-8.svg/250px-PL_road_sign_D-8.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Koniec drogi ekspresowej", "Droga ekspresowa", "Przejazd dla rowerów", "Przejście dla pieszych"],
+        "answer": "Koniec drogi ekspresowej"
+    },
+    {
+        "id": 62,
+        "category": "informacyjny",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/PL_road_sign_D-9.svg/250px-PL_road_sign_D-9.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Koniec drogi ekspresowej", "Droga ekspresowa", "Autostrada", "Przejście dla pieszych"],
+        "answer": "Autostrada"
+    },
+    {
+        "id": 63,
+        "category": "informacyjny",
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/PL_road_sign_D-10.svg/250px-PL_road_sign_D-10.svg.png",
+        "question": "Co oznacza ten znak?",
+        "options": ["Koniec drogi ekspresowej", "Koniec autostrady", "Autostrada", "Przejście dla pieszych"],
+        "answer": "Koniec autostrady"
+    }
+
+]
