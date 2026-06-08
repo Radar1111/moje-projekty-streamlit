@@ -2,33 +2,54 @@ import streamlit as st
 import json
 import os
 import random
-from huggingface_hub import hf_hub_download
+from huggingface_hub import hf_hub_download, list_repo_files
 
-# 1. KONFIGURACJA HUGGING FACE
+
+# 1. KONFIGURACJA HUGGING FACE 
+
 REPO_ID = "Radar1111/FolderLektur" 
 
 
-HF_TOKEN = st.secrets["HF_TOKEN"]
+def pobierz_liste_lektur():
+    """Pobiera listę wszystkich plików .json z repozytorium Hugging Face"""
+    if "HF_TOKEN" not in st.secrets:
+        st.error("❌ Brak tokenu 'HF_TOKEN' w Streamlit Secrets!")
+        st.info("Dodaj token w panelu Streamlit Cloud (Settings -> Secrets) lub lokalnie w .streamlit/secrets.toml")
+        return []
+        
+    try:
+        wszystkie_pliki = list_repo_files(
+            repo_id=REPO_ID, 
+            repo_type="dataset", 
+            token=st.secrets["HF_TOKEN"]
+        )
+        pliki_json = [f for f in wszystkie_pliki if f.endswith('.json')]
+        return pliki_json
+    except Exception as e:
+        st.error(f"❌ Błąd połączenia z Hugging Face: {e}")
+        st.warning(f"Sprawdź czy REPO_ID ('{REPO_ID}') jest poprawne i czy token ma odpowiednie uprawnienia.")
+        return []
 
 
 def wczytaj_json(nazwa_pliku):
-    # Dodajemy .json jeśli nazwa go nie posiada
+    """Pobiera i wczytuje konkretny plik JSON z Hugging Face"""
     if not nazwa_pliku.endswith('.json'):
         nazwa_pliku += '.json'
     
-    # Pobieramy plik z prywatnego repozytorium Hugging Face
     cached_file_path = hf_hub_download(
         repo_id=REPO_ID,
         filename=nazwa_pliku,
         repo_type="dataset",
-        token=HF_TOKEN
+        token=st.secrets["HF_TOKEN"]
     )
     
-    # Wczytujemy pobrany plik JSON
     with open(cached_file_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
-# 2. USTAWIENIA STRONY
+
+
+# 2. USTAWIENIA STRONY I LISTOWANIE LEKTUR
+
 st.set_page_config(page_title="Quiz Master Lektur", layout="centered")
 
 # Pobieranie listy plików JSON bezpośrednio z Hugging Face
@@ -36,13 +57,10 @@ pliki_json = pobierz_liste_lektur()
 
 # Jeśli wystąpił błąd lub lista jest pusta, zatrzymujemy aplikację
 if not pliki_json:
-    st.error("❌ Nie udało się pobrać plików z Hugging Face.")
-    st.info("Sprawdź, czy Twój token HF_TOKEN w Secrets jest poprawny oraz czy repozytorium zawiera pliki .json.")
     st.stop()
 
 # Tworzenie czystych tytułów lektur (bez końcówki .json) do menu wyboru
 tytuly_lektur = [f.replace(".json", "") for f in pliki_json]
-
 # 3. MODYFIKACJA W PANELU BOCZNYM
 with st.sidebar:
     st.title("📚 Biblioteka Lektur")
