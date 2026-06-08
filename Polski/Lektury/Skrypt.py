@@ -31,19 +31,17 @@ def wczytaj_json(nazwa_pliku):
 # 2. USTAWIENIA STRONY
 st.set_page_config(page_title="Quiz Master Lektur", layout="centered")
 
-# Sprawdzenie czy folder istnieje (bez automatycznego tworzenia)
-if not os.path.exists(SCIEZKA_LEKTUR):
-    st.error(f"❌ Nie znaleziono folderu: '{NAZWA_FOLDERU}'")
-    st.info(f"Stwórz folder o tej nazwie w: {BASE_DIR}")
+# Pobieranie listy plików JSON bezpośrednio z Hugging Face
+pliki_json = pobierz_liste_lektur()
+
+# Jeśli wystąpił błąd lub lista jest pusta, zatrzymujemy aplikację
+if not pliki_json:
+    st.error("❌ Nie udało się pobrać plików z Hugging Face.")
+    st.info("Sprawdź, czy Twój token HF_TOKEN w Secrets jest poprawny oraz czy repozytorium zawiera pliki .json.")
     st.stop()
 
-# Pobieranie listy plików JSON
-pliki_json = [f for f in os.listdir(SCIEZKA_LEKTUR) if f.endswith(".json")]
+# Tworzenie czystych tytułów lektur (bez końcówki .json) do menu wyboru
 tytuly_lektur = [f.replace(".json", "") for f in pliki_json]
-
-if not tytuly_lektur:
-    st.warning(f"Folder '{NAZWA_FOLDERU}' jest pusty. Wrzuć tam pliki .json")
-    st.stop()
 
 # 3. MODYFIKACJA W PANELU BOCZNYM
 with st.sidebar:
