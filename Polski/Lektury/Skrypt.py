@@ -189,11 +189,7 @@ st.caption("Tester: Bat0nik")
 # 2. USTAWIENIA STRONY
 st.set_page_config(page_title="Quiz Master Lektur", layout="centered")
 
-# Sprawdzenie czy folder istnieje (bez automatycznego tworzenia)
-if not os.path.exists(SCIEZKA_LEKTUR):
-    st.error(f"❌ Nie znaleziono folderu: '{NAZWA_FOLDERU}'")
-    st.info(f"Stwórz folder o tej nazwie w: {BASE_DIR}")
-    st.stop()
+
 
 # Pobieranie listy plików JSON
 pliki_json = [f for f in os.listdir(SCIEZKA_LEKTUR) if f.endswith(".json")]
