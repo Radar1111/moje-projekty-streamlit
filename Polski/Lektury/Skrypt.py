@@ -4,9 +4,9 @@ import os
 import random
 from huggingface_hub import hf_hub_download, list_repo_files
 
-# ==============================================================================
+
 # 1. KONFIGURACJA HUGGING FACE 
-# ==============================================================================
+
 REPO_ID = "Radar1111/FolderLektur" 
 
 
@@ -47,9 +47,9 @@ def wczytaj_json(nazwa_pliku):
         return json.load(f)
 
 
-# ==============================================================================
+
 # 2. USTAWIENIA STRONY I LISTOWANIE LEKTUR
-# ==============================================================================
+
 st.set_page_config(page_title="Quiz Master Lektur", layout="centered")
 
 # Pobieranie listy plików JSON bezpośrednio z Hugging Face
@@ -62,9 +62,9 @@ if not pliki_json:
 # Tworzenie czystych tytułów lektur (bez końcówki .json) do menu wyboru
 tytuly_lektur = [f.replace(".json", "") for f in pliki_json]
 
-# ==============================================================================
+
 # 3. MODYFIKACJA W PANELU BOCZNYM
-# ==============================================================================
+
 with st.sidebar:
     st.title("📚 Biblioteka Lektur")
     tytuly_lektur.sort()
@@ -88,9 +88,9 @@ with st.sidebar:
         help="Wybierz, jak długi ma być Twój quiz"
     )
 
-# ==============================================================================
+
 # 4. LOGIKA QUIZU
-# ==============================================================================
+
 if (
         "aktualna_lektura" not in st.session_state
         or st.session_state.aktualna_lektura != wybrany_tytul
@@ -117,9 +117,9 @@ if (
         if klucz.startswith("odpowiedziane_") or klucz.startswith("wybor_"):
             del st.session_state[klucz]
 
-# ==============================================================================
+
 # 5. WYŚWIETLANIE PYTAŃ
-# ==============================================================================
+
 st.title(f"📖 Quiz: {wybrany_tytul}")
 
 if not st.session_state.zakonczono:
@@ -173,9 +173,9 @@ if not st.session_state.zakonczono:
             st.rerun()
 
 else:
-    # ==============================================================================
+    
     # 6. EKRAN KOŃCOWY
-    # ==============================================================================
+    
     st.balloons()
     st.success("🎉 Gratulacje! Quiz zakończony.")
 
