@@ -191,9 +191,7 @@ st.set_page_config(page_title="Quiz Master Lektur", layout="centered")
 
 
 
-# Pobieranie listy plików JSON
-pliki_json = [f for f in os.listdir(SCIEZKA_LEKTUR) if f.endswith(".json")]
-tytuly_lektur = [f.replace(".json", "") for f in pliki_json]
+
 
 if not tytuly_lektur:
     st.warning(f"Folder '{NAZWA_FOLDERU}' jest pusty. Wrzuć tam pliki .json")
