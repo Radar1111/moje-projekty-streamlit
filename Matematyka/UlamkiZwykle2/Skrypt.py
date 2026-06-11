@@ -155,7 +155,7 @@ st.sidebar.write("Stworzone dla Twojej nauki! 🚀")
 
 # Inicjalizacja stanu sesji
 if 'pytanie' not in st.session_state:
-    st.session_state.pytanie = "Kliknij przycisk poniżej, aby wylosować pierwsze zadanie!"
+    st.session_state.pytanie = "Kliknij przycisk powyżej, aby wylosować pierwsze zadanie!"
     st.session_state.wyjasnienie = ""
     st.session_state.odpowiedzi = None
 
