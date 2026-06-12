@@ -64,23 +64,24 @@ if tryb == "Nauka zasad":
     st.subheader(f"Rok {test_rok} {test_era} to: **{wynik_wiek}**, **{wynik_polowa}**")
 
     st.markdown("### 💡 Wyjaśnienie teorii:")
-    if test_era == "n.e.":
-        st.write(
-            f"1. **Wiek:** Od roku {test_rok} odejmujemy 1, dzielimy przez 100 i dodajemy 1. Otrzymujemy wiek {nr_wieku}.")
-        if test_rok % 100 == 0:
-            st.write(f"2. **Połowa:** Rok kończy się na '00', więc to ostatni rok danego stulecia ({wynik_polowa}).")
-        else:
-            st.write(
-                f"2. **Połowa:** Końcówka roku to {test_rok % 100}. W erze n.e. lata 1-50 to I połowa, a 51-100 to II połowa.")
+
+if test_era == "n.e.":
+    st.write(f"1. **Wiek:** Rok {test_rok} należy do **{nr_wieku} wieku n.e.** (wiek trwa od roku {(nr_wieku-1)*100 + 1} do {nr_wieku*100}).")
+    
+    if test_rok % 100 == 0:
+        st.write(f"2. **Połowa:** Rok kończy się na '00', więc to dokładnie ostatni rok tego stulecia. Jest to **{wynik_polowa}**.")
     else:
-        st.write(
-            f"1. **Wiek:** W erze p.n.e. wieki liczymy tak samo, ale czas biegnie w drugą stronę. Rok {test_rok} p.n.e. to {nr_wieku} wiek p.n.e.")
-        if test_rok % 100 == 0:
-            st.write(
-                f"2. **Połowa:** Rok kończy się na '00', co oznacza **początek** wieku p.n.e. (odliczając wstecz), czyli jest to **{wynik_polowa}**.")
-        else:
-            st.write(
-                f"2. **Połowa:** W erze p.n.e. lata odliczamy wstecz do zera. Końcówka {test_rok % 100} oznacza, że lata 51-100 to II połowa, a 1-50 to I połowa.")
+        koncowka = test_rok % 100
+        st.write(f"2. **Połowa:** Końcówka roku to {koncowka}. W erze n.e. lata 1–50 to I połowa, a 51–100 to II połowa. Stąd wynik: **{wynik_polowa}**.")
+
+else:  # p.n.e.
+    st.write(f"1. **Wiek:** Rok {test_rok} p.n.e. należy do **{nr_wieku} wieku p.n.e.** (w p.n.e. czas biegnie wstecz, wiek trwa od roku {nr_wieku*100} do {(nr_wieku-1)*100 + 1} p.n.e.).")
+    
+    if test_rok % 100 == 0:
+        st.write(f"2. **Połowa:** Rok kończy się na '00'. W erze p.n.e. oznacza to pierwszy (początkowy) rok tego stulecia. Jest to **{wynik_polowa}**.")
+    else:
+        koncowka = test_rok % 100
+        st.write(f"2. **Połowa:** Ponieważ czas płynie wstecz, końcówki 51–99 (bliższe setki) to I połowa, a końcówki 1–50 (bliższe zera) to II połowa. Końcówka {koncowka} to **{wynik_polowa}**.")
 
 elif tryb == "Quiz historyczny":
     st.header("Quiz: Który to wiek?")
