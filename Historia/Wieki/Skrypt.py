@@ -80,7 +80,7 @@ if tryb == "Nauka zasad":
                 f"2. **Połowa:** Rok kończy się na '00', co oznacza **początek** wieku p.n.e. (odliczając wstecz), czyli jest to **{wynik_polowa}**.")
         else:
             st.write(
-                f"2. **Połowa:** W erze p.n.e. lata odliczamy wstecz do zera. Końcówka {test_rok % 100} oznacza, że lata 51-99 to II połowa, a 1-50 to I połowa.")
+                f"2. **Połowa:** W erze p.n.e. lata odliczamy wstecz do zera. Końcówka {test_rok % 100} oznacza, że lata 51-100 to II połowa, a 1-50 to I połowa.")
 
 elif tryb == "Quiz historyczny":
     st.header("Quiz: Który to wiek?")
