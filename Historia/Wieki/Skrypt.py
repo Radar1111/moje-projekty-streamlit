@@ -71,7 +71,7 @@ if tryb == "Nauka zasad":
             st.write(f"2. **Połowa:** Rok kończy się na '00', więc to ostatni rok danego stulecia ({wynik_polowa}).")
         else:
             st.write(
-                f"2. **Połowa:** Końcówka roku to {test_rok % 100}. W erze n.e. lata 1-50 to I połowa, a 51-99 to II połowa.")
+                f"2. **Połowa:** Końcówka roku to {test_rok % 100}. W erze n.e. lata 1-50 to I połowa, a 51-100 to II połowa.")
     else:
         st.write(
             f"1. **Wiek:** W erze p.n.e. wieki liczymy tak samo, ale czas biegnie w drugą stronę. Rok {test_rok} p.n.e. to {nr_wieku} wiek p.n.e.")
