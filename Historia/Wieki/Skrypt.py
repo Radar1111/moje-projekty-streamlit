@@ -25,7 +25,7 @@ def polowa_wieku(rok, era):
         if reszta == 0:
             return "II połowa"  # np. rok 300 p.n.e. to sam początek (od tyłu) III wieku, czyli II połowa
         # W p.n.e. końcówki 01-50 to I połowa (bliżej przełomu er), a 51-100 to II połowa
-        return "I połowa" if reszta <= 50 else "II połowa"
+        return "II połowa" if reszta <= 50 else "I połowa"
 
 
 def oblicz_roznice(rok1, era1, rok2, era2):
