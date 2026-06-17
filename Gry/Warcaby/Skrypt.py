@@ -9,28 +9,35 @@ st.title("Interaktywne Warcaby z Botem")
 
 st.markdown("""
 <style>
-/* 1. Kontener blokujący rozjeżdżanie się kolumn w Streamlit */
+/* 1. Wymuszenie poziomego układu głównego kontenera bez zawijania */
 div[data-testid="stHorizontalBlock"] {
+    display: flex !important;
     flex-direction: row !important;
     flex-wrap: nowrap !important;
-    max-width: 480px !important; /* Maksymalna szerokość planszy na PC */
+    width: 100% !important;
+    max-width: 340px !important;   /* Bezpieczna szerokość dla małych ekranów */
     margin: 0 auto !important;     /* Wyśrodkowanie planszy */
+    gap: 0px !important;           /* Usunięcie przerw między kolumnami */
 }
 
-div[data-testid="column"] {
+/* 2. Brutalne wymuszenie 12.5% szerokości dla KAŻDEGO kontenera wewnątrz (niszczy mobilne 250px) */
+div[data-testid="stHorizontalBlock"] > div,
+div[data-testid="stHorizontalBlock"] [data-testid="column"] {
     width: 12.5% !important;
-    flex: 1 1 12.5% !important;
     min-width: 12.5% !important;
-    padding: 0px !important;      /* Usunięcie marginesów bocznych Streamlit */
+    max-width: 12.5% !important;
+    flex: 1 1 12.5% !important;
+    padding: 0px !important;
+    margin: 0px !important;
 }
 
-/* 2. Responsywne przyciski jako idealne kwadraty */
+/* 3. Responsywne przyciski jako idealne, małe kwadraty */
 div.stButton > button {
     width: 100% !important;
-    aspect-ratio: 1 / 1 !important; /* Wymuszenie idealnego kwadratu (szerokość = wysokość) */
+    aspect-ratio: 1 / 1 !important; /* Szerokość równa wysokości */
     height: auto !important;
     padding: 0px !important;
-    font-size: 6vw !important;      /* Dynamiczny rozmiar pionków dla telefonu */
+    font-size: 5vw !important;      /* Idealny rozmiar emoji na telefonie */
     font-weight: bold !important;
     border-radius: 0px !important;
     border: 1px solid #444 !important;
@@ -39,17 +46,19 @@ div.stButton > button {
     justify-content: center !important;
 }
 
-/* 3. Optymalizacja czcionki i rozmiaru dla dużych ekranów (PC) */
+/* 4. Optymalizacja dla dużych ekranów (PC) */
 @media (min-width: 600px) {
     div.stButton > button {
-        font-size: 28px !important; /* Ładne, duże emoji na komputerze */
+        font-size: 24px !important; /* Większe emoji na komputerze */
     }
 }
+
+/* Maksymalne zwężenie marginesów bocznych całej strony na telefonie */
 .block-container {
-    padding-top: 1.5rem !important;
+    padding-top: 1rem !important;
     padding-bottom: 1rem !important;
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
+    padding-left: 0.1rem !important;
+    padding-right: 0.1rem !important;
 }
 </style>
 """, unsafe_allow_html=True)
