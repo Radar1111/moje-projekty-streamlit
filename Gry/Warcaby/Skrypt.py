@@ -3,7 +3,7 @@ import numpy as np
 import random
 import time
 
-# 1. Konfiguracja i CSS (Naprawione skalowanie dla PC i Telefonu)
+# 1. Konfiguracja i CSS 
 st.set_page_config(page_title="Warcaby Premium", layout="centered")
 st.title("Interaktywne Warcaby z Botem")
 
@@ -92,7 +92,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 # Automatycznie ustawiamy tryb na grę z botem
 tryb_gry = "Gra z Botem (Czarne)"
 
-# Automatycznie ustawiamy tryb na grę z botem (skoro usunęliśmy wybór)
+# Automatycznie ustawiamy tryb na grę z botem 
 tryb_gry = "Gra z Botem (Czarne)"
 
 
@@ -366,8 +366,8 @@ def pobierz_symbol_pionka(wartosc, w, k):
     return ""
 
 
-# RYSOWANIE PLANSZY (Poprawiona sekcja generująca przyciski)
-# RYSOWANIE PLANSZY (Czyszczenie wolnych pól ze zbędnych kwadratów)
+# Poprawiona sekcja generująca przyciski
+# Czyszczenie wolnych pól ze zbędnych kwadratów
 plansza_stan = st.session_state.plansza
 
 for w in range(8):
@@ -384,3 +384,9 @@ for w in range(8):
             if st.button(tekst_przycisku, key=f"pole_{w}_{k}"):
                 obsluga_klikniecia(w, k)
                 st.rerun()
+
+st.divider()
+st.caption("Relaks po nauce")
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
