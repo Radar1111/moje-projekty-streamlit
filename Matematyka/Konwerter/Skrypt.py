@@ -3,10 +3,11 @@ import random
 
 st.set_page_config(page_title="Szkolny Konwerter", page_icon="🎓")
 
-# DANE - Wszystkie jednostki odniesione do wspólnej bazy wewnątrz kategorii
+# DANE 
 # Odległość: baza to Milimetry (mm)
 # Masa: baza to Gramy (g)
 # Czas: baza to Sekundy (s)
+# Pole powierzchni: baza to Milimetry kwadratowe (mm2)
 data = {
     "Odległość 📏": {
         "Kilometry (km)": 1000000,
@@ -14,6 +15,13 @@ data = {
         "Decymetry (dm)": 100,
         "Centymetry (cm)": 10,
         "Milimetry (mm)": 1
+    },
+    "Pole powierzchni 📐": {
+        "Kilometry kwadratowe (km²)": 1000000000000,
+        "Hektary (ha)": 10000000000,
+        "Ary (a)": 100000000,
+        "Metry kwadratowe (m²)": 1000000,
+        "Centymetry kwadratowe (cm²)": 100
     },
     "Masa ⚖️": {
         "Tony (t)": 1000000,
@@ -32,11 +40,12 @@ data = {
 # WSKAZÓWKI
 wskazowki = {
     "Odległość 📏": "Pamiętaj: 1 km = 1000 m, a 1 cm = 10 mm. Przesuwaj przecinek w prawo przy mnożeniu!",
+    "Pole powierzchni 📐": "Uważaj! Przy jednostkach kwadratowych zer przybywa dwa razy szybciej! 1 m² = 10 000 cm². Pamiętaj też: 1 ar to kwadrat 10m x 10m (100 m²), a 1 hektar to kwadrat 100m x 100m (10 000 m²).",
     "Masa ⚖️": "Ważne: 1 kg to 100 dag, a 1 dag to 10 g. Tona to aż 1000 kilogramów!",
     "Czas ⏰": "Uwaga! Czas przeliczamy przez 60 (minuty, sekundy), a nie przez 100!"
 }
 
-st.title("🎓 Super Konwerter dla Klasy 4")
+st.title("🎓 Super Konwerter Jednostek")
 
 # SEKCJA KONWERTERA
 kategoria = st.selectbox("Wybierz co chcesz zmierzyć:", list(data.keys()))
@@ -79,7 +88,7 @@ if 'pytanie' not in st.session_state:
 
 st.write(f"**Pytanie:** {st.session_state.pytanie}")
 
-# Używamy klucza dynamicznego, 
+# Klucz dynamiczny
 odpowiedz = st.text_input("Twoja odpowiedź (wpisz samą liczbę):", key=f"quiz_ans_{st.session_state.odpowiedz_klucz}")
 
 col_btn1, col_btn2 = st.columns(2)
@@ -90,7 +99,7 @@ with col_btn2:
     nowe_pytanie = st.button("Nowe pytanie 🔁")
 
 if sprawdz:
-    # .strip() usuwa przypadkowe spacje wpisane przez dziecko na klawiaturze
+    # .strip() usuwa przypadkowe spacje wpisane przez ucznia na klawiaturze
     if odpowiedz.strip() == st.session_state.poprawna:
         st.balloons()
         st.success("Brawo! Świetnie Ci idzie! 🎉")
@@ -102,6 +111,10 @@ if nowe_pytanie:
         ("Ile centymetrów ma 1 metr?", "100"),
         ("Ile milimetrów ma 1 centymetr?", "10"),
         ("Ile metrów ma 1 kilometr?", "1000"),
+        ("Ile metrów kwadratowych ma 1 ar?", "100"),
+        ("Ile arów ma 1 hektar?", "100"),
+        ("Ile metrów kwadratowych ma 1 hektar?", "10000"),
+        ("Ile centymetrów kwadratowych ma 1 metr kwadratowy?", "10000"),
         ("Ile minut ma jedna godzina?", "60"),
         ("Ile godzin ma doba?", "24"),
         ("Ile minut ma kwadrans?", "15"),
@@ -125,7 +138,7 @@ st.divider()
 with st.expander("📝 Otwórz ściągę z jednostkami (do zeszytu!)"):
     st.write("Warto zapamiętać te zasady. Możesz je przepisać do zeszytu!")
 
-    tab1, tab2, tab3 = st.tabs(["📏 Odległość", "⚖️ Masa", "⏰ Czas"])
+    tab1, tab1_5, tab2, tab3 = st.tabs(["📏 Odległość", "📐 Pole powierzchni", "⚖️ Masa", "⏰ Czas"])
 
     with tab1:
         st.markdown("""
@@ -133,6 +146,15 @@ with st.expander("📝 Otwórz ściągę z jednostkami (do zeszytu!)"):
         - **1 m** = 100 cm = 10 dm
         - **1 dm** = 10 cm
         - **1 cm** = 10 mm
+        """)
+
+    with tab1_5:
+        st.markdown("""
+        - **1 cm²** = 100 mm²
+        - **1 m²** = 10 000 cm²
+        - **1 ar (a)** = 100 m² *(kwadrat o boku 10m x 10m)*
+        - **1 hektar (ha)** = 100 a = 10 000 m² *(kwadrat o boku 100m x 100m)*
+        - **1 km²** = 100 ha = 1 000 000 m²
         """)
 
     with tab2:
@@ -153,7 +175,7 @@ with st.expander("📝 Otwórz ściągę z jednostkami (do zeszytu!)"):
 
 # STOPKA
 st.divider()
-st.caption("Najcierpliwszy portal do matematyki - klasa 4")
+st.caption("Najcierpliwszy portal do matematyki")
 st.caption("Created by Radar | Software Development")
 st.caption("Grafika: Menorek | Youtuber")
 st.caption("Tester: Bat0nik")
