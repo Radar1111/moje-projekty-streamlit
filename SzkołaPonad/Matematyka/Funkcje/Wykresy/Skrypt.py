@@ -9,7 +9,6 @@ with st.expander("💡 Zobacz jak wpisywać wzory funkcji:"):
     st.write("* `x**2` — x do kwadratu ($x^2$)")
     st.write("* `x**3` — x do sześcianu ($x^3$)")
     st.write("* `3*x` — mnożenie (pamiętaj o gwieździe `*`)")
-    st.write("* `np.sin(x)` lub `np.cos(x)` — funkcje trygonometryczne")
     st.write(r"* `np.sqrt(x)` — pierwiastek kwadratowy ($\sqrt{x}$)")  # Poprawione z 'r'
 
 wzor = st.text_input("Wpisz wzór funkcji f(x):", value="x**2 - 4")
