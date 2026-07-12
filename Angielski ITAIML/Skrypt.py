@@ -157,7 +157,7 @@ else:
 
             user_choice = st.radio("Wybierz poprawną odpowiedź:", options, key=f"quiz_radio_{st.session_state.current_index}")
 
-            col1, col2 = st.columns()
+            col1, col2 = st.columns(2)
             with col1:
                 if st.button("Sprawdź odpowiedź"):
                     st.session_state.quiz_answered = True
