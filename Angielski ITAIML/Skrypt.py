@@ -7,34 +7,37 @@ from huggingface_hub import hf_hub_download  # <--- TA BIBLIOTEKA POBIERZE PLIK
 st.set_page_config(page_title="DevVocab: IT, AI i ML", page_icon="💻")
 
 
-# Wczytywanie danych z PRYWATNEGO repozytorium Hugging Face
 @st.cache_data
 def load_app_data():
     """Wczytuje kompletną bazę słów z prywatnego pliku JSON na Hugging Face."""
-    # --- SKONFIGURUJ TE DWIE LINIJKI POD SIEBIE ---
-    REPO_ID = "Radar1111/AngielskiITAIML"  # np. "jan_kowalski/devvocab-db"
+    # --- UPEWNIJ SIĘ, ŻE TE DANE SĄ POPRAWNE ---
+    REPO_ID = "twoja_nazwa_uzytkownika_hf/nazwa_repozytorium" 
     FILENAME = "words.json"
     
     try:
-        # Pobieranie tokenu z bezpiecznych sekretów Streamlita
+        # 1. Pobieranie tokenu z bezpiecznych sekretów Streamlita
+        if "HF_TOKEN" not in st.secrets:
+            st.sidebar.error("Błąd: Brak klucza HF_TOKEN w zakładce Secrets Streamlita!")
+            return []
+            
         token = st.secrets["HF_TOKEN"]
         
-        # Pobieranie ścieżki do pliku z chmury Hugging Face
-        # Jeśli Twoje repo to "Dataset", dopisz parametr: repo_type="dataset"
+        # 2. Bezpieczne pobranie pliku z Hugging Face (z jawnym wskazaniem na dataset)
         local_file_path = hf_hub_download(
             repo_id=REPO_ID, 
             filename=FILENAME, 
             token=token,
-            repo_type="dataset" # <--- Zmień na "model" jeśli to repozytorium modeli, a nie zbiorów danych
+            repo_type="dataset"  # <--- WYMUSZENIE TYPU DATASET (Naprawia TypeError)
         )
         
-        # Wczytanie pobranego pliku JSON
+        # 3. Wczytanie pobranego pliku JSON
         with open(local_file_path, "r", encoding="utf-8") as f:
             words = json.load(f)
         return words
 
     except Exception as e:
-        st.sidebar.error(f"Problem z pobraniem bazy danych: {e}")
+        # Wyświetlamy błąd w sidebarze, abyś dokładnie widział co poszło nie tak
+        st.sidebar.error(f"Szczegóły błędu połączenia z HF: {e}")
         return []
 
 
