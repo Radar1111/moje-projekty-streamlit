@@ -1,33 +1,33 @@
 import json
 import os
 import streamlit as st
-from huggingface_hub import hf_hub_download  # <--- TA BIBLIOTEKA POBIERZE PLIK
+from huggingface_hub import hf_hub_download  
 
-# 1. Konfiguracja strony MUSI być na samym początku
+# 1. Konfiguracja strony 
 st.set_page_config(page_title="DevVocab: IT, AI i ML", page_icon="💻")
 
 
 @st.cache_data
 def load_app_data():
     """Wczytuje kompletną bazę słów z prywatnego pliku JSON na Hugging Face."""
-    # --- UPEWNIJ SIĘ, ŻE TE DANE SĄ POPRAWNE ---
+    
     REPO_ID = "Radar1111/AngielskiITAIML" 
     FILENAME = "words.json"
     
     try:
-        # 1. Pobieranie tokenu z bezpiecznych sekretów Streamlita
+        # 1. Pobieranie tokenu 
         if "HF_TOKEN" not in st.secrets:
             st.sidebar.error("Błąd: Brak klucza HF_TOKEN w zakładce Secrets Streamlita!")
             return []
             
         token = st.secrets["HF_TOKEN"]
         
-        # 2. Bezpieczne pobranie pliku z Hugging Face (z jawnym wskazaniem na dataset)
+        # 2. Bezpieczne pobranie pliku z Hugging Face 
         local_file_path = hf_hub_download(
             repo_id=REPO_ID, 
             filename=FILENAME, 
             token=token,
-            repo_type="dataset"  # <--- WYMUSZENIE TYPU DATASET (Naprawia TypeError)
+            repo_type="dataset" 
         )
         
         # 3. Wczytanie pobranego pliku JSON
@@ -36,7 +36,7 @@ def load_app_data():
         return words
 
     except Exception as e:
-        # Wyświetlamy błąd w sidebarze, abyś dokładnie widział co poszło nie tak
+        
         st.sidebar.error(f"Szczegóły błędu połączenia z HF: {e}")
         return []
 
@@ -87,7 +87,7 @@ else:
 
     item = filtered_data[st.session_state.current_index]
 
-    # --- TRYB: FISZKI SŁÓWEK ---
+    # FISZKI SŁÓWEK
     if mode == "Fiszki słówek":
         st.info(f"Kategoria: {item.get('category', 'Ogólne')} | Karta {st.session_state.current_index + 1} z {len(filtered_data)}")
 
@@ -115,7 +115,7 @@ else:
                 st.session_state.show_translation = False
                 st.rerun()
 
-    # --- TRYB: SLANG BIUROWY ---
+    # SLANG BIUROWY
     elif mode == "Slang biurowy (Ponglish)":
         if "office_slang" in item and item["office_slang"]:
             slang = item["office_slang"]
@@ -142,7 +142,7 @@ else:
                 st.session_state.current_index = (st.session_state.current_index + 1) % len(filtered_data)
                 st.rerun()
 
-    # --- TRYB: QUIZ ---
+    # QUIZ
     elif mode == "Quiz (Zdania z luką)":
         if "cloze_test" in item and item["cloze_test"]:
             cloze = item["cloze_test"]
