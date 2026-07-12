@@ -104,7 +104,7 @@ else:
                 st.markdown(f"### PL: **{word_pl}**")
                 st.write(f"*Definicja:* {item.get('definition_pl', '')}")
 
-        col1, col2, col3 = st.columns()
+        col1, col2, col3 = st.columns(3)
         with col1:
             if st.button("Pokaż/Ukryj tłumaczenie"):
                 st.session_state.show_translation = not st.session_state.show_translation
