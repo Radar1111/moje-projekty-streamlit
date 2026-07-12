@@ -3,7 +3,7 @@ import os
 import streamlit as st
 from huggingface_hub import hf_hub_download  
 
-Konfiguracja strony 
+# Konfiguracja strony 
 st.set_page_config(page_title="DevVocab: IT, AI i ML", page_icon="💻")
 
 
