@@ -3,7 +3,7 @@ import os
 import streamlit as st
 from huggingface_hub import hf_hub_download  
 
-# 1. Konfiguracja strony 
+Konfiguracja strony 
 st.set_page_config(page_title="DevVocab: IT, AI i ML", page_icon="💻")
 
 
@@ -15,14 +15,14 @@ def load_app_data():
     FILENAME = "words.json"
     
     try:
-        # 1. Pobieranie tokenu 
+        # Pobieranie tokenu 
         if "HF_TOKEN" not in st.secrets:
             st.sidebar.error("Błąd: Brak klucza HF_TOKEN w zakładce Secrets Streamlita!")
             return []
             
         token = st.secrets["HF_TOKEN"]
         
-        # 2. Bezpieczne pobranie pliku z Hugging Face 
+        # Bezpieczne pobranie pliku z Hugging Face 
         local_file_path = hf_hub_download(
             repo_id=REPO_ID, 
             filename=FILENAME, 
