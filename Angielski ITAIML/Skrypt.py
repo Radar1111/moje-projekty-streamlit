@@ -65,7 +65,7 @@ mode = st.sidebar.radio("Wybierz tryb:", ["Fiszki słówek", "Slang biurowy (Pon
 st.sidebar.markdown("---")
 st.sidebar.subheader("☕ Wesprzyj projekt")
 st.sidebar.caption("Uratowałem Cię przed stresem na Daily? Postaw mi wirtualne espresso, abym miał siłę pisać bazę dla poziomu Senior!")
-st.sidebar.link_button("☕ Postaw mi kawę za brak konfliktów", "https://buycoffee.to")
+st.sidebar.link_button("☕ Postaw mi kawę za brak konfliktów", "https://buycoffee.to/gigawiedza")
 
 # Filtrowanie danych po poziomie trudności
 filtered_data = [w for w in WORDS_DATA if w.get("level") == level]
