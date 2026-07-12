@@ -131,7 +131,7 @@ else:
                 st.markdown("##### 🎧 Przykładowy cytat z Daily / czatu:")
                 st.info(f"„{slang.get('live_example', '')}”")
 
-            col1, col2, col3 = st.columns()
+            col1, col2, col3 = st.columns(3)
             with col3:
                 if st.button("Następny slang"):
                     st.session_state.current_index = (st.session_state.current_index + 1) % len(filtered_data)
