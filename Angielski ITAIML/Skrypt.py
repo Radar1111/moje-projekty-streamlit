@@ -12,7 +12,7 @@ st.set_page_config(page_title="DevVocab: IT, AI i ML", page_icon="💻")
 def load_app_data():
     """Wczytuje kompletną bazę słów z prywatnego pliku JSON na Hugging Face."""
     # --- SKONFIGURUJ TE DWIE LINIJKI POD SIEBIE ---
-    REPO_ID = "twoja_nazwa_uzytkownika_hf/nazwa_repozytorium"  # np. "jan_kowalski/devvocab-db"
+    REPO_ID = "Radar1111/AngielskiITAIML"  # np. "jan_kowalski/devvocab-db"
     FILENAME = "words.json"
     
     try:
