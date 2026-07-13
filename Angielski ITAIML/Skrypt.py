@@ -68,7 +68,7 @@ st.sidebar.caption("Tworzenie darmowych narzędzi to moja pasja! Jeśli moje apl
 st.sidebar.link_button("☕ Postaw mi kawę", "https://buycoffee.to/gigawiedza")
 st.sidebar.caption(
     "**Informacja o wsparciu:**"
-    "Wszelkie wpłaty realizowne za posrednictwem platformy BuyCoffee.to maja charakter "
+    "Wszelkie wpłaty realizowne za posrednictwem platformy BuyCoffee.to mają charakter "
     "całkowicie dobrowolnego, bezinteresownego wsparcia (darowizny) na rzecz dalszego rozwoju "
     "i utrzymania portfolio bezpłatnych aplikacji. Wpłata nie wiąże sie z zakupem żadnych "
     "cyfrowych towarów, usług ani dodatkowych funkcji w aplikacji."
