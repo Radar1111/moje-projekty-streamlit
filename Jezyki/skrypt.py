@@ -69,12 +69,12 @@ def wyswietl_sekcje_wsparcia():
     if "num2" not in st.session_state:
         st.session_state.num2 = random.randint(5, 15)
 
-    LINK_DO_KAWY = "https://buycoffee.to"
+    LINK_DO_KAWY = "https://buycoffee.to/gigawiedza"
 
     # Separator odcinający treść edukacyjną
     st.divider()
 
-    # Expander na dole strony
+    # Expander wsparcia
     with st.expander("👪 Dla Rodziców / Starszych Uczniów (Strefa Wspierania)"):
         if not st.session_state.parent_verified:
             st.write("Aby wejść, potwierdź że jesteś osobą dorosłą:")
