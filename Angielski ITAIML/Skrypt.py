@@ -64,8 +64,15 @@ mode = st.sidebar.radio("Wybierz tryb:", ["Fiszki słówek", "Slang biurowy (Pon
 # Sekcja Donate na samym dole panelu bocznego
 st.sidebar.markdown("---")
 st.sidebar.subheader("☕ Wesprzyj projekt")
-st.sidebar.caption("Uratowałem Cię przed stresem na Daily? Postaw mi wirtualne espresso, abym miał siłę pisać bazę dla poziomu Senior!")
-st.sidebar.link_button("☕ Postaw mi kawę za brak konfliktów", "https://buycoffee.to/gigawiedza")
+st.sidebar.caption("Tworzenie darmowych narzędzi to moja pasja! Jeśli moje aplikacje okazały się dla Ciebie przydatne i chcesz docenić czas, który poświęcam na ich rozwijanie, możesz postawić mi wirtualne espresso.Każda kawa to dla mnie ogromna motywacja i bezinteresowne wsparcie, dzięki któremu mogę dalej dzielić się swoją pasją ze społecznością.")
+st.sidebar.link_button("☕ Postaw mi kawę", "https://buycoffee.to/gigawiedza")
+st.sidebar.caption(
+    "**Informacja o wsparciu:**"
+    "Wszelkie wpłaty realizowne za posrednictwem platformy BuyCoffee.to maja charakter "
+    "całkowicie dobrowolnego, bezinteresownego wsparcia (darowizny) na rzecz dalszego rozwoju "
+    "i utrzymania portfolio bezpłatnych aplikacji. Wpłata nie wiąże sie z zakupem żadnych "
+    "cyfrowych towarów, usług ani dodatkowych funkcji w aplikacji."
+)
 
 # Filtrowanie danych po poziomie trudności
 filtered_data = [w for w in WORDS_DATA if w.get("level") == level]
