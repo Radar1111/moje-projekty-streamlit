@@ -128,11 +128,11 @@ lang_map = {
     "Francuski": "francuski"
 }
 
-with st.sidebar:
-    wyswietl_sekcje_wsparcia()
-
 wybrany_jezyk = st.sidebar.selectbox("Wybierz jezyk", list(lang_map.keys()))
 kolumna_jezyk = lang_map[wybrany_jezyk]
+
+with st.sidebar:
+    wyswietl_sekcje_wsparcia()
 
 st.title(f"Nauka jezyka: {wybrany_jezyk}")
 tab_slowka, tab_zdania = st.tabs(["Slowka", "Zdania"])
