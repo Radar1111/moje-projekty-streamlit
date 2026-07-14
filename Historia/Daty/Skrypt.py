@@ -167,9 +167,6 @@ elif menu == "Quiz":
         zagadka = f"Jaka to liczba arabska: **{rzymska_zagadka}**?"
         odpowiedz_wzorcowa = str(st.session_state.quiz_num)
 
-with st.sidebar:
-    wyswietl_sekcje_wsparcia()
-    
     st.write(zagadka)
 
     if st.session_state.pokazuj_wyjasnienie:
