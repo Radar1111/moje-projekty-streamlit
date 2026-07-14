@@ -3,6 +3,44 @@ import os
 import streamlit as st
 from huggingface_hub import hf_hub_download  
 
+
+# Konfiguracja strony 
+st.set_page_config(page_title="DevVocab: IT, AI i ML", page_icon="💻")
+
+
+@st.cache_data
+def load_app_data():
+    """Wczytuje kompletną bazę słów z prywatnego pliku JSON na Hugging Face."""
+    
+    REPO_ID = "Radar1111/AngielskiITAIML" 
+    FILENAME = "words.json"
+    
+    try:
+        # Pobieranie tokenu 
+        if "HF_TOKEN" not in st.secrets:
+            st.sidebar.error("Błąd: Brak klucza HF_TOKEN w zakładce Secrets Streamlita!")
+            return []
+            
+        token = st.secrets["HF_TOKEN"]
+        
+        # Bezpieczne pobranie pliku z Hugging Face 
+        local_file_path = hf_hub_download(
+            repo_id=REPO_ID, 
+            filename=FILENAME, 
+            token=token,
+            repo_type="dataset" 
+        )
+        
+        # 3. Wczytanie pobranego pliku JSON
+        with open(local_file_path, "r", encoding="utf-8") as f:
+            words = json.load(f)
+        return words
+
+    except Exception as e:
+        
+        st.sidebar.error(f"Szczegóły błędu połączenia z HF: {e}")
+        return []
+
 def wyswietl_sekcje_wsparcia():
     # Inicjalizacja sesji wewnątrz funkcji (bezpieczne dla każdej strony)
     if "parent_verified" not in st.session_state:
@@ -61,44 +99,6 @@ def wyswietl_sekcje_wsparcia():
             "i utrzymania portfolio bezpłatnych aplikacji. Wpłata nie wiąże się z zakupem żadnych "
             "cyfrowych towarów, usług ani dodatkowych funkcji w aplikacji."
         )
-
-# Konfiguracja strony 
-st.set_page_config(page_title="DevVocab: IT, AI i ML", page_icon="💻")
-
-
-@st.cache_data
-def load_app_data():
-    """Wczytuje kompletną bazę słów z prywatnego pliku JSON na Hugging Face."""
-    
-    REPO_ID = "Radar1111/AngielskiITAIML" 
-    FILENAME = "words.json"
-    
-    try:
-        # Pobieranie tokenu 
-        if "HF_TOKEN" not in st.secrets:
-            st.sidebar.error("Błąd: Brak klucza HF_TOKEN w zakładce Secrets Streamlita!")
-            return []
-            
-        token = st.secrets["HF_TOKEN"]
-        
-        # Bezpieczne pobranie pliku z Hugging Face 
-        local_file_path = hf_hub_download(
-            repo_id=REPO_ID, 
-            filename=FILENAME, 
-            token=token,
-            repo_type="dataset" 
-        )
-        
-        # 3. Wczytanie pobranego pliku JSON
-        with open(local_file_path, "r", encoding="utf-8") as f:
-            words = json.load(f)
-        return words
-
-    except Exception as e:
-        
-        st.sidebar.error(f"Szczegóły błędu połączenia z HF: {e}")
-        return []
-
 
 # Wywołanie funkcji
 WORDS_DATA = load_app_data()
