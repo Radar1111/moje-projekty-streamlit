@@ -120,7 +120,8 @@ st.sidebar.header("Ustawienia nauki")
 level = st.sidebar.selectbox("Wybierz poziom trudności:", ["Junior", "Mid", "Senior"])
 mode = st.sidebar.radio("Wybierz tryb:", ["Fiszki słówek", "Slang biurowy (Ponglish)", "Quiz (Zdania z luką)"])
 
-wyswietl_sekcje_wsparcia()
+with st.sidebar:
+    wyswietl_sekcje_wsparcia()
 
 # Filtrowanie danych po poziomie trudności
 filtered_data = [w for w in WORDS_DATA if w.get("level") == level]
