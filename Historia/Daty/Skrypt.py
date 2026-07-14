@@ -101,6 +101,10 @@ st.title("🏛️ Rzymskie Liczby - Nauka i Zabawa")
 
 menu = st.sidebar.radio("Wybierz sekcję:", ["Nauka", "Konwerter Dat", "Quiz"])
 
+with st.sidebar:
+    wyswietl_sekcje_wsparcia()
+
+
 if menu == "Nauka":
     st.header("Powtórka Wiadomości")
     col1, col2 = st.columns(2)
