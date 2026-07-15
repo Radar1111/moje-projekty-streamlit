@@ -1,6 +1,7 @@
 import ephem
 from datetime import datetime
 import streamlit as st
+import random
 
 # Ustawienia strony
 st.set_page_config(page_title="Fazy Księżyca dla Dzieci", layout="centered")
