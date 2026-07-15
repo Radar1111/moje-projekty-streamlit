@@ -20,6 +20,65 @@ def load_questions_from_json():
         # Awaryjna pusta baza, gdyby plik nie istniał
         return []
 
+def wyswietl_sekcje_wsparcia():
+    # Inicjalizacja sesji wewnątrz funkcji (bezpieczne dla każdej strony)
+    if "parent_verified" not in st.session_state:
+        st.session_state.parent_verified = False
+    if "num1" not in st.session_state:
+        st.session_state.num1 = random.randint(5, 15)
+    if "num2" not in st.session_state:
+        st.session_state.num2 = random.randint(5, 15)
+
+    LINK_DO_KAWY = "https://buycoffee.to/gigawiedza"
+
+    # Separator odcinający treść edukacyjną
+    st.divider()
+
+    # Expander na dole strony
+    with st.expander("👪 Dla Rodziców / Starszych Uczniów (Strefa Wspierania)"):
+        if not st.session_state.parent_verified:
+            st.write("Aby wejść, potwierdź że jesteś osobą dorosłą:")
+            pytanie = f"Ile to jest {st.session_state.num1} + {st.session_state.num2}?"
+            
+            # Użycie unikalnego klucza w widgetach zapobiega konfliktom w Streamlit
+            odpowiedz_rodzica = st.number_input(pytanie, step=1, value=0, key="footer_parent_input")
+
+            if st.button("Zatwierdź", key="footer_parent_btn", use_container_width=True):
+                poprawny_wynik = st.session_state.num1 + st.session_state.num2
+                if odpowiedz_rodzica == poprawny_wynik:
+                    st.session_state.parent_verified = True
+                    st.rerun()
+                else:
+                    st.error("Nieprawidłowy wynik. Spróbuj ponownie!")
+        else:
+            st.success("Weryfikacja pomyślna!")
+            st.markdown(
+                """
+                **Drogi Rodzicu / Starszy Uczniu!**  
+                Tworzę te aplikacje z myślą o bezpiecznym i skutecznym rozwoju oraz nauce. 
+                Udostępniam je całkowicie **za darmo i bez reklam**.
+                
+                Utrzymanie projektów wymaga jednak realnych kosztów i setek godzin pracy. 
+                Jeśli aplikacja pomogła w nauce i chcesz wesprzeć rozwój kolejnych programów 
+                – możesz postawić mi wirtualną kawę. Dziękuję!
+                """
+            )
+            st.link_button("☕ Postaw wirtualną kawę", LINK_DO_KAWY, type="primary", use_container_width=True)
+            
+            if st.button("Zablokuj strefę", type="secondary", use_container_width=True, key="footer_lock_btn"):
+                st.session_state.parent_verified = False
+                st.session_state.num1 = random.randint(5, 15)
+                st.session_state.num2 = random.randint(5, 15)
+                st.rerun()
+
+            st.caption(
+            "**Informacja o wsparciu:** "
+            "Wszelkie wpłaty realizowane za pośrednictwem platformy BuyCoffee.to mają charakter "
+            "całkowicie dobrowolnego, bezinteresownego wsparcia (darowizny) na rzecz dalszego rozwoju "
+            "i utrzymania portfolio bezpłatnych aplikacji. Wpłata nie wiąże się z zakupem żadnych "
+            "cyfrowych towarów, usług ani dodatkowych funkcji w aplikacji."
+        )
+
 
 # Wczytanie pytań z pliku do zmiennej
 ALL_QUIZ_DATA = load_questions_from_json()
@@ -30,6 +89,9 @@ DOSTEPNE_KATEGORIE = sorted(list(set(item["category"] for item in ALL_QUIZ_DATA)
 # Menu boczne do wyboru trybu
 st.sidebar.title("🚦 Nawigacja")
 mode = st.sidebar.radio("Wybierz tryb pracy:", ["Nauka 📖", "Quiz 🎮"])
+with st.sidebar:
+    wyswietl_sekcje_wsparcia()
+
 
 # --- TRYB NAUKI ---
 if mode == "Nauka 📖":
