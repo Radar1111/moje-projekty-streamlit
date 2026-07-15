@@ -147,7 +147,8 @@ with st.sidebar:
         help="Wybierz, jak długi ma być Twój quiz"
     )
 
-wyswietl_sekcje_wsparcia()
+
+
 
 # 4. LOGIKA QUIZU
 
@@ -247,6 +248,8 @@ else:
     if st.button("🔄 Zagraj jeszcze raz"):
         st.session_state.aktualna_lektura = None
         st.rerun()
+
+wyswietl_sekcje_wsparcia()
 
 st.divider()
 st.caption("Najcierpliwszy portal do polskiego")
