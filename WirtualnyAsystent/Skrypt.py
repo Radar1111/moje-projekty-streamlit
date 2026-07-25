@@ -11,7 +11,7 @@ st.title("🤖 Twój Inteligentny Asystent")
 @st.cache_data(ttl=60)
 def pobierz_baze():
     try:
-        df = pd.read_csv("lekcje.csv")
+        df = pd.read_csv("WirtualnyAsystent/lekcje.csv")
         # Zamienia puste pola (NaN) na pusty tekst, aby uniknąć błędów float
         df = df.fillna("")
         return df if not df.empty else None
