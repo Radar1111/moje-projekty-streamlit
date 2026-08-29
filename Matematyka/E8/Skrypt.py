@@ -23,7 +23,7 @@ def wczytaj_baze():
         hf_token = st.secrets["HF_TOKEN"]
         
         # Poprawny link dla wersji RAW dla prywatnego repozytorium
-        URL_HF = "https://huggingface.co/datasets/Radar1111/baza_zadan.json/blob/main/baza_zadan.json
+        URL_HF = "https://huggingface.co/datasets/Radar1111/baza_zadan.json/blob/main/baza_zadan.json"
         
         # Dodajemy token do nagłówka autoryzacji
         headers = {"Authorization": f"Bearer {hf_token}"}
