@@ -10,10 +10,10 @@ st.set_page_config(
 )
 
 
-# --- 1. BEZPIECZNE WCZYTYWANIE BAZY Z HUGGING FACE ---
+# --- 1. BEZPIECZNE WCZYTYWANIE BAZY Z HUGGING FACE (Z AUTOMATYCZNYM RESETEM CACHE) ---
 @st.cache_data
-def load_app_data(token):
-    """Wczytuje kompletną bazę zadań z prywatnego repozytorium Hugging Face."""
+def load_app_data(token, wersja_bazy):
+    """Wczytuje bazę zadań z Hugging Face. Zmiana parametru wersja_bazy automatycznie czyści cache."""
     REPO_ID = "Radar1111/TrenerE8" 
     FILENAME = "zadania.json"
     
@@ -35,11 +35,13 @@ if "HF_TOKEN" not in st.secrets:
     st.stop()
 else:
     try:
-        tasks = load_app_data(st.secrets["HF_TOKEN"])
+        # 💡 JEŚLI DODASZ NOWE ZADANIA NA HF, ZMIEŃ PONIŻSZĄ WARTOŚĆ (np. na "v2", "v3", itd.), ABY AUTOMATYCZNIE WYCZYŚCIĆ CACHE!
+        AKTUALNA_WERSJA_BAZY = "v2" 
+        
+        tasks = load_app_data(st.secrets["HF_TOKEN"], AKTUALNA_WERSJA_BAZY)
     except Exception as e:
         st.error(f"Nie udało się pobrać bazy zadań z Hugging Face. Szczegóły błędu: {e}")
         st.stop()
-
 
 # --- 2. INTERFEJS UŻYTKOWNIKA I FILTRY ---
 st.title("Egzamin Ósmoklasisty - Trener Matematyki")
