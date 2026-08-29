@@ -2,6 +2,7 @@ import json
 import os
 import random
 import streamlit as st
+from huggingface_hub import hf_hub_download
 
 # Konfiguracja strony
 st.set_page_config(
@@ -9,19 +10,39 @@ st.set_page_config(
 )
 
 
-# Ładowanie bazy zadań z json
+# 1. Wczytywanie bazy danych z pliku JSON (Bezpieczne cache'owanie)
 @st.cache_data
-def load_tasks():
-    if not os.path.exists("zadania.json"):
-        return []
-    with open("zadania.json", "r", encoding="utf-8") as f:
-        try:
-            return json.load(f)
-        except json.JSONDecodeError:
-            return []
+def load_app_data(token):
+    """Wczytuje kompletną bazę zadań z prywatnego repozytorium Hugging Face."""
+    REPO_ID = "Radar1111/TrenerE8" 
+    FILENAME = "zadania.json"
+    
+    # Bezpieczne pobranie pliku z Hugging Face 
+    local_file_path = hf_hub_download(
+        repo_id=REPO_ID, 
+        filename=FILENAME, 
+        token=token,
+        repo_type="dataset" # Upewnij się, że to typ "Dataset" na HF
+    )
+    
+    # Wczytanie pobranego pliku JSON
+    with open(local_file_path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
-tasks = load_tasks()
+# WYWOŁANIE FUNKCJI
+tasks = []
+
+if "HF_TOKEN" not in st.secrets:
+    st.error("Błąd krytyczny: Brak klucza `HF_TOKEN` w zakładce Secrets Streamlita!")
+    st.stop()
+else:
+    try:
+        # Przekazujemy token do funkcji, aby poprawnie zarządzać cachem
+        tasks = load_app_data(st.secrets["HF_TOKEN"])
+    except Exception as e:
+        st.error(f"Nie udało się pobrać bazy zadań z Hugging Face. Szczegóły błędu: {e}")
+        st.stop()
 
 # Interfejs użytkownika
 st.title("Egzamin Ósmoklasisty - Trener Matematyki")
