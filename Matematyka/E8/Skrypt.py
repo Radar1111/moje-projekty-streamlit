@@ -3,6 +3,8 @@ import json
 import random
 import time
 import requests
+# Dodano brakujący import do pobierania plików z Hugging Face
+from huggingface_hub import hf_hub_download
 
 # Konfiguracja strony Streamlit
 st.set_page_config(page_title="Inteligentny Arkusz Diagnostyczny E8", layout="centered")
@@ -45,11 +47,10 @@ def load_app_data():
         return words
 
     except Exception as e:
-        
         st.sidebar.error(f"Szczegóły błędu połączenia z HF: {e}")
-        return []
         
-        # Awaryjna baza danych (gdy nie ma pliku JSON)
+        # POPRAWKA: Awaryjna baza danych musi być zwrócona TUTAJ, 
+        # zamiast pustej listy 'return []', aby aplikacja mogła działać lokalnie bez HF.
         return [
             {
                 "id_zadania": "cke_mat_01",
@@ -71,10 +72,9 @@ def load_app_data():
             }
         ]
 
-
-baza_pelna = wczytaj_baze()
+# POPRAWKA: Zmiana nazwy funkcji na właściwą (zgodną z definicją wyżej)
+baza_pelna = load_app_data()
 liczba_w_bazie = len(baza_pelna)
-
 
 # PANEL BOCZNY (MENU GŁÓWNE)
 
