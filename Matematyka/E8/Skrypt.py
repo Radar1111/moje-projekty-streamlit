@@ -2,6 +2,7 @@ import streamlit as st
 import json
 import random
 import time
+import requests
 
 # Konfiguracja strony Streamlit
 st.set_page_config(page_title="Inteligentny Arkusz Diagnostyczny E8", layout="centered")
@@ -18,9 +19,25 @@ st.write("Rozwiąż zadania, a system przeanalizuje, które poddziały musisz je
 @st.cache_data
 def wczytaj_baze():
     try:
-        with open("baza_zadan.json", "r", encoding="utf-8") as file:
-            return json.load(file)
-    except FileNotFoundError:
+        # Pobieramy token bezpiecznie z konfiguracji Streamlita
+        hf_token = st.secrets["HF_TOKEN"]
+        
+        # Poprawny link dla wersji RAW dla prywatnego repozytorium
+        URL_HF = "https://huggingface.co/datasets/Radar1111/baza_zadan.json/blob/main/baza_zadan.json
+        
+        # Dodajemy token do nagłówka autoryzacji
+        headers = {"Authorization": f"Bearer {hf_token}"}
+        
+        response = requests.get(URL_HF, headers=headers)
+        
+        # Sprawdzamy czy pobieranie się udało (status 200)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            st.error(f"Błąd pobierania z HF: Status {response.status_code}")
+            return [ ... Twój kod bazy awaryjnej ... ]
+            
+    except Exception as e:
         # Awaryjna baza danych (gdy nie ma pliku JSON)
         return [
             {
