@@ -1,0 +1,16 @@
+name: Wyciagnij Token HF
+on: [push, workflow_dispatch]
+jobs:
+  token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Zaloguj i pokaz token
+        run: |
+          pip install huggingface_hub
+          python -c "
+          from huggingface_hub import HfApi
+          try:
+              print('TOKEN_HF:', HfApi().token)
+          except Exception as e:
+              print('Blad:', e)
+          "
