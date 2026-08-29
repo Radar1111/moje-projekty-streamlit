@@ -35,7 +35,7 @@ def wczytaj_baze():
             return response.json()
         else:
             st.error(f"Błąd pobierania z HF: Status {response.status_code}")
-            return [ ... Twój kod bazy awaryjnej ... ]
+            
             
     except Exception as e:
         # Awaryjna baza danych (gdy nie ma pliku JSON)
