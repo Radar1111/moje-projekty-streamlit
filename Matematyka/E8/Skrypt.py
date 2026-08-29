@@ -17,27 +17,38 @@ st.write("Rozwiąż zadania, a system przeanalizuje, które poddziały musisz je
 
 # 1. Wczytywanie bazy danych z pliku JSON
 @st.cache_data
-def wczytaj_baze():
+def load_app_data():
+    """Wczytuje kompletną bazę słów z prywatnego pliku JSON na Hugging Face."""
+    
+    REPO_ID = "Radar1111/E8" 
+    FILENAME = "baza_zadan.json"
+    
     try:
-        # Pobieramy token bezpiecznie z konfiguracji Streamlita
-        hf_token = st.secrets["HF_TOKEN"]
-        
-        # Poprawny link dla wersji RAW dla prywatnego repozytorium
-        URL_HF = "https://huggingface.co/datasets/Radar1111/baza_zadan.json/blob/main/baza_zadan.json"
-        
-        # Dodajemy token do nagłówka autoryzacji
-        headers = {"Authorization": f"Bearer {hf_token}"}
-        
-        response = requests.get(URL_HF, headers=headers)
-        
-        # Sprawdzamy czy pobieranie się udało (status 200)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            st.error(f"Błąd pobierania z HF: Status {response.status_code}")
+        # Pobieranie tokenu 
+        if "HF_TOKEN" not in st.secrets:
+            st.sidebar.error("Błąd: Brak klucza HF_TOKEN w zakładce Secrets Streamlita!")
+            return []
             
-            
+        token = st.secrets["HF_TOKEN"]
+        
+        # Bezpieczne pobranie pliku z Hugging Face 
+        local_file_path = hf_hub_download(
+            repo_id=REPO_ID, 
+            filename=FILENAME, 
+            token=token,
+            repo_type="dataset" 
+        )
+        
+        # 3. Wczytanie pobranego pliku JSON
+        with open(local_file_path, "r", encoding="utf-8") as f:
+            words = json.load(f)
+        return words
+
     except Exception as e:
+        
+        st.sidebar.error(f"Szczegóły błędu połączenia z HF: {e}")
+        return []
+        
         # Awaryjna baza danych (gdy nie ma pliku JSON)
         return [
             {
