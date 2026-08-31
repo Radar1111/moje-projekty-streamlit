@@ -3,7 +3,6 @@ import json
 import random
 import time
 import requests
-# Dodano brakujący import do pobierania plików z Hugging Face
 from huggingface_hub import hf_hub_download
 
 # Konfiguracja strony Streamlit
@@ -72,7 +71,6 @@ def load_app_data():
             }
         ]
 
-# POPRAWKA: Zmiana nazwy funkcji na właściwą (zgodną z definicją wyżej)
 baza_pelna = load_app_data()
 liczba_w_bazie = len(baza_pelna)
 
@@ -113,7 +111,45 @@ with st.sidebar:
         if "trening_zestaw" in st.session_state:
             del st.session_state["trening_zestaw"]
         st.rerun()
+    # --- 📝 MULTI-BRUDNOPIS W SIDEBARZE (TEKST + RYSOWANIE) ---
+    st.sidebar.markdown("---")
+    st.sidebar.header("📝 Brudnopis Ucznia")
 
+    # Tworzymy dwie niezależne zakładki w pasku bocznym
+    zakladka_rysuj, zakladka_pisz = st.sidebar.tabs(["🎨 Rysuj", "✍️ Pisz"])
+
+    with zakladka_rysuj:
+        st.caption("Rysuj myszką lub palcem. Kliknij ikonę kosza pod tablicą, aby wyczyścić.")
+        from streamlit_drawable_canvas import st_canvas
+
+        # Rysownica w sidebarze działa stabilnie, bo nie blokuje jej główny formularz
+        st_canvas(
+            fill_color="rgba(255, 165, 0, 0.3)",
+            stroke_width=3,
+            stroke_color="#000000",
+            background_color="#ffffff",
+            update_streamlit=False,  # Dla płynności rysowania (w sidebarze już nie zablokuje apki!)
+            height=250,
+            drawing_mode="freedraw",
+            key="globalny_canvas_brudnopis",  # Jeden stały klucz, by rysunek nie znikał przy zmianie pytania
+        )
+
+    with zakladka_pisz:
+        if "brudnopis_globalny" not in st.session_state:
+            st.session_state["brudnopis_globalny"] = ""
+
+
+        def czysc_notatnik():
+            st.session_state["brudnopis_globalny"] = ""
+
+
+        st.text_area(
+            label="Miejsce na Twoje obliczenia:",
+            placeholder="Np. wspólny mianownik to 12...",
+            key="brudnopis_globalny",
+            height=180
+        )
+        st.button("Wyczyść notatnik 🧹", on_click=czysc_notatnik)
 
 # OBSŁUGA SEKCJI WYBORU I LOSOWANIA (Zarządzanie stanem - Session State)
 
