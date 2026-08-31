@@ -122,7 +122,6 @@ przefiltrowane_zadania = st.session_state[obecny_klucz_puli]
 if not przefiltrowane_zadania:
     st.info("Brak zadań w wybranej konfiguracji.")
 else:
-    else:
     # --- 📝 MULTI-BRUDNOPIS W SIDEBARZE (TEKST + RYSOWANIE) ---
     st.sidebar.markdown("---")
     st.sidebar.header("📝 Brudnopis Ucznia")
