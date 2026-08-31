@@ -71,15 +71,7 @@ def load_app_data():
             }
         ]
 
-# Walidacja tokenu i wczytanie bazy danych
-baza_pelna = []
-if "HF_TOKEN" not in st.secrets:
-    st.sidebar.error("Błąd: Brak klucza HF_TOKEN w zakładce Secrets Streamlita!")
-else:
-    # 💡 ZMIENIAJ TĘ WARTOŚĆ (np. na "v6", "v7" itd.) PRZY KAŻDEJ ZMIANIE PLIKU JSON NA SERWERZE!
-    AKTUALNA_WERSJA_BAZY = "v1" 
-    baza_pelna = load_app_data(st.secrets["HF_TOKEN"], AKTUALNA_WERSJA_BAZY)
-
+baza_pelna = load_app_data()
 liczba_w_bazie = len(baza_pelna)
 
 # PANEL BOCZNY (MENU GŁÓWNE)
