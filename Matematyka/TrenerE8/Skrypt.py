@@ -36,7 +36,7 @@ if "HF_TOKEN" not in st.secrets:
 else:
     try:
         # 💡 JEŚLI DODASZ NOWE ZADANIA NA HF, ZMIEŃ PONIŻSZĄ WARTOŚĆ (np. na "v2", "v3", itd.), ABY AUTOMATYCZNIE WYCZYŚCIĆ CACHE!
-        AKTUALNA_WERSJA_BAZY = "v3" 
+        AKTUALNA_WERSJA_BAZY = "v4" 
         
         tasks = load_app_data(st.secrets["HF_TOKEN"], AKTUALNA_WERSJA_BAZY)
     except Exception as e:
@@ -122,6 +122,47 @@ przefiltrowane_zadania = st.session_state[obecny_klucz_puli]
 if not przefiltrowane_zadania:
     st.info("Brak zadań w wybranej konfiguracji.")
 else:
+    else:
+    # --- 📝 MULTI-BRUDNOPIS W SIDEBARZE (TEKST + RYSOWANIE) ---
+    st.sidebar.markdown("---")
+    st.sidebar.header("📝 Brudnopis Ucznia")
+
+    # Tworzymy dwie niezależne zakładki w pasku bocznym
+    zakladka_rysuj, zakladka_pisz = st.sidebar.tabs(["🎨 Rysuj", "✍️ Pisz"])
+
+    with zakladka_rysuj:
+        st.caption("Rysuj myszką lub palcem. Kliknij ikonę kosza pod tablicą, aby wyczyścić.")
+        from streamlit_drawable_canvas import st_canvas
+
+        # Rysownica w sidebarze działa stabilnie, bo nie blokuje jej główny formularz
+        st_canvas(
+            fill_color="rgba(255, 165, 0, 0.3)",
+            stroke_width=3,
+            stroke_color="#000000",
+            background_color="#ffffff",
+            update_streamlit=False,  # Dla płynności rysowania (w sidebarze już nie zablokuje apki!)
+            height=250,
+            drawing_mode="freedraw",
+            key="globalny_canvas_brudnopis",  # Jeden stały klucz, by rysunek nie znikał przy zmianie pytania
+        )
+
+    with zakladka_pisz:
+        if "brudnopis_globalny" not in st.session_state:
+            st.session_state["brudnopis_globalny"] = ""
+
+
+        def czysc_notatnik():
+            st.session_state["brudnopis_globalny"] = ""
+
+
+        st.text_area(
+            label="Miejsce na Twoje obliczenia:",
+            placeholder="Np. wspólny mianownik to 12...",
+            key="brudnopis_globalny",
+            height=180
+        )
+        st.button("Wyczyść notatnik 🧹", on_click=czysc_notatnik)
+
     # A. EKRAN PODSUMOWANIA (KONIEC SERII)
     if st.session_state.quiz_finished:
         st.success("🎉 Gratulacje! Ukończyłeś całą serię zadań!")
