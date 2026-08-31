@@ -6,3 +6,4 @@ datasets
 fsspec
 sympy
 ephem
+streamlit-drawable-canvas
