@@ -36,7 +36,7 @@ if "HF_TOKEN" not in st.secrets:
 else:
     try:
         # 💡 JEŚLI DODASZ NOWE ZADANIA NA HF, ZMIEŃ PONIŻSZĄ WARTOŚĆ (np. na "v2", "v3", itd.), ABY AUTOMATYCZNIE WYCZYŚCIĆ CACHE!
-        AKTUALNA_WERSJA_BAZY = "v5" 
+        AKTUALNA_WERSJA_BAZY = "v6" 
         
         tasks = load_app_data(st.secrets["HF_TOKEN"], AKTUALNA_WERSJA_BAZY)
     except Exception as e:
