@@ -9,7 +9,9 @@ st.title("Moja Nauka Słówek")
 SŁOWNIK_ROZDZIAŁOW = {
     "Rozdział 1: Liczebniki (Numerals)": "ang_kl4_rozdzial1.csv",
     "Rozdział 2: Szkoła (School)": "ang_kl4_rozdzial2.csv",
-    # Tutaj możesz dopisywać kolejne rozdziały według wzoru:
+    "Rozdział 3: Owoce (Fruits)": "ang_kl4_rozdzial3.csv",
+    "Rozdział 4: Warzywaa (Vegetables)": "ang_kl4_rozdzial4.csv",
+    # Kolejne rozdziały według wzoru:
     # "Nazwa wyświetlana w menu": "nazwa_pliku_na_hf.csv"
 }
 
