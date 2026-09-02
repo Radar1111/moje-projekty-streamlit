@@ -5,6 +5,14 @@ import random
 st.set_page_config(page_title="Apka do Słówek", page_icon="✏️")
 st.title("Moja Nauka Słówek")
 
+# 1. MAPOWANIE NAZW ROZDZIAŁÓW NA PLIKI CSV
+SŁOWNIK_ROZDZIAŁOW = {
+    "Rozdział 1: Liczebniki (Numerals)": "ang_kl4_rozdzial1.csv",
+    "Rozdział 2: Szkoła (School)": "ang_kl4_rozdzial2.csv",
+    # Tutaj możesz dopisywać kolejne rozdziały według wzoru:
+    # "Nazwa wyświetlana w menu": "nazwa_pliku_na_hf.csv"
+}
+
 def laduj_slowka(nazwa_pliku):
     """Pobiera bazę słów z Hugging Face Dataset"""
     try:
@@ -17,15 +25,15 @@ def laduj_slowka(nazwa_pliku):
         
         pobrane_dane = []
         for wiersz in dataset['train']:
-            # strip() usuwa zbędne spacje
             pobrane_dane.append({'pl': wiersz['pl'].strip(), 'en': wiersz['en'].strip()})
         return pobrane_dane
     except Exception as e:
         st.error(f"Problem z połączeniem lub brakiem pliku: {e}")
         return []
 
-def sprawdz_i_dalej(klucz):
-    """Funkcja sprawdza odpowiedź pobraną z dynamicznego klucza"""
+def sprawdz_odpowiedz():
+    """Sprawdza wpisaną odpowiedź i blokuje ponowne sprawdzenie tego samego słowa"""
+    klucz = f"temp_odp_{st.session_state.index}"
     if klucz not in st.session_state:
         return
         
@@ -42,17 +50,28 @@ def sprawdz_i_dalej(klucz):
         st.session_state.punkty += 1
     else:
         st.session_state.feedback = ("zle", f"Niestety nie. Miało być: {prawidlowe}")
+    
+    st.session_state.sprawdzone = True
 
-    # Przeskakujemy do kolejnego elementu
+def nastepne_slowko():
+    """Resetuje stan feedbacku i przechodzi do kolejnego słowa"""
+    st.session_state.feedback = None
+    st.session_state.sprawdzone = False
     st.session_state.index += 1
 
 # PANEL BOCZNY (SIDEBAR)
 with st.sidebar:
     st.header("Panel sterowania")
-    wybrany_numer = st.selectbox("Który rozdział?", range(1, 3)) 
+    
+    # Wybór rozdziału za pomocą ładnej nazwy
+    wybrany_opis = st.selectbox("Który rozdział?", list(SŁOWNIK_ROZDZIAŁOW.keys()))
+    nazwa_pliku = SŁOWNIK_ROZDZIAŁOW[wybrany_opis] # Pobranie właściwej nazwy pliku .csv
+    
     wybrany_tryb = st.radio("Czego się uczysz:", ["Polski na Angielski", "Angielski na Polski"])
+    
+    # 2. WYBÓR LICZBY SŁÓWEK
+    wybrany_limit = st.selectbox("Ile słówek chcesz powtórzyć?", ["5", "10", "Wszystkie"])
 
-    # NAPRAWIONE MAPOWANIE JĘZYKÓW
     if wybrany_tryb == "Polski na Angielski":
         t_source = 'pl'
         t_target = 'en'
@@ -60,23 +79,39 @@ with st.sidebar:
         t_source = 'en'
         t_target = 'pl'
 
-# INICJALIZACJA SESJI
+# INICJALIZACJA SESJI LUB ZMIANA USTAWIEŃ
 if ('aktualny_rozdzial' not in st.session_state or
-        st.session_state.aktualny_rozdzial != wybrany_numer or
-        st.session_state.ostatni_tryb != wybrany_tryb):
+        st.session_state.aktualny_rozdzial != nazwa_pliku or
+        st.session_state.ostatni_tryb != wybrany_tryb or
+        st.session_state.ostatni_limit != wybrany_limit):
     
-    st.session_state.aktualny_rozdzial = wybrany_numer
+    st.session_state.aktualny_rozdzial = nazwa_pliku
     st.session_state.ostatni_tryb = wybrany_tryb
+    st.session_state.ostatni_limit = wybrany_limit
     
-    nazwa_pliku = f'ang_kl4_rozdzial{wybrany_numer}.csv'
-    st.session_state.lista_slowek = laduj_slowka(nazwa_pliku)
+    wszystkie_slowka = laduj_slowka(nazwa_pliku)
 
-    if st.session_state.lista_slowek:
-        random.shuffle(st.session_state.lista_slowek)
+    if wszystkie_slowka:
+        random.shuffle(wszystkie_slowka)
+        
+        # 3. ZABEZPIECZENIE LICZBY SŁÓWEK
+        if wybrany_limit == "Wszystkie":
+            st.session_state.lista_slowek = wszystkie_slowka
+        else:
+            limit_int = int(wybrany_limit)
+            # Jeśli w bazie jest mniej słówek niż żądany limit, bierzemy tylko tyle, ile jest dostępnych
+            if len(wszystkie_slowka) < limit_int:
+                st.session_state.lista_slowek = wszystkie_slowka
+                st.sidebar.warning(f"Baza zawiera tylko {len(wszystkie_slowka)} słówek!")
+            else:
+                st.session_state.lista_slowek = wszystkie_slowka[:limit_int]
+    else:
+        st.session_state.lista_slowek = []
     
     st.session_state.index = 0
     st.session_state.punkty = 0
     st.session_state.feedback = None
+    st.session_state.sprawdzone = False
     st.session_state.target_lang = t_target
     st.session_state.source_lang = t_source
 
@@ -94,26 +129,32 @@ if st.session_state.lista_slowek:
 
         st.markdown(f"### Przetłumacz: **{pytanie_txt}**")
 
-        # UNIKALNY KLUCZ DLA CZYSZCZENIA POLA
         klucz_pola = f"temp_odp_{st.session_state.index}"
 
         st.text_input(
             "Twoja propozycja:",
             key=klucz_pola,
             placeholder="Wpisz słowo...",
-            autocomplete="off"
+            autocomplete="off",
+            disabled=st.session_state.sprawdzone,
+            on_change=sprawdz_odpowiedz if not st.session_state.sprawdzone else None
         )
 
-        if st.button("Sprawdź i następne ➔", use_container_width=True, type="primary"):
-            sprawdz_i_dalej(klucz_pola)
-            st.rerun()
-
-        if st.session_state.feedback:
-            typ, tresc = st.session_state.feedback
-            if typ == "dobrze":
-                st.success(tresc)
-            else:
-                st.error(tresc)
+        if not st.session_state.sprawdzone:
+            if st.button("Sprawdź ➔", use_container_width=True, type="primary"):
+                sprawdz_odpowiedz()
+                st.rerun()
+        else:
+            if st.session_state.feedback:
+                typ, tresc = st.session_state.feedback
+                if typ == "dobrze":
+                    st.success(tresc)
+                else:
+                    st.error(tresc)
+            
+            if st.button("Następne słówko ➔", use_container_width=True, type="secondary"):
+                nastepne_slowko()
+                st.rerun()
     else:
         st.balloons()
         st.header("Koniec nauki!")
@@ -122,6 +163,7 @@ if st.session_state.lista_slowek:
             st.session_state.index = 0
             st.session_state.punkty = 0
             st.session_state.feedback = None
+            st.session_state.sprawdzone = False
             random.shuffle(st.session_state.lista_slowek)
             st.rerun()
 
