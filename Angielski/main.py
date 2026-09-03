@@ -178,7 +178,7 @@ if st.session_state.lista_slowek:
 
 # --- STOPKA ---
 st.divider()
-st.caption("Najcierpliwszy portal do angielskiego - klasa 4")
+st.caption("Najcierpliwszy portal do angielskiego")
 st.caption("Created by Radar | Software Development")
 st.caption("Grafika: Menorek | Youtuber")
 st.caption("Tester: Bat0nik")
