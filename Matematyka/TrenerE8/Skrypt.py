@@ -252,3 +252,10 @@ else:
                     else:
                         st.session_state.quiz_finished = True
                     st.rerun()
+
+# --- STOPKA ---
+st.divider()
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
+
