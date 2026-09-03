@@ -10,7 +10,14 @@ SŁOWNIK_ROZDZIAŁOW = {
     "Rozdział 1: Liczebniki (Numerals)": "ang_kl4_rozdzial1.csv",
     "Rozdział 2: Szkoła (School)": "ang_kl4_rozdzial2.csv",
     "Rozdział 3: Owoce (Fruits)": "ang_kl4_rozdzial3.csv",
-    "Rozdział 4: Warzywaa (Vegetables)": "ang_kl4_rozdzial4.csv",
+    "Rozdział 4: Warzywa (Vegetables)": "ang_kl4_rozdzial4.csv",
+    "Rozdział 5: Rodzina (Family)": "ang_kl4_rozdzial5.csv",
+    "Rozdział 6: Zwierzęta (Animals)": "ang_kl4_rozdzial6.csv",
+    "Rozdział 7: Pokoje w domu (Rooms)": "ang_kl4_rozdzial7.csv",
+    "Rozdział 8: Kolory (Colors)": "ang_kl4_rozdzial8.csv",
+    "Rozdział 9: Części ciała (Body parts)": "ang_kl4_rozdzial9.csv",
+    "Rozdział 10: Miejsca w szkole (School places)": "ang_kl4_rozdzial10.csv",
+    "Rozdział 11: Polecenia nauczyciela (Teacher's instruction)": "ang_kl4_rozdzial11.csv",
     # Kolejne rozdziały według wzoru:
     # "Nazwa wyświetlana w menu": "nazwa_pliku_na_hf.csv"
 }
