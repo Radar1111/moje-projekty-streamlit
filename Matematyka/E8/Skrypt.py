@@ -330,3 +330,9 @@ st.write(
     "w żaden sposób powiązana, autoryzowana ani sponsorowana przez CKE."
     "Logotypy oraz nazwy własne CKE zostały użyte wyłącznie w celach informacyjnych."
 )
+# --- STOPKA ---
+st.divider()
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
+
