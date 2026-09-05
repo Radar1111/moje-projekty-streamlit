@@ -5,20 +5,23 @@ import random
 st.set_page_config(page_title="Apka do Słówek", page_icon="✏️")
 st.title("Moja Nauka Słówek")
 
-# 1. MAPOWANIE NAZW ROZDZIAŁÓW NA PLIKI CSV
+# 1. POPRAWIONE MAPOWANIE NAZW ROZDZIAŁÓW (Klucze muszą być unikalne!)
 SŁOWNIK_ROZDZIAŁOW = {
     "Rozdział 1: Liczebniki (Numerals)": "ang_sr_rozdzial1.csv",
-     "Rozdział 1: Liczebniki (Numerals)": "ang_sr_rozdzial2.csv",
+    "Rozdział 2: Cechy": "ang_sr_rozdzial2.csv",  # Zmieniono klucz na unikalny
 }
 
 def laduj_slowka(nazwa_pliku):
     """Pobiera bazę słów z Hugging Face Dataset"""
     try:
         repo_id = "Radar1111/Angielski-Śr" 
+        
+        # DODANO: download_mode="force_redownload", aby pominąć błędny cache przekierowań
         dataset = load_dataset(
             repo_id, 
             data_files=nazwa_pliku, 
-            token=st.secrets["HF_TOKEN"]
+            token=st.secrets["HF_TOKEN"],
+            download_mode="force_redownload"
         )
         
         pobrane_dane = []
