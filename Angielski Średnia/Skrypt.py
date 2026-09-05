@@ -2,40 +2,46 @@ import streamlit as st
 import pandas as pd
 import requests
 import io
+import random
+
+st.set_page_config(page_title="Apka do Słówek", page_icon="✏️")
+st.title("Moja Nauka Słówek")
+
+# ---- TUTAJ MUSI BYĆ TA ZMIENNA (SPRAWDŹ CZY NIE MA TU LITERÓWKI) ----
+SŁOWNIK_ROZDZIAŁOW = {
+    "Rozdział 1: Liczebniki (Numerals)": "ang_sr_rozdzial1.csv",
+    "Rozdział 2: Kolejny Rozdział": "ang_sr_rozdzial2.csv"
+}
 
 def laduj_slowka(nazwa_pliku):
     """Pobiera plik CSV bezpośrednio przez URL z nagłówkiem autoryzacji HF"""
     try:
-        # Tworzymy bezpośredni link URL do pliku w Twoim repozytorium
         url = f"https://huggingface.co{nazwa_pliku}"
-        
-        # Pobieramy token ze Streamlit Secrets
         token = st.secrets["HF_TOKEN"]
         headers = {"Authorization": f"Bearer {token}"}
         
-        # Wykonujemy bezpośrednie zapytanie HTTP z tokenem
         response = requests.get(url, headers=headers)
         
-        # Jeśli HF zwróci błąd autoryzacji lub braku pliku
         if response.status_code != 200:
             st.error(f"Błąd HF (Status {response.status_code}): Sprawdź token lub nazwę pliku.")
             return []
             
-        # Odczytujemy zawartość CSV za pomocą Pandas (wymaga import io)
         df = pd.read_csv(io.StringIO(response.text))
         
-        # Konwersja na listę słowników (zgodnie z Twoim oryginalnym formatem)
         pobrane_dane = []
         for _, wiersz in df.iterrows():
             pobrane_dane.append({
                 'pl': str(wiersz['pl']).strip(), 
-                'en': str(wiersz['en']).strip()
-            })
+                'en': str(wiersz['en'].strip()
+            )})
         return pobrane_dane
         
     except Exception as e:
         st.error(f"Problem z połączeniem lub brakiem pliku: {e}")
         return []
+
+# ---- DALSZA CZĘŚĆ TWOJEGO KODU ----
+wybrany_opis = st.selectbox("Który rozdział?", list(SŁOWNIK_ROZDZIAŁOW.keys()))
 
 def sprawdz_odpowiedz_wpisywanie():
     """Sprawdza wpisaną odpowiedź w trybie Wpisywania"""
