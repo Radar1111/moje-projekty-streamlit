@@ -7,24 +7,29 @@ import random
 st.set_page_config(page_title="Apka do Słówek", page_icon="✏️")
 st.title("Moja Nauka Słówek")
 
-# ---- TUTAJ MUSI BYĆ TA ZMIENNA (SPRAWDŹ CZY NIE MA TU LITERÓWKI) ----
+# 1. MAPOWANIE NAZW ROZDZIAŁÓW NA PLIKI CSV
 SŁOWNIK_ROZDZIAŁOW = {
     "Rozdział 1: Liczebniki (Numerals)": "ang_sr_rozdzial1.csv",
-    "Rozdział 2: Kolejny Rozdział": "ang_sr_rozdzial2.csv"
+    "Rozdział 2: Szkoła (School)": "ang_sr_rozdzial2.csv",
 }
 
 def laduj_slowka(nazwa_pliku):
-    """Pobiera plik CSV bezpośrednio przez URL z nagłówkiem autoryzacji HF"""
+    """Pobiera bazę słów z Hugging Face Dataset"""
     try:
-        url = f"https://huggingface.co{nazwa_pliku}"
-        token = st.secrets["HF_TOKEN"]
-        headers = {"Authorization": f"Bearer {token}"}
+        repo_id = "Radar1111/Angielski-Sr" 
+        dataset = load_dataset(
+            repo_id, 
+            data_files=nazwa_pliku, 
+            token=st.secrets["HF_TOKEN"]
+        )
         
-        response = requests.get(url, headers=headers)
-        
-        if response.status_code != 200:
-            st.error(f"Błąd HF (Status {response.status_code}): Sprawdź token lub nazwę pliku.")
-            return []
+        pobrane_dane = []
+        for wiersz in dataset['train']:
+            pobrane_dane.append({'pl': wiersz['pl'].strip(), 'en': wiersz['en'].strip()})
+        return pobrane_dane
+    except Exception as e:
+        st.error(f"Problem z połączeniem lub brakiem pliku: {e}")
+        return []
             
         df = pd.read_csv(io.StringIO(response.text))
         
