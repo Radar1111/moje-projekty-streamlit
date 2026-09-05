@@ -7,23 +7,15 @@ st.title("Moja Nauka Słówek")
 
 # 1. MAPOWANIE NAZW ROZDZIAŁÓW NA PLIKI CSV
 SŁOWNIK_ROZDZIAŁOW = {
-    "Rozdział 1: Liczebniki (Numerals)": "ang_kl4_rozdzial1.csv",
-    "Rozdział 2: Szkoła (School)": "ang_kl4_rozdzial2.csv",
-    "Rozdział 3: Owoce (Fruits)": "ang_kl4_rozdzial3.csv",
-    "Rozdział 4: Warzywa (Vegetables)": "ang_kl4_rozdzial4.csv",
-    "Rozdział 5: Rodzina (Family)": "ang_kl4_rozdzial5.csv",
-    "Rozdział 6: Zwierzęta (Animals)": "ang_kl4_rozdzial6.csv",
-    "Rozdział 7: Pokoje w domu (Rooms)": "ang_kl4_rozdzial7.csv",
-    "Rozdział 8: Kolory (Colors)": "ang_kl4_rozdzial8.csv",
-    "Rozdział 9: Części ciała (Body parts)": "ang_kl4_rozdzial9.csv",
-    "Rozdział 10: Miejsca w szkole (School places)": "ang_kl4_rozdzial10.csv",
-    "Rozdział 11: Polecenia nauczyciela (Teacher's instruction)": "ang_kl4_rozdzial11.csv",
+    "Rozdział 1: Liczebniki (Numerals)": "ang_sr_rozdzial1.csv",
+    "Rozdział 2: Szkoła (School)": "ang_sr_rozdzial2.csv",
+    
 }
 
 def laduj_slowka(nazwa_pliku):
     """Pobiera bazę słów z Hugging Face Dataset"""
     try:
-        repo_id = "Radar1111/angielski-klasa-4" 
+        repo_id = "Radar1111/Angielski-Sr" 
         dataset = load_dataset(
             repo_id, 
             data_files=nazwa_pliku, 
