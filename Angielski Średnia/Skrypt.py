@@ -1,35 +1,38 @@
 import streamlit as st
-from datasets import load_dataset
-import random
-
-st.set_page_config(page_title="Apka do Słówek", page_icon="✏️")
-st.title("Moja Nauka Słówek")
-
-# 1. POPRAWIONE MAPOWANIE NAZW ROZDZIAŁÓW (Klucze muszą być unikalne!)
-SŁOWNIK_ROZDZIAŁOW = {
-    "Rozdział 1: Liczebniki (Numerals)": "ang_sr_rozdzial1.csv",
-    "Rozdział 2: Cechy": "ang_sr_rozdzial2.csv",  # Zmieniono klucz na unikalny
-}
+import pandas as pd
+import requests
+import io
 
 def laduj_slowka(nazwa_pliku):
-    """Pobiera bazę słów z Hugging Face Dataset"""
+    """Pobiera plik CSV bezpośrednio przez URL z nagłówkiem autoryzacji HF"""
     try:
-        # 1. Określamy dokładną ścieżkę do pliku wewnątrz Twojego repozytorium
-        # Format: hf://datasets/NAZWA_UŻYTKOWNIKA/NAZWA_REPO/NAZWA_PLIKU.csv
-        sciezka_do_pliku = f"hf://datasets/Radar1111/Angielski-Śr/{nazwa_pliku}"
+        # Tworzymy bezpośredni link URL do pliku w Twoim repozytorium
+        url = f"https://huggingface.co{nazwa_pliku}"
         
-        # 2. Wywołujemy load_dataset wskazując format "csv"
-        dataset = load_dataset(
-            "csv", 
-            data_files=sciezka_do_pliku, 
-            token=st.secrets["HF_TOKEN"],
-            download_mode="force_redownload"
-        )
+        # Pobieramy token ze Streamlit Secrets
+        token = st.secrets["HF_TOKEN"]
+        headers = {"Authorization": f"Bearer {token}"}
         
+        # Wykonujemy bezpośrednie zapytanie HTTP z tokenem
+        response = requests.get(url, headers=headers)
+        
+        # Jeśli HF zwróci błąd autoryzacji lub braku pliku
+        if response.status_code != 200:
+            st.error(f"Błąd HF (Status {response.status_code}): Sprawdź token lub nazwę pliku.")
+            return []
+            
+        # Odczytujemy zawartość CSV za pomocą Pandas (wymaga import io)
+        df = pd.read_csv(io.StringIO(response.text))
+        
+        # Konwersja na listę słowników (zgodnie z Twoim oryginalnym formatem)
         pobrane_dane = []
-        for wiersz in dataset['train']:
-            pobrane_dane.append({'pl': wiersz['pl'].strip(), 'en': wiersz['en'].strip()})
+        for _, wiersz in df.iterrows():
+            pobrane_dane.append({
+                'pl': str(wiersz['pl']).strip(), 
+                'en': str(wiersz['en']).strip()
+            })
         return pobrane_dane
+        
     except Exception as e:
         st.error(f"Problem z połączeniem lub brakiem pliku: {e}")
         return []
