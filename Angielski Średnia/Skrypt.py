@@ -14,12 +14,14 @@ SŁOWNIK_ROZDZIAŁOW = {
 def laduj_slowka(nazwa_pliku):
     """Pobiera bazę słów z Hugging Face Dataset"""
     try:
-        repo_id = "Radar1111/Angielski-Śr" 
+        # 1. Określamy dokładną ścieżkę do pliku wewnątrz Twojego repozytorium
+        # Format: hf://datasets/NAZWA_UŻYTKOWNIKA/NAZWA_REPO/NAZWA_PLIKU.csv
+        sciezka_do_pliku = f"hf://datasets/Radar1111/Angielski-Śr/{nazwa_pliku}"
         
-        # DODANO: download_mode="force_redownload", aby pominąć błędny cache przekierowań
+        # 2. Wywołujemy load_dataset wskazując format "csv"
         dataset = load_dataset(
-            repo_id, 
-            data_files=nazwa_pliku, 
+            "csv", 
+            data_files=sciezka_do_pliku, 
             token=st.secrets["HF_TOKEN"],
             download_mode="force_redownload"
         )
