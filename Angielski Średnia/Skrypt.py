@@ -7,8 +7,8 @@ st.title("Moja Nauka Słówek")
 
 # 1. MAPOWANIE NAZW ROZDZIAŁÓW NA PLIKI CSV
 SŁOWNIK_ROZDZIAŁOW = {
-    "Rozdział 1: Liczebniki (Numerals)": "ang_sr_rozdzial1.csv",
-    "Rozdział 2: Szkoła (School)": "ang_sr_rozdzial2.csv",
+    "Rozdział 1: Cechy charakteru cz.1 (Character traits)": "ang_sr_rozdzial1.csv",
+    "Rozdział 2: Cechy charakteru cz.2 (Character traits)": "ang_sr_rozdzial2.csv",
     
 }
 
