@@ -203,7 +203,7 @@ if st.session_state.lista_slowek:
                     nastepne_slowko()
                     st.rerun()
 
-        #3. MODUŁ: WPISYWANIE
+        # ==================== 3. MODUŁ: WPISYWANIE ====================
         elif wybrany_modul == "Wpisywanie ✏️":
             st.markdown(f"### Przetłumacz: **{pytanie_txt}**")
             klucz_pola = f"temp_odp_{st.session_state.index}"
@@ -231,3 +231,26 @@ if st.session_state.lista_slowek:
                 
                 if st.button("Następne słówko ➔", use_container_width=True, type="secondary"):
                     nastepne_slowko()
+                    st.rerun()
+                    
+    # TEN BLOK ODPOWIADA ZA KONIEC NAUKI (gdy ktore_teraz >= ile_wszystkich)
+    else:
+        st.balloons()
+        st.header("Koniec nauki!")
+        st.success(f"Wynik: {st.session_state.punkty}/{ile_wszystkich}")
+        if st.button("Powtórz rozdział", use_container_width=True):
+            st.session_state.index = 0
+            st.session_state.punkty = 0
+            st.session_state.feedback = None
+            st.session_state.sprawdzone = False
+            st.session_state.fiszka_obrocona = False
+            st.session_state.opcje_abcd = []
+            random.shuffle(st.session_state.lista_slowek)
+            st.rerun()
+
+# --- STOPKA ---
+st.divider()
+st.caption("Najcierpliwszy portal do angielskiego")
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
