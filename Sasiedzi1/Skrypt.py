@@ -1,56 +1,40 @@
-import streamlit as st
-import pandas as pd
-import random
 import os
+import random
+import pandas as pd
+import streamlit as st
+from huggingface_hub import hf_hub_download
 
-st.set_page_config(page_title="Master Jezykow", layout="wide")
-
-SPECIAL_CHARS = {
-    "Czeski": ["á", "é", "í", "ó", "ú", "ý", "ů", "č", "ď", "ě", "ň", "ř", "š", "ť", "ž"],
-    "Słowacki": ["á", "é", "í", "ó", "ú", "ý", "ĺ", "ŕ", "č", "ď", "ľ", "ň", "š", "ť", "ž", "ä", "ô"],
-    "Węgierski": ["á", "é", "í", "ó", "ú", "ö", "ü", "ő", "ű"],
-    "Rumuński": ["ș", "ț", "â", "î", "ă"],
-    "Łotewski": ["ā", "ē", "ī", "ū", "č", "š", "ž", "ģ", "ķ", "ļ", "ņ"]
-}
-
-
-URL_SLOWA = "https://huggingface.co/datasets/Radar1111/Sasiedzi1/jezyki_slowa.csv"
-URL_ZDANIA = "https://huggingface.co"
+# --- ŁADOWANIE DANYCH Z HUGGING FACE ---
 
 @st.cache_data(ttl=3600)
 def load_words():
     try:
+        # Pobranie tokenu z sekretów Streamlit lub zmiennych środowiskowych
         token = st.secrets.get("HF_TOKEN") if "HF_TOKEN" in st.secrets else os.getenv("HF_TOKEN")
-        naglowki_auth = {"Authorization": f"Bearer {token}"} if token else None
         
-        naglowki = list(pd.read_csv(URL_SLOWA, storage_options=naglowki_auth, nrows=0).columns)
-        dane = pd.read_csv(
-            URL_SLOWA, 
-            sep=',', 
-            encoding='utf-8-sig', 
-            storage_options=naglowki_auth,
-            usecols=range(len(naglowki))
+        if not token:
+            st.warning("Brak tokenu HF_TOKEN w sekretach aplikacji. Dostęp do prywatnego repozytorium może się nie udać.")
+
+        # Oficjalne i bezpieczne pobranie pliku z prywatnego repozytorium do pamięci lokalnej
+        lokalna_sciezka = hf_hub_download(
+            repo_id="Radar1111/Sasiedzi1",
+            filename="jezyki_slowa.csv",
+            repo_type="dataset",
+            token=token
         )
+        
+        # Odczyt pobranego lokalnie pliku przez Pandas
+        dane = pd.read_csv(lokalna_sciezka, sep=',', encoding='utf-8-sig')
         dane.columns = dane.columns.str.strip()
         return dane
     except Exception as e:
-        st.error(f"Problem z pobraniem bazy z Hugging Face: {e}")
+        st.error(f"Problem z pobraniem bazy słówek z Hugging Face: {e}")
+        # Zwracamy pusty DataFrame o właściwej strukturze w razie awarii
         return pd.DataFrame(columns=['rozdzial', 'polski', 'czeski', 'słowacki', 'węgierski', 'rumuński', 'łotewski'])
 
-@st.cache_data(ttl=3600)
-def load_sentences():
-    try:
-        token = st.secrets.get("HF_TOKEN") if "HF_TOKEN" in st.secrets else os.getenv("HF_TOKEN")
-        naglowki_auth = {"Authorization": f"Bearer {token}"} if token else None
-        
-        dane = pd.read_csv(URL_ZDANIA, sep=',', encoding='utf-8-sig', storage_options=naglowki_auth)
-        dane.columns = dane.columns.str.strip()
-        return dane
-    except Exception:
-        return None
-
+# Wywołujemy ładowanie tylko dla słówek (zdania zostają wyłączone, dopóki ich nie utworzysz)
 baza_slowa = load_words()
-baza_zdania = load_sentences()
+baza_zdania = None  # Tymczasowy placeholder
 
 if 'score' not in st.session_state:
     st.session_state.score = 0
