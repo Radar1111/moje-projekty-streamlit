@@ -150,13 +150,17 @@ with tab_slowka:
             if kolumna_wymowa in dane_roz.columns:
                 st.table(dane_roz[['polski', kolumna_jezyk, kolumna_wymowa]])
             else:
-                # Sprawdzamy, czy zmienna kolumna_jezyk nie jest pusta (None)
-                if kolumna_jezyk:
-                    # Sprawdzamy, czy obie kolumny istnieją w danych
-                    if 'polski' in dane_roz.columns and kolumna_jezyk in dane_roz.columns:
-                        st.table(dane_roz[['polski', kolumna_jezyk]])
+                # 1. Zabezpieczenie: Jeśli kolumna_jezyk to słownik z lang_map, wyciągamy z niego tekst "slowo"
+                czysty_jezyk = kolumna_jezyk
+                if isinstance(kolumna_jezyk, dict):
+                    czysty_jezyk = kolumna_jezyk.get("slowo")
+
+                # 2. Sprawdzamy, czy mamy poprawny tekst i czy kolumny są w bazie
+                if czysty_jezyk:
+                    if 'polski' in dane_roz.columns and czysty_jezyk in dane_roz.columns:
+                        st.table(dane_roz[['polski', czysty_jezyk]])
                     else:
-                        st.error(f"Nie znaleziono kolumny '{kolumna_jezyk}' w pliku CSV. Dostępne kolumny to: {list(dane_roz.columns)}")
+                        st.error(f"Nie znaleziono kolumny '{czysty_jezyk}' w pliku CSV. Dostępne kolumny to: {list(dane_roz.columns)}")
                 else:
                     st.warning("Wybierz język w panelu bocznym, aby wyświetlić tabelę.")
         else:
