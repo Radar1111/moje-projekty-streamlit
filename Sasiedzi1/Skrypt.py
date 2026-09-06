@@ -165,6 +165,7 @@ with tab_slowka:
                 st.error(f"Nie znaleziono kolumny '{czysty_jezyk}' w pliku CSV. Dostępne kolumny: {list(dane_roz.columns)}")
         
         else: # TRYB QUIZ (ABCD)
+            else: # TRYB QUIZ (ABCD)
     if st.session_state.get('last_id') != nr_roz or 'opcje_abcd' not in st.session_state:
         st.session_state.slowo_id = random.choice(dane_roz.index)
         st.session_state.last_id = nr_roz
