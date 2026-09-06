@@ -4,7 +4,7 @@ import pandas as pd
 import streamlit as st
 from huggingface_hub import hf_hub_download
 
-# --- BEZPIECZNE ŁADOWANIE DANYCH Z HUGGING FACE ---
+#  ŁADOWANIE DANYCH Z HUGGING FACE 
 
 @st.cache_data(ttl=3600)
 def load_words():
@@ -141,26 +141,28 @@ with tab_slowka:
         if min_r < max_r:
             nr_roz = st.slider("Wybierz rozdzial", min_r, max_r, key="s_slider")
 
-        dane_roz = baza_slowa[baza_slowa['rozdzial'] == nr_roz]
+       dane_roz = baza_slowa[baza_slowa['rozdzial'] == nr_roz]
         tryb_s = st.radio("Wybierz tryb pracy:", ["Nauka", "Quiz"], horizontal=True, key="mode_s")
 
-        kolumna_wymowa = f"{kolumna_jezyk}_wym"
+        
+        czysty_jezyk = kolumna_jezyk.get("slowo") if isinstance(kolumna_jezyk, dict) else kolumna_jezyk
+        kolumna_wymowa = kolumna_jezyk.get("wymowa") if isinstance(kolumna_jezyk, dict) else f"{czysty_jezyk}_wym"
 
         if tryb_s == "Nauka":
+            # Budujemy dynamiczną listę kolumn do wyświetlenia
+            kolumny_do_tabeli = ['polski']
+            
+            if czysty_jezyk in dane_roz.columns:
+                kolumny_do_tabeli.append(czysty_jezyk)
+                
             if kolumna_wymowa in dane_roz.columns:
-                st.table(dane_roz[['polski', kolumna_jezyk, kolumna_wymowa]])
-            else:
-                # 1. Zabezpieczenie: Jeśli kolumna_jezyk to słownik z lang_map, wyciągamy z niego tekst "slowo"
-                czysty_jezyk = kolumna_jezyk
-                if isinstance(kolumna_jezyk, dict):
-                    czysty_jezyk = kolumna_jezyk.get("slowo")
+                kolumny_do_tabeli.append(kolumna_wymowa)
 
-                # 2. Sprawdzamy, czy mamy poprawny tekst i czy kolumny są w bazie
-                if czysty_jezyk:
-                    if 'polski' in dane_roz.columns and czysty_jezyk in dane_roz.columns:
-                        st.table(dane_roz[['polski', czysty_jezyk]])
-                    else:
-                        st.error(f"Nie znaleziono kolumny '{czysty_jezyk}' w pliku CSV. Dostępne kolumny to: {list(dane_roz.columns)}")
+            # Wyświetlamy tabelę, jeśli znaleźliśmy przynajmniej kolumnę językową
+            if len(kolumny_do_tabeli) > 1:
+                st.table(dane_roz[kolumny_do_tabeli])
+            else:
+                st.error(f"Nie znaleziono kolumny '{czysty_jezyk}' w pliku CSV. Dostępne kolumny: {list(dane_roz.columns)}")
                 else:
                     st.warning("Wybierz język w panelu bocznym, aby wyświetlić tabelę.")
         else:
