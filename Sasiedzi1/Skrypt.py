@@ -150,7 +150,15 @@ with tab_slowka:
             if kolumna_wymowa in dane_roz.columns:
                 st.table(dane_roz[['polski', kolumna_jezyk, kolumna_wymowa]])
             else:
-                st.table(dane_roz[['polski', kolumna_jezyk]])
+                # Sprawdzamy, czy zmienna kolumna_jezyk nie jest pusta (None)
+                if kolumna_jezyk:
+                    # Sprawdzamy, czy obie kolumny istnieją w danych
+                    if 'polski' in dane_roz.columns and kolumna_jezyk in dane_roz.columns:
+                        st.table(dane_roz[['polski', kolumna_jezyk]])
+                    else:
+                        st.error(f"Nie znaleziono kolumny '{kolumna_jezyk}' w pliku CSV. Dostępne kolumny to: {list(dane_roz.columns)}")
+                else:
+                    st.warning("Wybierz język w panelu bocznym, aby wyświetlić tabelę.")
         else:
             if st.session_state.get('last_id') != nr_roz:
                 st.session_state.slowo_id = random.choice(dane_roz.index)
