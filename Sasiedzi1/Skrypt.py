@@ -4,18 +4,22 @@ import pandas as pd
 import streamlit as st
 from huggingface_hub import hf_hub_download
 
-# --- ŁADOWANIE DANYCH Z HUGGING FACE ---
+# --- BEZPIECZNE ŁADOWANIE DANYCH Z HUGGING FACE ---
 
 @st.cache_data(ttl=3600)
 def load_words():
     try:
-        # Pobranie tokenu z sekretów Streamlit lub zmiennych środowiskowych
-        token = st.secrets.get("HF_TOKEN") if "HF_TOKEN" in st.secrets else os.getenv("HF_TOKEN")
+        # Bezpieczne sprawdzenie i pobranie tokenu bez używania metody .get()
+        token = None
+        if "HF_TOKEN" in st.secrets:
+            token = st.secrets["HF_TOKEN"]
+        elif os.getenv("HF_TOKEN"):
+            token = os.getenv("HF_TOKEN")
         
         if not token:
-            st.warning("Brak tokenu HF_TOKEN w sekretach aplikacji. Dostęp do prywatnego repozytorium może się nie udać.")
+            st.warning("Brak tokenu HF_TOKEN w sekretach aplikacji (w pliku secrets.toml lub ustawieniach chmury).")
 
-        # Oficjalne i bezpieczne pobranie pliku z prywatnego repozytorium do pamięci lokalnej
+        # Pobranie pliku z prywatnego repozytorium do cache lokalnego
         lokalna_sciezka = hf_hub_download(
             repo_id="Radar1111/Sasiedzi1",
             filename="jezyki_slowa.csv",
@@ -23,18 +27,19 @@ def load_words():
             token=token
         )
         
-        # Odczyt pobranego lokalnie pliku przez Pandas
+        # Odczyt pliku przez Pandas
         dane = pd.read_csv(lokalna_sciezka, sep=',', encoding='utf-8-sig')
         dane.columns = dane.columns.str.strip()
         return dane
+        
     except Exception as e:
-        st.error(f"Problem z pobraniem bazy słówek z Hugging Face: {e}")
-        # Zwracamy pusty DataFrame o właściwej strukturze w razie awarii
+        # W razie jakiegokolwiek innego błędu, Streamlit pokaże go na ekranie, ułatwiając debugowanie
+        st.error(f"Błąd krytyczny pobierania: {e}")
         return pd.DataFrame(columns=['rozdzial', 'polski', 'czeski', 'słowacki', 'węgierski', 'rumuński', 'łotewski'])
 
-# Wywołujemy ładowanie tylko dla słówek (zdania zostają wyłączone, dopóki ich nie utworzysz)
+# Wywołanie funkcji
 baza_slowa = load_words()
-baza_zdania = None  # Tymczasowy placeholder
+baza_zdania = None  # Czeka na Twoje pliki ze zdaniami w przyszłości
 
 if 'score' not in st.session_state:
     st.session_state.score = 0
