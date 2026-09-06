@@ -165,66 +165,64 @@ with tab_slowka:
                 st.error(f"Nie znaleziono kolumny '{czysty_jezyk}' w pliku CSV. Dostępne kolumny: {list(dane_roz.columns)}")
         
         else: # TRYB QUIZ (ABCD)
-            else: # TRYB QUIZ (ABCD)
-    if st.session_state.get('last_id') != nr_roz or 'opcje_abcd' not in st.session_state:
-        st.session_state.slowo_id = random.choice(dane_roz.index)
-        st.session_state.last_id = nr_roz
-        
-        # Pobranie poprawnej odpowiedzi
-        poprawna = str(baza_slowa.loc[st.session_state.slowo_id, czysty_jezyk]).strip()
-        
-        # Pobranie wszystkich INNYCH słów z bazy do stworzenia błędnych odpowiedzi
-        inne_slowa = baza_slowa[czysty_jezyk].dropna().astype(str).str.strip().unique()
-        inne_slowa = [s for s in inne_slowa if s.lower() != poprawna.lower()]
-        
-        # Wylosowanie 3 błędnych odpowiedzi (lub mniej, jeśli baza jest za mała)
-        liczba_blednych = min(3, len(inne_slowa))
-        bledne = random.sample(inne_slowa, liczba_blednych) if liczba_blednych > 0 else []
-        
-        # Połączenie poprawnej z błędnymi i pomieszanie kolejności
-        wszystkie_opcje = bledne + [poprawna]
-        random.shuffle(wszystkie_opcje)
-        
-        # Zapisanie opcji i poprawnej odpowiedzi do session_state
-        st.session_state.opcje_abcd = wszystkie_opcje
-        st.session_state.poprawna_odp = poprawna
-        st.session_state.wybrana_odp = None  # Reset wyboru użytkownika
+            if st.session_state.get('last_id') != nr_roz or 'opcje_abcd' not in st.session_state:
+                st.session_state.slowo_id = random.choice(dane_roz.index)
+                st.session_state.last_id = nr_roz
+                
+                # Pobranie poprawnej odpowiedzi
+                poprawna = str(baza_slowa.loc[st.session_state.slowo_id, czysty_jezyk]).strip()
+                
+                # Pobranie wszystkich INNYCH słów z bazy do stworzenia błędnych odpowiedzi
+                inne_slowa = baza_slowa[czysty_jezyk].dropna().astype(str).str.strip().unique()
+                inne_slowa = [s for s in inne_slowa if s.lower() != poprawna.lower()]
+                
+                # Wylosowanie 3 błędnych odpowiedzi (lub mniej, jeśli baza jest za mała)
+                liczba_blednych = min(3, len(inne_slowa))
+                bledne = random.sample(inne_slowa, liczba_blednych) if liczba_blednych > 0 else []
+                
+                # Połączenie poprawnej z błędnymi i pomieszanie kolejności
+                wszystkie_opcje = bledne + [poprawna]
+                random.shuffle(wszystkie_opcje)
+                
+                # Zapisanie opcji i poprawnej odpowiedzi do session_state
+                st.session_state.opcje_abcd = wszystkie_opcje
+                st.session_state.poprawna_odp = poprawna
+                st.session_state.wybrana_odp = None  # Reset wyboru użytkownika
 
-    slowo_pl = baza_slowa.loc[st.session_state.slowo_id, 'polski']
+            slowo_pl = baza_slowa.loc[st.session_state.slowo_id, 'polski']
 
-    with st.container(border=True):
-        st.subheader(f"Jak przetlumaczysz: {slowo_pl}?")
+            with st.container(border=True):
+                st.subheader(f"Jak przetlumaczysz: {slowo_pl}?")
 
-        # Wyświetlenie przycisków ABCD w układzie 2x2
-        col1, col2 = st.columns(2)
-        opcje = st.session_state.opcje_abcd
-        
-        # Generowanie przycisków dla opcji (obsługa sytuacji, gdy opcji jest mniej niż 4)
-        for idx, opcja in enumerate(opcje):
-            target_col = col1 if idx % 2 == 0 else col2
-            # Jeśli użytkownik kliknie przycisk, zapisujemy jego wybór
-            if target_col.button(opcja, use_container_width=True, key=f"btn_opt_{idx}"):
-                st.session_state.wybrana_odp = opcja
+                # Wyświetlenie przycisków ABCD w układzie 2x2
+                col1, col2 = st.columns(2)
+                opcje = st.session_state.opcje_abcd
+                
+                # Generowanie przycisków dla opcji (obsługa sytuacji, gdy opcji jest mniej niż 4)
+                for idx, opcja in enumerate(opcje):
+                    target_col = col1 if idx % 2 == 0 else col2
+                    # Jeśli użytkownik kliknie przycisk, zapisujemy jego wybór
+                    if target_col.button(opcja, use_container_width=True, key=f"btn_opt_{idx}"):
+                        st.session_state.wybrana_odp = opcja
 
-        # Jeśli użytkownik dokonał wyboru, sprawdzamy wynik
-        if st.session_state.wybrana_odp is not None:
-            user_ans = st.session_state.wybrana_odp
-            poprawna = st.session_state.poprawna_odp
-            
-            st.session_state.total += 1
-            
-            if user_ans.lower() == poprawna.lower():
-                st.success(f"Prawidlowo! Wynik: {poprawna}")
-                st.session_state.score += 1
-            else:
-                st.error(f"Blad. Twoja odpowiedź: '{user_ans}'. Prawidlowa odpowiedz to: {poprawna}")
-            
-            # Przycisk do przejścia do kolejnego pytania
-            if st.button("Nastepne pytanie", use_container_width=True, type="primary"):
-                # Usuwamy klucz opcji, aby przy kolejnym uruchomieniu wylosowało nowe słowo i odpowiedzi
-                del st.session_state.opcje_abcd
-                st.rerun()
-
+                # Jeśli użytkownik dokonał wyboru, sprawdzamy wynik
+                if st.session_state.wybrana_odp is not None:
+                    user_ans = st.session_state.wybrana_odp
+                    poprawna = st.session_state.poprawna_odp
+                    
+                    st.session_state.total += 1
+                    
+                    if user_ans.lower() == poprawna.lower():
+                        st.success(f"Prawidlowo! Wynik: {poprawna}")
+                        st.session_state.score += 1
+                    else:
+                        st.error(f"Blad. Twoja odpowiedź: '{user_ans}'. Prawidlowa odpowiedz to: {poprawna}")
+                    
+                    # Przycisk do przejścia do kolejnego pytania
+                    if st.button("Nastepne pytanie", use_container_width=True, type="primary"):
+                        # Usuwamy klucz opcji, aby przy kolejnym uruchomieniu wylosowało nowe słowo i odpowiedzi
+                        del st.session_state.opcje_abcd
+                        st.rerun()
 st.divider()
 st.metric("Statystyki odpowiedzi", f"{st.session_state.score} / {st.session_state.total}")
 if st.button("Czysc statystyki"):
