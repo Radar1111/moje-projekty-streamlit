@@ -142,15 +142,14 @@ with tab_slowka:
             nr_roz = st.slider("Wybierz rozdzial", min_r, max_r, key="s_slider")
 
         dane_roz = baza_slowa[baza_slowa['rozdzial'] == nr_roz]
-        dane_roz = baza_slowa[baza_slowa['rozdzial'] == nr_roz]
         tryb_s = st.radio("Wybierz tryb pracy:", ["Nauka", "Quiz"], horizontal=True, key="mode_s")
 
-        
+        # Bezpieczne pobranie nazw kolumn ze słownika lang_map
         czysty_jezyk = kolumna_jezyk.get("slowo") if isinstance(kolumna_jezyk, dict) else kolumna_jezyk
         kolumna_wymowa = kolumna_jezyk.get("wymowa") if isinstance(kolumna_jezyk, dict) else f"{czysty_jezyk}_wym"
 
         if tryb_s == "Nauka":
-            # Budujemy dynamiczną listę kolumn do wyświetlenia
+            # Budujemy dynamiczną listę kolumn do wyświetlenia w tabeli
             kolumny_do_tabeli = ['polski']
             
             if czysty_jezyk in dane_roz.columns:
@@ -164,7 +163,8 @@ with tab_slowka:
                 st.table(dane_roz[kolumny_do_tabeli])
             else:
                 st.error(f"Nie znaleziono kolumny '{czysty_jezyk}' w pliku CSV. Dostępne kolumny: {list(dane_roz.columns)}")
-        else:
+        
+        else: # TRYB QUIZ
             if st.session_state.get('last_id') != nr_roz:
                 st.session_state.slowo_id = random.choice(dane_roz.index)
                 st.session_state.last_id = nr_roz
@@ -176,25 +176,13 @@ with tab_slowka:
             wymowa_txt = ""
             if kolumna_wymowa in baza_slowa.columns:
                 wymowa_txt = str(baza_slowa.loc[st.session_state.slowo_id, kolumna_wymowa])
-            else:
-                st.warning("Wybierz język w panelu bocznym, aby wyświetlić tabelę.")
-        else:
-            if st.session_state.get('last_id') != nr_roz:
-                st.session_state.slowo_id = random.choice(dane_roz.index)
-                st.session_state.last_id = nr_roz
-                st.session_state.input_val = ""
-
-            slowo_pl = baza_slowa.loc[st.session_state.slowo_id, 'polski']
-            poprawna = str(baza_slowa.loc[st.session_state.slowo_id, kolumna_jezyk])
-            
-            wymowa_txt = ""
-            if kolumna_wymowa in baza_slowa.columns:
-                wymowa_txt = str(baza_slowa.loc[st.session_state.slowo_id, kolumna_wymowa])
 
             with st.container(border=True):
                 st.subheader(f"Jak przetlumaczysz: {slowo_pl}?")
 
-                znaki = SPECIAL_CHARS.get(wybrany_jezyk, [])
+                # Słownik znaków specjalnych dla języków (jeśli zdefiniowany globalnie)
+                # Jeśli SPECIAL_CHARS nie istnieje wyżej w kodzie, program użyje pustej listy []
+                znaki = SPECIAL_CHARS.get(wybrany_jezyk, []) if 'SPECIAL_CHARS' in globals() else []
                 if znaki:
                     cols = st.columns(len(znaki) + 1)
                     for i, z in enumerate(znaki):
