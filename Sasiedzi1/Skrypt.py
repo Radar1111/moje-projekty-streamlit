@@ -141,7 +141,8 @@ with tab_slowka:
         if min_r < max_r:
             nr_roz = st.slider("Wybierz rozdzial", min_r, max_r, key="s_slider")
 
-       dane_roz = baza_slowa[baza_slowa['rozdzial'] == nr_roz]
+        dane_roz = baza_slowa[baza_slowa['rozdzial'] == nr_roz]
+        dane_roz = baza_slowa[baza_slowa['rozdzial'] == nr_roz]
         tryb_s = st.radio("Wybierz tryb pracy:", ["Nauka", "Quiz"], horizontal=True, key="mode_s")
 
         # Pobranie czystych nazw kolumn tekstowych ze słownika lang_map
