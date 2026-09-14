@@ -3,6 +3,7 @@ from fractions import Fraction
 import re
 import random
 import matplotlib.pyplot as plt
+from streamlit_drawable_canvas import st_canvas
 
 # Ustawienia strony
 st.set_page_config(page_title="Ułamki zwykłe i mieszane", page_icon="🍕")
