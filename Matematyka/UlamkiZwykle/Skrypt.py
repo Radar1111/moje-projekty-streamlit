@@ -113,6 +113,12 @@ def wyswietl_sekcje_wsparcia():
             "cyfrowych towarów, usług ani dodatkowych funkcji w aplikacji."
         )
 
+# --- PANEL BOCZNY ---
+st.sidebar.header("⚙️ Ustawienia treningu")
+st.sidebar.markdown("---")
+st.sidebar.write("Stworzone dla Twojej nauki! 🚀")
+
+
 
 # Losujemy ułamki
 if 'f1' not in st.session_state:
