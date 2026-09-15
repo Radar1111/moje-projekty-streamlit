@@ -1,16 +1,30 @@
 import streamlit as st
 import json
 import os
+from huggingface_hub import hf_hub_download
 
 st.set_page_config(page_title="Historia: Akcja-Reakcja!", page_icon="🚀", layout="centered")
 
 
 @st.cache_data
 def wczytaj_pytanie():
-    if os.path.exists('pytanie.json'):
-        with open('pytanie.json', "r", encoding="utf-8") as f:
+    hf_token = os.getenv("HF_TOKEN") 
+    
+    try:
+        sciezka_pliku = hf_hub_download(
+            repo_id="Radar1111/Historia",
+            filename="pytanie.json",
+            repo_type="dataset",  
+            token=hf_token
+        )
+        
+        # 3. Wczytaj pobrany plik JSON
+        with open(sciezka_pliku, "r", encoding="utf-8") as f:
             return json.load(f)
-    return []
+            
+    except Exception as e:
+        st.error(f"Błąd podczas pobierania z HF: {e}")
+        return []
 
 
 baza_pytan = wczytaj_pytanie()
