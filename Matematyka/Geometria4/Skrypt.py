@@ -1,12 +1,114 @@
 import math
 import matplotlib.pyplot as plt
 import streamlit as st
+import random
 
 st.set_page_config(page_title="Geometria", layout="wide")
 st.title("Interaktywny Pomocnik do Geometrii")
 
+def wyswietl_sekcje_wsparcia():
+    # Inicjalizacja sesji wewnątrz funkcji (bezpieczne dla każdej strony)
+    if "parent_verified" not in st.session_state:
+        st.session_state.parent_verified = False
+    if "num1" not in st.session_state:
+        st.session_state.num1 = random.randint(5, 15)
+    if "num2" not in st.session_state:
+        st.session_state.num2 = random.randint(5, 15)
+
+    LINK_DO_KAWY = "https://buycoffee.to/gigawiedza"
+
+    # Separator odcinający treść edukacyjną
+    st.divider()
+
+    # Expander na dole strony
+    with st.expander("👪 Dla Rodziców / Starszych Uczniów (Strefa Wspierania)"):
+        if not st.session_state.parent_verified:
+            st.write("Aby wejść, potwierdź że jesteś osobą dorosłą:")
+            pytanie = f"Ile to jest {st.session_state.num1} + {st.session_state.num2}?"
+
+            # Użycie unikalnego klucza w widgetach zapobiega konfliktom w Streamlit
+            odpowiedz_rodzica = st.number_input(pytanie, step=1, value=0, key="footer_parent_input")
+
+            if st.button("Zatwierdź", key="footer_parent_btn", use_container_width=True):
+                poprawny_wynik = st.session_state.num1 + st.session_state.num2
+                if odpowiedz_rodzica == poprawny_wynik:
+                    st.session_state.parent_verified = True
+                    st.rerun()
+                else:
+                    st.error("Nieprawidłowy wynik. Spróbuj ponownie!")
+        else:
+            st.success("Weryfikacja pomyślna!")
+            st.markdown(
+                """
+                **Drogi Rodzicu / Starszy Uczniu!**  
+                Tworzę te aplikacje z myślą o bezpiecznym i skutecznym rozwoju oraz nauce. 
+                Udostępniam je całkowicie **za darmo i bez reklam**.
+
+                Utrzymanie projektów wymaga jednak realnych kosztów i setek godzin pracy. 
+                Jeśli aplikacja pomogła w nauce i chcesz wesprzeć rozwój kolejnych programów 
+                – możesz postawić mi wirtualną kawę. Dziękuję!
+                """
+            )
+            st.link_button("☕ Postaw wirtualną kawę", LINK_DO_KAWY, type="primary", use_container_width=True)
+
+            if st.button("Zablokuj strefę", type="secondary", use_container_width=True, key="footer_lock_btn"):
+                st.session_state.parent_verified = False
+                st.session_state.num1 = random.randint(5, 15)
+                st.session_state.num2 = random.randint(5, 15)
+                st.rerun()
+
+            st.caption(
+                "**Informacja o wsparciu:** "
+                "Wszelkie wpłaty realizowane za pośrednictwem platformy BuyCoffee.to mają charakter "
+                "całkowicie dobrowolnego, bezinteresownego wsparcia (darowizny) na rzecz dalszego rozwoju "
+                "i utrzymania portfolio bezpłatnych aplikacji. Wpłata nie wiąże się z zakupem żadnych "
+                "cyfrowych towarów, usług ani dodatkowych funkcji w aplikacji."
+            )
+
+
 # Menu boczne - rozdzielono elementy w liście
 opcja = st.sidebar.radio("Co chcesz robić?", ["Rysowanie figur", "Obliczanie kątów"])
+
+# 📝 MULTI-BRUDNOPIS W SIDEBARZE (TEKST + RYSOWANIE)
+st.sidebar.markdown("---")
+st.sidebar.header("📝 Brudnopis Ucznia")
+
+
+zakladka_rysuj, zakladka_pisz = st.sidebar.tabs(["🎨 Rysuj", "✍️ Pisz"])
+
+with zakladka_rysuj:
+    st.caption("Rysuj myszką lub palcem. Kliknij ikonę kosza pod tablicą, aby wyczyścić.")
+    from streamlit_drawable_canvas import st_canvas
+
+    
+    st_canvas(
+        fill_color="rgba(255, 165, 0, 0.3)",
+        stroke_width=3,
+        stroke_color="#000000",
+        background_color="#ffffff",
+        update_streamlit=False,  # Dla płynności rysowania (w sidebarze już nie zablokuje apki!)
+        height=250,
+        drawing_mode="freedraw",
+        key="globalny_canvas_brudnopis",  # Jeden stały klucz, by rysunek nie znikał przy zmianie pytania
+    )
+
+with zakladka_pisz:
+    if "brudnopis_globalny" not in st.session_state:
+        st.session_state["brudnopis_globalny"] = ""
+
+    def czysc_notatnik():
+        st.session_state["brudnopis_globalny"] = ""
+
+    st.text_area(
+        label="Miejsce na Twoje obliczenia:",
+        placeholder="Np. wspólny mianownik to 12...",
+        key="brudnopis_globalny",
+        height=180
+    )
+    st.button("Wyczyść notatnik 🧹", on_click=czysc_notatnik)
+
+with st.sidebar:
+    wyswietl_sekcje_wsparcia()
 
 if opcja == "Rysowanie figur":
     figura = st.selectbox("Wybierz figurę", ["Prostokąt", "Kwadrat", "Koło"])
