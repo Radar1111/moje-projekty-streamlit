@@ -18,6 +18,10 @@ SŁOWNIK_ROZDZIAŁOW = {
     "Rozdział 9: Części ciała (Body parts)": "ang_kl4_rozdzial9.csv",
     "Rozdział 10: Miejsca w szkole (School places)": "ang_kl4_rozdzial10.csv",
     "Rozdział 11: Polecenia nauczyciela (Teacher's instruction)": "ang_kl4_rozdzial11.csv",
+    "Rozdział 12: Ubrania (Clothes)": "ang_kl4_rozdzial12.csv",
+    "Rozdział 13: Pogoda i pory roku (Weather and seasons)": "ang_kl4_rozdzial13.csv",
+    "Rozdział 14: Zabawki i czas wolny (Toys and free time)": "ang_kl4_rozdzial14.csv",
+    "Rozdział 15: Jedzenie i napoje (Food and drinks)": "ang_kl4_rozdzial15.csv",
 }
 
 def laduj_slowka(nazwa_pliku):
