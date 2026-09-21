@@ -9,7 +9,8 @@ st.title("Moja Nauka Słówek")
 SŁOWNIK_ROZDZIAŁOW = {
     "Rozdział 1: Cechy charakteru cz.1 (Character traits)": "ang_sr_rozdzial1.csv",
     "Rozdział 2: Cechy charakteru cz.2 (Character traits)": "ang_sr_rozdzial2.csv",
-    
+    "Rozdział 3: Hobby i czas wolny (Hobby and free time)": "ang_sr_rozdzial3.csv",
+    "Rozdział 4: Sylwetka, włosy i znaki sczzególne (Build, Hair & Special features)": "ang_sr_rozdzial4.csv",
 }
 
 def laduj_slowka(nazwa_pliku):
