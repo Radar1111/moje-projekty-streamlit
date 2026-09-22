@@ -115,9 +115,9 @@ def generuj_opcje(baza_filtrowana, poprawna_odp, kolumna):
     return pula
 
 
-# ==========================================
+
 #  SŁÓWKA 
-# ==========================================
+
 with tab_slowka:
     if baza_slowa.empty:
         st.warning("Tabela słówek jest pusta lub plik CSV nie został wczytany.")
@@ -195,7 +195,7 @@ with tab_slowka:
                     st.session_state.opcje_s = generuj_opcje(dane_roz, poprawna_nowa, kolumna_jezyk)
                     st.rerun()
 
-                # Stałe wyświetlanie komunikatu pod przyciskami (nie znika przy odświeżeniu)
+                # Stałe wyświetlanie komunikatu pod przyciskami 
                 if st.session_state.sprawdzone_s and "wynik_s" in st.session_state:
                     typ, tekst = st.session_state.wynik_s
                     if typ == "success": st.success(tekst)
