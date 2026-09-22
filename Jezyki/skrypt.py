@@ -284,6 +284,12 @@ with tab_zdania:
                     typ, tekst = st.session_state.wynik_z
                     if typ == "success": st.success(tekst)
                     else: st.error(tekst)
+st.divider()
+st.metric("Statystyki odpowiedzi", f"{st.session_state.score} / {st.session_state.total}")
+if st.button("Czysc statystyki"):
+    st.session_state.score = 0
+    st.session_state.total = 0
+    st.rerun()
 
 st.caption("Najcierpliwszy portal do nauki języków obcych")
 st.caption("Created by Radar | Software Development")
