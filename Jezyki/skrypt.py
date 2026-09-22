@@ -160,7 +160,7 @@ with tab_slowka:
             poprawna = str(baza_slowa.loc[st.session_state.slowo_id, kolumna_jezyk]).strip()
 
             with st.container(border=True):
-                st.subheader(f"Jak przetlumaczysz: {slowo_pl}?")
+                st.subheader(f"Jak przetlumaczysz: {slowo_pl}")
 
                 wybor_s = st.radio("Wybierz poprawna odpowiedz:", st.session_state.opcje_s, key="radio_s", index=None)
 
