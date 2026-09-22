@@ -14,7 +14,7 @@ SPECIAL_CHARS = {
 }
 
 URL_SLOWA = "https://huggingface.co/datasets/Radar1111/baza-jezykowa/raw/main/jezyki_slowa.csv"
-URL_ZDANIA = "https://huggingface.co"
+URL_ZDANIA = "https://huggingface.co/datasets/Radar1111/baza-jezykowa/raw/main/jezyki_zdania.csv"
 
 @st.cache_data(ttl=3600)
 def load_words():
