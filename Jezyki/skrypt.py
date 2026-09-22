@@ -36,20 +36,31 @@ def load_words():
         st.error(f"Problem z pobraniem bazy z Hugging Face: {e}")
         return pd.DataFrame(columns=['rozdzial', 'polski', 'angielsk', 'niemiecki', 'hiszpanski', 'wloski', 'francuski'])
 
-@st.cache_data(ttl=3600)
+
 @st.cache_data(ttl=3600)
 def load_sentences():
     try:
         token = st.secrets.get("HF_TOKEN") if "HF_TOKEN" in st.secrets else os.getenv("HF_TOKEN")
         naglowki_auth = {"Authorization": f"Bearer {token}"} if token else None
         
-        dane = pd.read_csv(URL_ZDANIA, sep=',', encoding='utf-8-sig', storage_options=naglowki_auth)
+        # 1. Najpierw bezpiecznie pobieramy same nagłówki (tak jak w load_words)
+        naglowki = list(pd.read_csv(URL_ZDANIA, storage_options=naglowki_auth, nrows=0).columns)
+        
+        # 2. Pobieramy właściwe dane z określeniem liczby kolumn
+        dane = pd.read_csv(
+            URL_ZDANIA, 
+            sep=',', 
+            encoding='utf-8-sig', 
+            storage_options=naglowki_auth,
+            usecols=range(len(naglowki))
+        )
         dane.columns = dane.columns.str.strip()
         return dane
     except Exception as e:
-        st.error(f"Problem z pobraniem bazy zdań z Hugging Face: {e}")
-        
-        return pd.DataFrame() 
+        # Ten komunikat wypisze dokładny powód błędu wprost na ekranie Twojej aplikacji!
+        st.error(f"Szczegóły błędu pobierania zdań: {e}")
+        # Zwracamy pusty DataFrame o właściwej strukturze kolumn, żeby aplikacja szła dalej
+        return pd.DataFrame(columns=['rozdzial', 'polski', 'angielski', 'niemiecki', 'hiszpanski', 'wloski', 'francuski'])
 
 baza_slowa = load_words()
 baza_zdania = load_sentences()
