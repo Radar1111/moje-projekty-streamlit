@@ -43,10 +43,10 @@ def load_sentences():
         token = st.secrets.get("HF_TOKEN") if "HF_TOKEN" in st.secrets else os.getenv("HF_TOKEN")
         naglowki_auth = {"Authorization": f"Bearer {token}"} if token else None
         
-        # 1. Najpierw bezpiecznie pobieramy same nagłówki (tak jak w load_words)
+        
         naglowki = list(pd.read_csv(URL_ZDANIA, storage_options=naglowki_auth, nrows=0).columns)
         
-        # 2. Pobieramy właściwe dane z określeniem liczby kolumn
+       
         dane = pd.read_csv(
             URL_ZDANIA, 
             sep=',', 
@@ -57,9 +57,9 @@ def load_sentences():
         dane.columns = dane.columns.str.strip()
         return dane
     except Exception as e:
-        # Ten komunikat wypisze dokładny powód błędu wprost na ekranie Twojej aplikacji!
+        
         st.error(f"Szczegóły błędu pobierania zdań: {e}")
-        # Zwracamy pusty DataFrame o właściwej strukturze kolumn, żeby aplikacja szła dalej
+        
         return pd.DataFrame(columns=['rozdzial', 'polski', 'angielski', 'niemiecki', 'hiszpanski', 'wloski', 'francuski'])
 
 baza_slowa = load_words()
@@ -103,24 +103,24 @@ tab_slowka, tab_zdania = st.tabs(["Slowka", "Zdania"])
 
 # Funkcja pomocnicza do generowania opcji ABCD
 def generuj_opcje(baza_filtrowana, poprawna_odp, kolumna):
-    # Pobierz wszystkie unikalne odpowiedzi z tego rozdziału (zamienione na stringi i oczyszczone)
+    
     wszystkie_odp = baza_filtrowana[kolumna].dropna().astype(str).str.strip().unique().tolist()
 
-    # Usuń poprawną odpowiedź z puli do losowania błędnych
+    
     if poprawna_odp in wszystkie_odp:
         wszystkie_odp.remove(poprawna_odp)
 
-    # Wylosuj maksymalnie 3 błędne odpowiedzi
+    
     liczba_blednych = min(3, len(wszystkie_odp))
     bledne = random.sample(wszystkie_odp, liczba_blednych)
 
-    # Połącz i wymieszaj
+    
     pula = bledne + [poprawna_odp]
     random.shuffle(pula)
     return pula
 
 
-# --- ZAKŁADKA SŁÓWKA ---
+#  SŁÓWKA 
 with tab_slowka:
     if baza_slowa.empty:
         st.warning("Tabela słówek jest pusta lub plik CSV nie został wczytany.")
@@ -146,7 +146,7 @@ with tab_slowka:
                 widoczne_kolumny.append(kolumna_wymowa)
             st.table(dane_roz[widoczne_kolumny])
         else:
-            # POPRAWKA: Sprawdzamy czy zmienił się rozdział LUB język LUB nie ma wylosowanego słowa
+            
             if (st.session_state.get('last_id') != nr_roz or
                     st.session_state.get('last_lang') != kolumna_jezyk or
                     st.session_state.get('slowo_id') not in dane_roz.index):
@@ -184,7 +184,7 @@ with tab_slowka:
                     st.session_state.opcje_s = generuj_opcje(dane_roz, poprawna_nowa, kolumna_jezyk)
                     st.rerun()
 
-# --- ZAKŁADKA ZDANIA ---
+# ZDANIA
 with tab_zdania:
     if baza_zdania.empty:
         st.warning("Tabela zdań jest pusta lub plik CSV nie został wczytany.")
@@ -210,7 +210,7 @@ with tab_zdania:
                 widoczne_kolumny_z.append(kolumna_wymowa)
             st.table(dane_roz_z[widoczne_kolumny_z])
         else:
-            # POPRAWKA: Sprawdzamy czy zmienił się rozdział LUB język LUB nie ma wylosowanego zdania
+           
             if (st.session_state.get('last_id_z') != nr_roz_z or
                     st.session_state.get('last_lang_z') != kolumna_jezyk or
                     st.session_state.get('zdanie_id') not in dane_roz_z.index):
@@ -224,7 +224,7 @@ with tab_zdania:
             poprawna_z = str(baza_zdania.loc[st.session_state.zdanie_id, kolumna_jezyk]).strip()
 
             with st.container(border=True):
-                st.subheader(f"Jak przetłumaczysz zdanie: {zdanie_pl}?")
+                st.subheader(f"Jak przetłumaczysz zdanie: {zdanie_pl}")
 
                 wybor_z = st.radio("Wybierz poprawna odpowiedz:", st.session_state.opcje_z, key="radio_z", index=None)
 
