@@ -43,10 +43,7 @@ def load_sentences():
         token = st.secrets.get("HF_TOKEN") if "HF_TOKEN" in st.secrets else os.getenv("HF_TOKEN")
         naglowki_auth = {"Authorization": f"Bearer {token}"} if token else None
         
-        
         naglowki = list(pd.read_csv(URL_ZDANIA, storage_options=naglowki_auth, nrows=0).columns)
-        
-       
         dane = pd.read_csv(
             URL_ZDANIA, 
             sep=',', 
@@ -57,9 +54,7 @@ def load_sentences():
         dane.columns = dane.columns.str.strip()
         return dane
     except Exception as e:
-        
         st.error(f"Szczegóły błędu pobierania zdań: {e}")
-        
         return pd.DataFrame(columns=['rozdzial', 'polski', 'angielski', 'niemiecki', 'hiszpanski', 'wloski', 'francuski'])
 
 baza_slowa = load_words()
@@ -76,11 +71,15 @@ if 'slowo_id' not in st.session_state:
     st.session_state.slowo_id = None
 if 'opcje_s' not in st.session_state:
     st.session_state.opcje_s = []
+if 'sprawdzone_s' not in st.session_state:
+    st.session_state.sprawdzone_s = False
 
 if 'zdanie_id' not in st.session_state:
     st.session_state.zdanie_id = None
 if 'opcje_z' not in st.session_state:
     st.session_state.opcje_z = []
+if 'sprawdzone_z' not in st.session_state:
+    st.session_state.sprawdzone_z = False
 
 st.sidebar.header("Ustawienia aplikacji")
 
@@ -98,29 +97,27 @@ kolumna_jezyk = lang_map[wybrany_jezyk]["slowo"]
 kolumna_wymowa = lang_map[wybrany_jezyk].get("wymowa") or lang_map[wybrany_jezyk].get("fancy_wym")
 
 st.title(f"Nauka jezyka: {wybrany_jezyk}")
-tab_slowka, tab_zdania = st.tabs(["Slowka", "Zdania"])
 
+# Licznik punktów na górze ekranu
+st.write(f"📊 Wynik: **{st.session_state.score}** / {st.session_state.total}")
+
+tab_slowka, tab_zdania = st.tabs(["Slowka", "Zdania"])
 
 # Funkcja pomocnicza do generowania opcji ABCD
 def generuj_opcje(baza_filtrowana, poprawna_odp, kolumna):
-    
     wszystkie_odp = baza_filtrowana[kolumna].dropna().astype(str).str.strip().unique().tolist()
-
-    
     if poprawna_odp in wszystkie_odp:
         wszystkie_odp.remove(poprawna_odp)
-
-    
     liczba_blednych = min(3, len(wszystkie_odp))
     bledne = random.sample(wszystkie_odp, liczba_blednych)
-
-    
     pula = bledne + [poprawna_odp]
     random.shuffle(pula)
     return pula
 
 
+# ==========================================
 #  SŁÓWKA 
+# ==========================================
 with tab_slowka:
     if baza_slowa.empty:
         st.warning("Tabela słówek jest pusta lub plik CSV nie został wczytany.")
@@ -146,13 +143,16 @@ with tab_slowka:
                 widoczne_kolumny.append(kolumna_wymowa)
             st.table(dane_roz[widoczne_kolumny])
         else:
-            
+            # Losowanie słówka przy zmianie rozdziału, języka lub braku ID
             if (st.session_state.get('last_id') != nr_roz or
                     st.session_state.get('last_lang') != kolumna_jezyk or
                     st.session_state.get('slowo_id') not in dane_roz.index):
                 st.session_state.slowo_id = random.choice(dane_roz.index)
                 st.session_state.last_id = nr_roz
-                st.session_state.last_lang = kolumna_jezyk  # Zapisujemy bieżący język
+                st.session_state.last_lang = kolumna_jezyk
+                st.session_state.sprawdzone_s = False
+                if "wynik_s" in st.session_state: del st.session_state.wynik_s
+                
                 poprawna = str(baza_slowa.loc[st.session_state.slowo_id, kolumna_jezyk]).strip()
                 st.session_state.opcje_s = generuj_opcje(dane_roz, poprawna, kolumna_jezyk)
 
@@ -162,27 +162,44 @@ with tab_slowka:
             with st.container(border=True):
                 st.subheader(f"Jak przetlumaczysz: {slowo_pl}")
 
-                wybor_s = st.radio("Wybierz poprawna odpowiedz:", st.session_state.opcje_s, key="radio_s", index=None)
+                # Wyłączenie radio po sprawdzeniu, żeby użytkownik nie zmieniał zaznaczenia
+                wybor_s = st.radio(
+                    "Wybierz poprawna odpowiedz:", 
+                    st.session_state.opcje_s, 
+                    key="radio_s", 
+                    index=None, 
+                    disabled=st.session_state.sprawdzone_s
+                )
 
                 c1, c2 = st.columns(2)
-                if c1.button("Sprawdz", key="chk_s", use_container_width=True, disabled=(wybor_s is None)):
+                
+                # Przycisk "Sprawdź" działa tylko przed sprawdzeniem
+                if c1.button("Sprawdz", key="chk_s", use_container_width=True, disabled=(wybor_s is None or st.session_state.sprawdzone_s)):
                     st.session_state.total += 1
+                    st.session_state.sprawdzone_s = True
                     if wybor_s == poprawna:
-                        st.success(f"Prawidlowo! Odpowiedz to: {poprawna}")
                         st.session_state.score += 1
+                        st.session_state.wynik_s = ("success", f"Prawidlowo! Odpowiedz to: {poprawna}")
                     else:
-                        st.error(f"Blad. Twoja odpowiedz: {wybor_s}. Prawidlowa to: {poprawna}")
+                        st.session_state.wynik_s = ("error", f"Blad. Twoja odpowiedz: {wybor_s}. Prawidlowa to: {poprawna}")
+                    st.rerun()
 
+                # Dynamiczna nazwa przycisku Następne
+                tekst_nxt_s = "Nastepne" if st.session_state.sprawdzone_s else "Nastepne (Pomin)"
+                if c2.button(tekst_nxt_s, key="nxt_s", use_container_width=True):
+                    st.session_state.sprawdzone_s = False
+                    if "wynik_s" in st.session_state: del st.session_state.wynik_s
+                    
                     st.session_state.slowo_id = random.choice(dane_roz.index)
                     poprawna_nowa = str(baza_slowa.loc[st.session_state.slowo_id, kolumna_jezyk]).strip()
                     st.session_state.opcje_s = generuj_opcje(dane_roz, poprawna_nowa, kolumna_jezyk)
                     st.rerun()
 
-                if c2.button("Nastepne (Pomin)", key="nxt_s", use_container_width=True):
-                    st.session_state.slowo_id = random.choice(dane_roz.index)
-                    poprawna_nowa = str(baza_slowa.loc[st.session_state.slowo_id, kolumna_jezyk]).strip()
-                    st.session_state.opcje_s = generuj_opcje(dane_roz, poprawna_nowa, kolumna_jezyk)
-                    st.rerun()
+                # Stałe wyświetlanie komunikatu pod przyciskami (nie znika przy odświeżeniu)
+                if st.session_state.sprawdzone_s and "wynik_s" in st.session_state:
+                    typ, tekst = st.session_state.wynik_s
+                    if typ == "success": st.success(tekst)
+                    else: st.error(tekst)
 
 # ZDANIA
 with tab_zdania:
