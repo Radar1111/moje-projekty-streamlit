@@ -37,6 +37,7 @@ def load_words():
         return pd.DataFrame(columns=['rozdzial', 'polski', 'angielsk', 'niemiecki', 'hiszpanski', 'wloski', 'francuski'])
 
 @st.cache_data(ttl=3600)
+@st.cache_data(ttl=3600)
 def load_sentences():
     try:
         token = st.secrets.get("HF_TOKEN") if "HF_TOKEN" in st.secrets else os.getenv("HF_TOKEN")
@@ -45,8 +46,10 @@ def load_sentences():
         dane = pd.read_csv(URL_ZDANIA, sep=',', encoding='utf-8-sig', storage_options=naglowki_auth)
         dane.columns = dane.columns.str.strip()
         return dane
-    except Exception:
-        return None
+    except Exception as e:
+        st.error(f"Problem z pobraniem bazy zdań z Hugging Face: {e}")
+        
+        return pd.DataFrame() 
 
 baza_slowa = load_words()
 baza_zdania = load_sentences()
