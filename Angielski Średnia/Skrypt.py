@@ -11,6 +11,12 @@ SŁOWNIK_ROZDZIAŁOW = {
     "Rozdział 2: Cechy charakteru cz.2 (Character traits)": "ang_sr_rozdzial2.csv",
     "Rozdział 3: Hobby i czas wolny (Hobby and free time)": "ang_sr_rozdzial3.csv",
     "Rozdział 4: Sylwetka, włosy i znaki sczzególne (Build, Hair & Special features)": "ang_sr_rozdzial4.csv",
+    "Rozdział 5: Pogoda i zjawiska pogodowe (Weather and eather phenomena)": "ang_sr_rozdzial5.csv",
+    "Rozdział 6: Dyscypliny sportowe i sprzęt sportowy (Sports disciplines and sports equipment)": "ang_sr_rozdzial6.csv",
+    "Rozdział 7: Miejsce uprawiania sportu i czaswoniki związane ze sportem (Sports venues and sports verbs": "ang_sr_rozdzial7.csv",
+    "Rozdział 8: Dom i mieszaknie opis (Exterior description and interior description )": "ang_sr_rozdzial8.csv",
+    "Rozdział 4: Pokoje i meble (Rooms and furniture)": "ang_sr_rozdzial9.csv",
+    "Rozdział 4: RTV AGD Dekoracje i Obowiązki (Home electronicses, Decorations and household chores)": "ang_sr_rozdzial10.csv",
 }
 
 def laduj_slowka(nazwa_pliku):
