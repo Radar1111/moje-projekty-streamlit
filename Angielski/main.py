@@ -22,7 +22,7 @@ SŁOWNIK_ROZDZIAŁOW = {
     "Rozdział 13: Pogoda i pory roku (Weather and seasons)": "ang_kl4_rozdzial13.csv",
     "Rozdział 14: Zabawki i czas wolny (Toys and free time)": "ang_kl4_rozdzial14.csv",
     "Rozdział 15: Jedzenie i napoje (Food and drinks)": "ang_kl4_rozdzial15.csv",
-    "Rozdział 15: Kraje i kontynenty (Countries and continents": "ang_kl4_rozdzial16.csv",
+    "Rozdział 16: Kraje i kontynenty (Countries and continents": "ang_kl4_rozdzial16.csv",
 }
 
 def laduj_slowka(nazwa_pliku):
