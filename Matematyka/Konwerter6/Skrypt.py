@@ -116,3 +116,9 @@ st.markdown(r"""
 * $1\text{ a (ar)} = 100\text{ m}^2$ *(Kwadrat o boku 10 m x 10 m)*
 * $1\text{ ha (hektar)} = 100\text{ a} = 10\ 000\text{ m}^2$ *(Kwadrat o boku 100 m x 100 m)*
 """)
+
+st.divider()
+st.caption("Najcierpliwszy portal do matematyki")
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
