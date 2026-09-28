@@ -177,3 +177,9 @@ st.latex(latex_słupek)
 st.write("### Jak do tego dojść?")
 for i, k in enumerate(info):
     st.info(f"{i + 1}. {k}")
+
+st.divider()
+st.caption("Najcierpliwszy portal do matematyki")
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
