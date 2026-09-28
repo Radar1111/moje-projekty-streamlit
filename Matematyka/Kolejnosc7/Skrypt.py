@@ -79,3 +79,9 @@ elif wybor == "Przykład D (Wszystko na raz)":
     3. Dodawanie i odejmowanie robimy **od lewej do prawej**: $10 + 12 = 22$, a potem $22 - 4 = 18$.
     """)
     st.success("Ostateczny wynik: **18**")
+
+st.divider()
+st.caption("Najcierpliwszy portal do matematyki")
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
