@@ -2,7 +2,7 @@ import streamlit as st
 import json
 import os
 import random
-import requests  # <-- Dodaj tę bibliotekę do pobierania danych przez URL
+import requests  
 
 # Konfiguracja strony
 st.set_page_config(
@@ -37,7 +37,7 @@ def reset_question_state(shuffled_list=None):
 @st.cache_data
 def load_quiz_data():
     # Adres URL do surowego pliku w repozytorium (Datasets)
-    url = "https://huggingface.co"
+    url = "https://huggingface.co/datasets/Radar1111/AngielskiZdania/blob/main/quiz_data.json"
     
     # Pobranie tokenu z bezpiecznych zmiennych Streamlit (st.secrets)
     # Upewnij się, że dodałeś HF_TOKEN do konfiguracji sekretów!
