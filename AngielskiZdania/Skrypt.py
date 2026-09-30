@@ -2,69 +2,41 @@ import streamlit as st
 import json
 import os
 import random
-import requests  
+from huggingface_hub import hf_hub_download  # <-- Dodaj ten import
 
-# Konfiguracja strony
-st.set_page_config(
-    page_title="Trener Gramatyki",
-    page_icon="🎯",
-    layout="centered"
-)
+# ... (reszta Twoich inicjalizacji stanu st.session_state pozostaje bez zmian)
 
-# Inicjalizacja stanu aplikacji (State Management)
-if "current_question_idx" not in st.session_state:
-    st.session_state.current_question_idx = 0
-if "user_scramble_order" not in st.session_state:
-    st.session_state.user_scramble_order = []
-if "shuffled_words" not in st.session_state:
-    st.session_state.shuffled_words = []
-
-if "score" not in st.session_state:
-    st.session_state.score = 0
-if "answered_questions" not in st.session_state:
-    st.session_state.answered_questions = set()
-
-# Funkcja resetująca stan przy zmianie pytania lub trybu
-def reset_question_state(shuffled_list=None):
-    st.session_state.user_scramble_order = []
-    if shuffled_list is not None:
-        st.session_state.shuffled_words = shuffled_list
-    else:
-        st.session_state.shuffled_words = []
-
-
-# Ładowanie bazy pytań z prywatnego repozytorium Hugging Face
+# Ładowanie bazy pytań z prywatnego repozytorium przy użyciu oficjalnej biblioteki
 @st.cache_data
 def load_quiz_data():
-    # Adres URL do surowego pliku w repozytorium (Datasets)
-    url = "https://huggingface.co/datasets/Radar1111/AngielskiZdania/blob/main/quiz_data.json"
+    repo_id = "Radar1111/AngielskiZdani"
+    filename = "quiz_data.json"
     
     # Pobranie tokenu z bezpiecznych zmiennych Streamlit (st.secrets)
-    # Upewnij się, że dodałeś HF_TOKEN do konfiguracji sekretów!
     hf_token = st.secrets.get("HF_TOKEN")
     
     if not hf_token:
         st.error("Brak tokenu HF_TOKEN w konfiguracji Streamlit Secrets!")
         return []
         
-    headers = {"Authorization": f"Bearer {hf_token}"}
-    
     try:
-        response = requests.get(url, headers=headers)
-        if response.status_code == 200:
-            return response.json()
-        elif response.status_code == 404:
-            st.error(f"Nie znaleziono pliku pod wskazanym adresem URL. Sprawdź ścieżkę i nazwę gałęzi (main).")
-            return []
-        else:
-            st.error(f"Błąd pobierania danych z Hugging Face. Kod statusu: {response.status_code}")
-            return []
+        # Oficjalna metoda HF pobierająca pojedynczy plik z prywatnego zbioru danych (dataset)
+        local_file_path = hf_hub_download(
+            repo_id=repo_id,
+            filename=filename,
+            repo_type="dataset",  # Informuje HF, że szukamy w Datasets, a nie w Models
+            token=hf_token
+        )
+        
+        # Wczytanie pobranego i zabezpieczonego przez bibliotekę pliku JSON
+        with open(local_file_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+            
     except Exception as e:
-        st.error(f"Wystąpił nieoczekiwany błąd podczas połączenia: {e}")
+        st.error(f"Nie udało się pobrać bazy danych z Hugging Face: {e}")
         return []
 
-
-all_questions = load_quiz_data()
+all_questions = load_quiz_data())
 
 # Interfejs użytkownika
 st.title("🎯 Trener Gramatyki przed Egzaminem Ósmoklasisty")
