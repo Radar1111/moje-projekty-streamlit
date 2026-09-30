@@ -2,7 +2,7 @@ import streamlit as st
 import json
 import os
 import random
-from huggingface_hub import hf_hub_download  # <-- Dodaj ten import
+from huggingface_hub import hf_hub_download  
 
 # Konfiguracja strony
 st.set_page_config(
@@ -65,8 +65,8 @@ def load_quiz_data():
 all_questions = load_quiz_data()
 
 # Interfejs użytkownika
-st.title("🎯 Trener Gramatyki przed Egzaminem Ósmoklasisty")
-st.markdown("Wybierz tryb ćwiczeń i sprawdź swoją wiedzę w formatach zadań prosto z E8!")
+st.title("🎯 Trener Gramatyki")
+st.markdown("Wybierz tryb ćwiczeń i sprawdź swoją wiedzę!")
 
 
 st.sidebar.header("Ustawienia ćwiczeń")
