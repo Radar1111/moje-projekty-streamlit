@@ -524,4 +524,10 @@ elif bryla == "Stożek":
                 st.markdown("**4. Objętość stożka:**")
                 st.latex(f"V \\approx \\frac{{1}}{{3}} \\cdot {Pp_ap:.2f} \\cdot {H} = {V_ap:.2f}")
 
+st.divider()
+st.caption("Najcierpliwszy portal do matematyki")
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
+
 
