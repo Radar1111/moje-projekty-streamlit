@@ -62,7 +62,7 @@ def load_quiz_data():
         st.error(f"Nie udało się pobrać bazy danych z Hugging Face: {e}")
         return []
 
-all_questions = load_quiz_data())
+all_questions = load_quiz_data()
 
 # Interfejs użytkownika
 st.title("🎯 Trener Gramatyki przed Egzaminem Ósmoklasisty")
