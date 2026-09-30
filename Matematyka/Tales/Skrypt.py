@@ -277,3 +277,8 @@ elif tryb_aplikacji == "📝 Sekcja zadań":
 
 with st.sidebar:
     wyswietl_sekcje_wsparcia()
+st.divider()
+st.caption("Najcierpliwszy portal do matematyki")
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
