@@ -7,3 +7,4 @@ fsspec
 sympy
 ephem
 streamlit-drawable-canvas
+gTTS
