@@ -4,7 +4,33 @@ import os
 import random
 from huggingface_hub import hf_hub_download  # <-- Dodaj ten import
 
-# ... (reszta Twoich inicjalizacji stanu st.session_state pozostaje bez zmian)
+# Konfiguracja strony
+st.set_page_config(
+    page_title="Trener Gramatyki",
+    page_icon="🎯",
+    layout="centered"
+)
+
+# Inicjalizacja stanu aplikacji (State Management)
+if "current_question_idx" not in st.session_state:
+    st.session_state.current_question_idx = 0
+if "user_scramble_order" not in st.session_state:
+    st.session_state.user_scramble_order = []
+if "shuffled_words" not in st.session_state:
+    st.session_state.shuffled_words = []
+
+if "score" not in st.session_state:
+    st.session_state.score = 0
+if "answered_questions" not in st.session_state:
+    st.session_state.answered_questions = set()
+
+# Funkcja resetująca stan przy zmianie pytania lub trybu
+def reset_question_state(shuffled_list=None):
+    st.session_state.user_scramble_order = []
+    if shuffled_list is not None:
+        st.session_state.shuffled_words = shuffled_list
+    else:
+        st.session_state.shuffled_words = []
 
 # Ładowanie bazy pytań z prywatnego repozytorium przy użyciu oficjalnej biblioteki
 @st.cache_data
