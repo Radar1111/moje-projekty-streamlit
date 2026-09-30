@@ -9,7 +9,7 @@ st.title("Mistrz Ortografii!")
 
 # Funkcja wczytywania danych z JSON
 def wczytaj_opowiadania():
-    sciezka = "opowiadania.json"
+    sciezka = "Polski/DyktandoLuki/opowiadania.json"
     if not os.path.exists(sciezka):
         st.error(f"Nie znaleziono pliku {sciezka}!")
         return []
