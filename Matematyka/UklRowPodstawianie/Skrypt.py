@@ -238,3 +238,9 @@ if st.button("Rozwiąż układ krok po kroku", type="primary", use_container_wid
 
 # Sekcja wsparcia
 wyswietl_sekcje_wsparcia()
+
+st.divider()
+st.caption("Najcierpliwszy portal do matematyki")
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
