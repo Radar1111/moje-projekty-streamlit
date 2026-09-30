@@ -1,0 +1,549 @@
+[
+  {
+    "tytul": "Poranek w kuchni",
+    "trudnosc": "Łatwy",
+    "tekst_wzorcowy": "Dzisiaj rano w {kuchni} mama przygotowała pyszny {urodzinowy} tort.",
+    "luki": {
+      "kuchni": {
+        "odpowiedz": "u",
+        "pelny": "kuchni",
+        "zasada": "W środku większości polskich wyrazów (w rdzeniu) piszemy 'u', jeśli nie wymienia się na o/e/a."
+      },
+      "urodzinowy": {
+        "odpowiedz": "u",
+        "pelny": "urodzinowy",
+        "zasada": "Literę 'u' piszemy na początku niemal wszystkich wyrazów (wyjątki: ósemka, ósmy, ów, ówczesny, ówdzie)."
+      }
+    }
+  },
+  {
+    "tytul": "Przygoda w ogrodzie",
+    "trudnosc": "Łatwy",
+    "tekst_wzorcowy": "Mały {wróbel} usiadł na gałęzi. Nagle kotek wyskoczył zza {krzaka} i głośno {zamiauczał}.",
+    "luki": {
+      "wróbel": {
+        "odpowiedz": "ó",
+        "pelny": "wróbel",
+        "zasada": "Wyraz tradycyjnie pisany przez 'ó' (wyraz do zapamiętania)."
+      },
+      "krzaka": {
+        "odpowiedz": "rz",
+        "pelny": "krzaka",
+        "zasada": "Piszemy 'rz' po spółgłosce 'k' (z wyjątkiem słów: kucharz, kszyk itp.)."
+      },
+      "zamiauczał": {
+        "odpowiedz": "u",
+        "pelny": "zamiauczał",
+        "zasada": "Piszemy 'u' w cząstkach -au-, -eu-, -ou- w wyrazach dźwiękonaśladowczych i obcych (miauczeć, ryczałt)."
+      }
+    }
+  },
+  {
+    "tytul": "Drugi poranek",
+    "trudnosc": "Łatwy",
+    "tekst_wzorcowy": "Mama parzy {herbatę} w dużym {kubku}. Na stole leży świeża {bułka} z masłem.",
+    "luki": {
+      "herbatę": {
+        "odpowiedz": "h",
+        "pelny": "herbatę",
+        "zasada": "Wyraz pochodzenia obcego do zapamiętania (pisownia przez 'h')."
+      },
+      "kubku": {
+        "odpowiedz": "u",
+        "pelny": "kubku",
+        "zasada": "Piszemy 'u' w zdrobnieniach i zakończeniach rzeczowników typu '-ku', '-uk'."
+      },
+      "bułka": {
+        "odpowiedz": "u",
+        "pelny": "bułka",
+        "zasada": "Piszemy 'u' w przyrostkach rzeczownikowych zakończonych na '-ułka' (bułka, kukułka)."
+      }
+    }
+  },
+  {
+    "tytul": "Leśny spacer",
+    "trudnosc": "Łatwy",
+    "tekst_wzorcowy": "W gęstym {borze} rośnie stary dąb. Pod jego liśćmi {schował} się mały borowik.",
+    "luki": {
+      "borze": {
+        "odpowiedz": "rz",
+        "pelny": "borze",
+        "zasada": "Piszemy 'rz', ponieważ wymienia się na 'r' w innych formach wyrazu (borze -> bór)."
+      },
+      "schował": {
+        "odpowiedz": "ch",
+        "pelny": "schował",
+        "zasada": "Piszemy 'ch' po spółgłosce 's' w rodzimych polskich słowach (schować, schody)."
+      }
+    }
+  },
+  {
+    "tytul": "Zimowa zabawa",
+    "trudnosc": "Łatwy",
+    "tekst_wzorcowy": "Dzieci lepią wielkiego {śniegowego} bałwana. Jako nos zatykają {marchew}.",
+    "luki": {
+      "śniegowego": {
+        "odpowiedz": "ś",
+        "pelny": "śniegowego",
+        "zasada": "Przed spółgłoskami miękkimi w rdzeniach polskich wyrazów stosujemy znak diakrytyczny (kreskę nad 'ś')."
+      },
+      "marchew": {
+        "odpowiedz": "ch",
+        "pelny": "marchew",
+        "zasada": "Wyraz tradycyjnie pisany przez 'ch' w środku słowa (wyraz do zapamiętania)."
+      }
+    }
+  },
+  {
+    "tytul": "Wyprawa nad rzekę",
+    "trudnosc": "Łatwy",
+    "tekst_wzorcowy": "Czysta {rzeka} płynie wolno. Nad {brzegiem} lata chuda {ważka}.",
+    "luki": {
+      "rzeka": {
+        "odpowiedz": "rz",
+        "pelny": "rzeka",
+        "zasada": "Wyraz historycznie uzasadniony, dawniej wymawiany z 'r' (wyraz do zapamiętania)."
+      },
+      "brzegiem": {
+        "odpowiedz": "rz",
+        "pelny": "brzegiem",
+        "zasada": "Piszemy 'rz' po spółgłosce 'b' (wyjątki: bujny, budzić)."
+      },
+      "ważka": {
+        "odpowiedz": "ż",
+        "pelny": "ważka",
+        "zasada": "Piszemy 'ż', ponieważ wymienia się na 'g' w słowie pokrewnym (ważka -> waga)."
+      }
+    }
+  },
+  {
+    "tytul": "Tajemnica starego zamku",
+    "trudnosc": "Średni",
+    "tekst_wzorcowy": "Wysoka {wieża} zamkowa skrywała wielki skarb. Wokół niej krążył {orzeł}, wypatrując zdobyczy.",
+    "luki": {
+      "wieża": {
+        "odpowiedz": "ż",
+        "pelny": "wieża",
+        "zasada": "Piszemy 'ż', ponieważ wymienia się na 'g' w słowach pokrewnych (wieża -> wieżyca)."
+      },
+      "orzeł": {
+        "odpowiedz": "rz",
+        "pelny": "orzeł",
+        "zasada": "Piszemy 'rz', ponieważ wymienia się na 'r' w innych formach tego wyrazu (orzeł -> orła)."
+      }
+    }
+  },
+  {
+    "tytul": "Podróż pociągiem",
+    "trudnosc": "Średni",
+    "tekst_wzorcowy": "Z pociągu {wyjrzał} młody podróżnik. Na stacji kupił {świeży} sok pomarańczowy.",
+    "luki": {
+      "wyjrzał": {
+        "odpowiedz": "rz",
+        "pelny": "wyjrzał",
+        "zasada": "Piszemy 'rz' po spółgłosce 'j' (jest to reguła fonetyczna dla czasowników zakończonych na -jrzeć)."
+      },
+      "świeży": {
+        "odpowiedz": "ż",
+        "pelny": "świeży",
+        "zasada": "Piszemy 'ż' w przymiotnikach zakończonych na '-eży' (świeży, bieżący)."
+      }
+    }
+  },
+  {
+    "tytul": "Spotkanie z historią",
+    "trudnosc": "Średni",
+    "tekst_wzorcowy": "Dziadek opowiadał o dawnych {rycerzach}. Jego pasją była {historia} i stare mapy.",
+    "luki": {
+      "rycerzach": {
+        "odpowiedz": "rz",
+        "pelny": "rycerzach",
+        "zasada": "Piszemy 'rz', ponieważ wymienia się na 'r' w słowach pokrewnych (rycerz -> rycerski)."
+      },
+      "historia": {
+        "odpowiedz": "h",
+        "pelny": "historia",
+        "zasada": "W wyrazach pochodzenia obcego (międzynarodowych) na początku słowa piszemy 'h'."
+      }
+    }
+  },
+  {
+    "tytul": "Wyprawa w góry",
+    "trudnosc": "Średni",
+    "tekst_wzorcowy": "Turysta założył {ciężki} plecak i ruszył na szlak. Nad {wierzchołkami} gór zbierały się czрные chmury.",
+    "luki": {
+      "ciężki": {
+        "odpowiedz": "ż",
+        "pelny": "ciężki",
+        "zasada": "Piszemy 'ż', ponieważ w stopnu wyższym wymienia się na 'sz' (ciężki - cięższy)."
+      },
+      "wierzchołkami": {
+        "odpowiedz": "rz",
+        "pelny": "wierzchołkami",
+        "zasada": "Piszemy 'rz', ponieważ wymienia się na '' w innych formach wyrazu (wierzchołek -> wierch)."
+      }
+    }
+  },
+  {
+    "tytul": "Jesienny dzień",
+    "trudnosc": "Średni",
+    "tekst_wzorcowy": "Z drzew spadają złote {liście}. Zimny wiatr wieje coraz mocniej od strony północnej.",
+    "luki": {
+      "liście": {
+        "odpowiedz": "ci",
+        "pelny": "liście",
+        "zasada": "Piszemy 'ście', ponieważ wymienia się na 'st' w słowie pokrewnym (liście -> listek)."
+      },
+      "północnej": {
+        "odpowiedz": "ó",
+        "pelny": "północnej",
+        "zasada": "Piszemy 'ó', ponieważ historycznie wymienia się na 'o' w słowie pokrewnym (północ -> połowa)."
+      }
+    }
+  },
+  {
+    "tytul": "Wyprawa geologa",
+    "trudnosc": "Trudny",
+    "tekst_wzorcowy": "Naukowiec schował do torby cenne próbki. Na {grząskim} szlaku panował przejmujący chłód i {hałas}.",
+    "luki": {
+      "grząskim": {
+        "odpowiedz": "rz",
+        "pelny": "grząskim",
+        "zasada": "Piszemy 'rz', ponieważ rz wystepuje po spółgłosce."
+      },
+      "hałas": {
+        "odpowiedz": "h",
+        "pelny": "hałas",
+        "zasada": "Wyraz tradycyjnie pisany przez 'h' (wyraz do zapamiętania)."
+      }
+    }
+  },
+  {
+    "tytul": "Wizyta w zoo",
+    "trudnosc": "Trudny",
+    "tekst_wzorcowy": "Egzotyczna {gżegżółka} głośno kukała w wolierze. Obok rósł piękny, {hiacyntowy} kwiat.",
+    "luki": {
+      "gżegżółka": {
+        "odpowiedz": "ż",
+        "pelny": "gżegżółka",
+        "zasada": "Wyjątek! Piszemy 'ż' po spółgłosce 'g' w tym konkretnym wyrazie (wyraz staropolski do zapamiętania)."
+      },
+      "hiacyntowy": {
+        "odpowiedz": "h",
+        "pelny": "hiacyntowy",
+        "zasada": "Słowo pochodzenia obcego, piszemy przez 'h'."
+      }
+    }
+  },
+  {
+    "tytul": "Praca w kuźni",
+    "trudnosc": "Trudny",
+    "tekst_wzorcowy": "Doświadczony rzeźbiarz {uderzał} młotem w stal. Spod kowadła sypały się {pęki} iskier.",
+    "luki": {
+      "uderzał": {
+        "odpowiedz": "rz",
+        "pelny": "uderzał",
+        "zasada": "Piszemy 'rz', ponieważ wymienia się na 'r' wyrazu pokrewnego (udar -> uderzyć -> uderzał)."
+      },
+      "pęki": {
+        "odpowiedz": "ę",
+        "pelny": "pęki",
+        "zasada": "pęk -> pęki"
+      }
+    }
+  },
+  {
+    "tytul": "Popołudnie na wsi",
+    "trudnosc": "Trudny",
+    "tekst_wzorcowy": "Starszy {druh} rozpalił ognisko na polanie. W garnku bulgotała pyszna {juszka}.",
+    "luki": {
+      "druh": {
+        "odpowiedz": "h",
+        "pelny": "druh",
+        "zasada": "Wyjątek! Piszemy 'h' na końcu wyrazu (w większości polskich wyrazów na końcu pisze się 'ch')."
+      },
+      "juszka": {
+        "odpowiedz": "u",
+        "pelny": "juszka",
+        "zasada": "Wyraz do zapamiętania (tradycyjna nazwa wywaru/zupy)."
+      }
+    }
+  },
+  {
+    "tytul": "Wieczorne rozmyślania",
+    "trudnosc": "Trudny",
+    "tekst_wzorcowy": "Artysta poczuł nagłą {żalość} i melancholię. Na papier przelał swoje {wtorne} myśli.",
+    "luki": {
+      "żałość": {
+        "odpowiedz": "ż",
+        "pelny": "żałość",
+        "zasada": "Piszemy 'ż', ponieważ wymienia się na 'ź' lub 'z' (żałość -> żalić się)."
+      },
+      "wtórne": {
+        "odpowiedz": "ó",
+        "pelny": "wtórne",
+        "zasada": "Piszemy 'ó' zgodnie z ogólną zasada ortograficzną lub ponieważ wymienia się na 'o' (wtórne -> wtór -> (starodawne wtory))."
+      }
+    }
+  },
+  {
+    "tytul": "Zabawa z psem",
+    "trudnosc": "Łatwy",
+    "tekst_wzorcowy": "Wesoły {kundelek} biega po trawie. Gdy widzi {kota}, zaczyna głośno szczekać.",
+    "luki": {
+      "kundelek": {
+        "odpowiedz": "u",
+        "pelny": "kundelek",
+        "zasada": "W środku rdzenia większości polskich wyrazów piszemy 'u' (brak wymiany na o, e, a)."
+      },
+      "kota": {
+        "odpowiedz": "o",
+        "pelny": "kota",
+        "zasada": "Wyraz podstawowy do zapamiętania (końcówka fleksyjna -a w dopełniaczu)."
+      }
+    }
+  },
+  {
+    "tytul": "Mała chmura",
+    "trudnosc": "Łatwy",
+    "tekst_wzorcowy": "Na czystym niebie pojawiła się czarna {chmura}. Zaraz spadnie ciepły, letni {deszcz}.",
+    "luki": {
+      "chmura": {
+        "odpowiedz": "ch",
+        "pelny": "chmura",
+        "zasada": "Wyraz tradycyjnie pisany przez 'ch' na początku wyrazu (wyraz do zapamiętania)."
+      },
+      "deszcz": {
+        "odpowiedz": "sz",
+        "pelny": "deszcz",
+        "zasada": "Zakończenie fonetyczne '-szcz' w rdzennych polskich rzeczownikach."
+      }
+    }
+  },
+  {
+    "tytul": "Pyszny podwieczorek",
+    "trudnosc": "Łatwy",
+    "tekst_wzorcowy": "Babcia upiekła pachnące {ciastka}. Do picia podała słodki kompot z {truskawek}.",
+    "luki": {
+      "ciastka": {
+        "odpowiedz": "ci",
+        "pelny": "ciastka",
+        "zasada": "Zapis zmiękczenia przed samogłoską realizujemy za pomocą dwuznaku 'ci'."
+      },
+      "truskawek": {
+        "odpowiedz": "u",
+        "pelny": "truskawek",
+        "zasada": "W środku większości rodzimych słów piszemy 'u' (wyraz do zapamiętania)."
+      }
+    }
+  },
+  {
+    "tytul": "Książka na wieczór",
+    "trudnosc": "Łatwy",
+    "tekst_wzorcowy": "Krzyś chętnie {czyta} bajki o smokach. Wieczorem chowa książkę pod {poduszkę}.",
+    "luki": {
+      "czyta": {
+        "odpowiedz": "cz",
+        "pelny": "czyta",
+        "zasada": "Spółgłoska twarda 'cz' na początku rdzenia czasownika."
+      },
+      "poduszkę": {
+        "odpowiedz": "u",
+        "pelny": "poduszkę",
+        "zasada": "Piszemy 'u' w przyrostkach zakończonych na '-uszka' (poduszka, pieluszka)."
+      }
+    }
+  },
+  {
+    "tytul": "Mali artyści",
+    "trudnosc": "Łatwy",
+    "tekst_wzorcowy": "Ania pięknie {maluje} farbami. Na jej obrazku widać wysokie {drzewo}.",
+    "luki": {
+      "maluje": {
+        "odpowiedz": "u",
+        "pelny": "maluje",
+        "zasada": "Końcówki czasowników '-uję', '-ujesz', '-uje' zawsze piszemy przez 'u'."
+      },
+      "drzewo": {
+        "odpowiedz": "rz",
+        "pelny": "drzewo",
+        "zasada": "Piszemy 'rz' po spółgłosce 'd' (drzewo, drżeć, przed)."
+      }
+    }
+  },
+  {
+    "tytul": "Mądra sowa",
+    "trudnosc": "Średni",
+    "tekst_wzorcowy": "Na gałęzi dębu usiadła {puchata} sowa. To {mądry} ptak, który poluje nocą.",
+    "luki": {
+      "puchata": {
+        "odpowiedz": "ch",
+        "pelny": "puchata",
+        "zasada": "Wyraz tradycyjnie pisany przez 'ch' (wyraz do zapamiętania)."
+      },
+      "mądry": {
+        "odpowiedz": "ą",
+        "pelny": "mądry",
+        "zasada": "Piszemy 'ą' przed spółgłoskami szczelinowymi i zwartymi w rdzeniach słów rodzimych (mądry -> mądrość)."
+      }
+    }
+  },
+  {
+    "tytul": "Praca w ogrodzie",
+    "trudnosc": "Średni",
+    "tekst_wzorcowy": "Ogrodnik ścina suche {gałązki}. Potem starannie plewi {grządki} z warzywami.",
+    "luki": {
+      "gałązki": {
+        "odpowiedz": "ą",
+        "pelny": "gałązki",
+        "zasada": "Piszemy 'ą', ponieważ wymienia się na 'ę' w liczbie pojedynczej (gałązka -> gałęzie)."
+      },
+      "grządki": {
+        "odpowiedz": "rz",
+        "pelny": "grządki",
+        "zasada": "Piszemy 'rz' ponieważ występuje po spółgłosce 'g' (grzyb, grzmot)"
+      }
+    }
+  },
+  {
+    "tytul": "Nowy zegarek",
+    "trudnosc": "Średni",
+    "tekst_wzorcowy": "Mój brat dostał srebrny {zegarek}. Mechanizm działa idealnie i nie {spóźnia} się.",
+    "luki": {
+      "mechanizm": {
+        "odpowiedz": "ch",
+        "pelny": "mechanizm",
+        "zasada": "Brak bezpośredniej wymiany. O pisowni decyduje wyłącznie greckie pochodzenie tego słowa.."
+      },
+      "spóźnia": {
+        "odpowiedz": "ó",
+        "pelny": "spóźnia",
+        "zasada": "Piszemy 'ó', ponieważ wymienia się na 'ó' w słowie bazowym 'późno' (późno -> spóźnienie)."
+      }
+    }
+  },
+  {
+    "tytul": "Wielka burza",
+    "trudnosc": "Średni",
+    "tekst_wzorcowy": "Nagle uderzył {potężny} {piorun}. Silny {wicher} łamał delikatne gałęzie w parku.",
+    "luki": {
+      "potężny": {
+        "odpowiedz": "ż",
+        "pelny": "potężny",
+        "zasada": "Działa tutaj podstawowa polska reguła ortograficzna: wymiana „ż” na „g” w wyrazach pokrewnych (potężny - potega)."
+      },
+      "piorun": {
+        "odpowiedz": "u",
+        "pelny": "piorun",
+        "zasada": "Zakończenie rzeczowników na '-un' piszemy zawsze przez 'u' (piorun, biegun, zwiastun)."
+      },
+      "wicher": {
+        "odpowiedz": "ch",
+        "pelny": "wicher",
+        "zasada": "Wyraz pisany przez 'ch' w środku słowa (wyraz do zapamiętania)."
+      }
+    }
+  },
+  {
+    "tytul": "Wyprawa na ryby",
+    "trudnosc": "Średni",
+    "tekst_wzorcowy": "Wędkarz zarzucił długą {wędką}. W czystej wodzie pływał duży {szczupak}.",
+    "luki": {
+      "wędką": {
+        "odpowiedz": "ę",
+        "pelny": "wędką",
+        "zasada": "Piszemy 'ę' wewnątrz rdzenia słowa przed spółgłoską zwartą 'd'."
+      },
+      "szczupak": {
+        "odpowiedz": "u",
+        "pelny": "szczupak",
+        "zasada": "Wyraz rodzimy, w którym 'u' nie podlega wymianie (wyraz do zapamiętania)."
+      }
+    }
+  },
+  {
+    "tytul": "Astronomiczna noc",
+    "trudnosc": "Trudny",
+    "tekst_wzorcowy": "Naukowiec skierował {teleskop} w stronę nieba. Odkrył nową, {karłowatą} gwiazdę.",
+    "luki": {
+      "teleskop": {
+        "odpowiedz": "e",
+        "pelny": "teleskop",
+        "zasada": "Wyraz pochodzenia obcego, pisownia zgodna z międzynarodowym rdzeniem 'tele-'."
+      },
+      "karłowatą": {
+        "odpowiedz": "ą",
+        "pelny": "karłowatą",
+        "zasada": "Piszemy 'a' w mianowmiku karłowata 'ą' w narzędniku karłowatą."
+      }
+    }
+  },
+  {
+    "tytul": "Porządek w dokumentach",
+    "trudnosc": "Trudny",
+    "tekst_wzorcowy": "Urzędnik przejrzał stary {kwestionariusz}. Wpisał dane i podbił papier {pieczęcią}.",
+    "luki": {
+      "kwestionariusz": {
+        "odpowiedz": "sz",
+        "pelny": "kwestionariusz",
+        "zasada": "Zakończenia wyrazów obcych na '-usz' piszemy przez (kwestionariusz, arkusz)."
+      },
+      "pieczęcią": {
+        "odpowiedz": "ę",
+        "pelny": "pieczęcią",
+        "zasada": "Piszemy 'ę' wewnątrz wyrazu przed spółgłoską afrykatywną 'cz' (pieczęć -> pieczęcią)."
+      }
+    }
+  },
+  {
+    "tytul": "Wiejski pejzaż",
+    "trudnosc": "Trudny",
+    "tekst_wzorcowy": "Na wzgórzu stał stary, zniszczony {wiatrak}. Wokół niego rozciągały się {żółte} pola zbóż.",
+    "luki": {
+      "wiatrak": {
+        "odpowiedz": "ia",
+        "pelny": "wiatrak",
+        "zasada": "Zmiękczenie 'w' realizujemy przez 'i' przed samogłoską 'a'."
+      },
+      "żółte": {
+        "odpowiedz": "ż",
+        "pelny": "żółte",
+        "zasada": "Wyraz z 'ż' i 'ó' jednocześnie – brak bezpośredniej wymiany na poziomie podstawowym (wyraz do zapamiętania)."
+      }
+    }
+  },
+  {
+    "tytul": "Koncert w filharmonii",
+    "trudnosc": "Trudny",
+    "tekst_wzorcowy": "Sławny {skrzypek} nastroił instrument. Muzyka zachwyciła zgromadzoną {publiczność}.",
+    "luki": {
+      "skrzypek": {
+        "odpowiedz": "rz",
+        "pelny": "skrzypek",
+        "zasada": "Piszemy 'rz' po spółgłosce 'k' (skrzypce, skrzypek, krzyk)."
+      },
+      "publiczność": {
+        "odpowiedz": "u",
+        "pelny": "publiczność",
+        "zasada": "Wyraz pochodzenia obcego (łac. publicus) zachowuje pisownię przez 'u'."
+      }
+    }
+  },
+  {
+    "tytul": "Sztuka renowacji",
+    "trudnosc": "Trudny",
+    "tekst_wzorcowy": "Rzemieślnik nakładał błyszczący {lakier} na drewno. Odnowił w ten sposób {stuletnią} szafę.",
+    "luki": {
+      "lakier": {
+        "odpowiedz": "ie",
+        "pelny": "lakier",
+        "zasada": "Zakończenie wyrazów zapożyczonych na '-ier' po spółgłoskach (lakier, koneser, oficer)."
+      },
+      "stuletnią": {
+        "odpowiedz": "ą",
+        "pelny": "stuletnią",
+        "zasada": "Końcówka biernika liczby pojedynczej przymiotników rodzaju żeńskiego pisana jako 'ą'."
+      }
+    }
+  }
+]
