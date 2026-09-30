@@ -35,7 +35,7 @@ def reset_question_state(shuffled_list=None):
 # Ładowanie bazy pytań z prywatnego repozytorium przy użyciu oficjalnej biblioteki
 @st.cache_data
 def load_quiz_data():
-    repo_id = "Radar1111/AngielskiZdani"
+    repo_id = "Radar1111/AngielskiZdania"
     filename = "quiz_data.json"
     
     # Pobranie tokenu z bezpiecznych zmiennych Streamlit (st.secrets)
