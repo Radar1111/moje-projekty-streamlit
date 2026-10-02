@@ -198,7 +198,7 @@ elif menu == "📚 Czytanie (Teksty ~200 słów)":
     st.title("📚 Rozumienie Tekstów Pisanych")
 
     # Wczytanie danych z JSON
-    all_texts = load_reading_data()
+    all_texts = reading_data
 
     if all_texts:
         
