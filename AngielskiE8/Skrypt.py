@@ -62,7 +62,7 @@ def render_cke_audio(audio_path, unique_id):
     if audio_path:
         nazwa_pliku = os.path.basename(audio_path)
         # Prawidłowy link URL kierujący do folderu audio w chmurze
-        audio_url = f"https://huggingface.co{REPO_ID}/resolve/main/audio/{nazwa_pliku}?download=true&token={HF_TOKEN}"
+        audio_url = f"https://huggingface.co/datasets/{REPO_ID}/resolve/main/{nazwa_pliku}?download=true&token={HF_TOKEN}"
     else:
         st.caption("ℹ️ Ładowanie pliku audio z chmury Hugging Face...")
 
