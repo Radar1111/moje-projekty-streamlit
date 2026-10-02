@@ -99,7 +99,7 @@ def render_cke_audio(audio_path, unique_id):
 
     # Wyświetlenie odtwarzacza audio po zaliczeniu kliknięcia
     if current_count > 0:
-        st.audio(audio_source, format="audio/mp3"
+        st.audio(audio_source, format="audio/mp3")
 
     
     if current_count > 0:
