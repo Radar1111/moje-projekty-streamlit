@@ -58,12 +58,9 @@ def render_cke_audio(audio_path, unique_id):
     # Domyślny, zapasowy link do nagrania, jeśli plik na HF zniknie
     audio_url = "https://soundhelix.com"
 
-    # GENEROWANIE BEZPIECZNEGO LINKU DO PRYWATNEGO REPOZYTORIUM HF (GŁÓWNY KATALOG)
+    # GENEROWANIE BEZPIECZNEGO LINKU DO PRYWATNEGO REPOZYTORIUM HF
     if audio_path:
-        # Wyciągamy samą nazwę pliku (np. sluchanie_1.mp3)
         nazwa_pliku = os.path.basename(audio_path)
-        
-        # Tworzymy bezpośredni link WWW do głównego poziomu repozytorium HF
         audio_url = f"https://huggingface.co{REPO_ID}/resolve/main/{nazwa_pliku}?download=true&token={HF_TOKEN}"
     else:
         st.caption("ℹ️ Ładowanie pliku audio z chmury Hugging Face...")
@@ -90,53 +87,31 @@ def render_cke_audio(audio_path, unique_id):
         st.session_state[state_key] += 1
         st.rerun()
 
-    # WYŚWIETLENIE STYLIZOWANEGO ODTWARZACZA HTML
+    # WYŚWIETLENIE ZABEZPIECZONEGO ODTWARZACZA
     if current_count > 0:
-        html_code = f"""
-        <style>
-          /* Ukrywamy oś czasu, czas trwania i pobieranie */
-          audio::-internal-media-controls-download-button,
-          audio::-webkit-media-controls-timeline,
-          audio::-webkit-media-controls-current-time-display,
-          audio::-webkit-media-controls-time-remaining-display {{
-            display: none !important;
-          }}
-          .player-box {{
-            font-family: sans-serif;
-            padding: 12px;
-            background-color: #f0f2f6;
-            border-radius: 8px;
-            text-align: center;
-            max-width: 400px;
-            margin-bottom: 15px;
-            border: 1px solid #d1d5db;
-          }}
-          .custom-play-btn {{
-            background-color: #ff4b4b;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-          }}
-          .custom-play-btn:hover {{
-            background-color: #e04141;
-          }}
-        </style>
-        <div class="player-box">
-          <p style="margin: 0 0 10px 0; color: #31333F; font-weight: bold; font-size: 14px;">
-            Odtwarzacz Egzaminacyjny CKE (Odsłuch {current_count}/2):
-          </p>
-          <!-- POPRAWKA: Przekazujemy poprawne źródło audio_url zmienione z audio_source -->
-          <audio id="audio_{unique_id}" src="{audio_url}" controlsList="nodownload" style="width: 100%; max-width: 300px;"></audio>
-          <div style="margin-top: 8px;">
-            <button class="custom-play-btn" onclick="document.getElementById('audio_{unique_id}').play()">🎵 Włącz dźwięk</button>
-          </div>
-        </div>
-        """
-        components.html(html_code, height=140)
+        # WTRZYKUJEMY STYLE CSS bezpośrednio do strony Streamlit, aby ukryć oś czasu i ściąganie
+        st.markdown(
+            """
+            <style>
+            /* Ukrywa suwak postępu, licznik czasu i przycisk pobierania w natywnym odtwarzaczu Streamlit */
+            audio::-internal-media-controls-download-button,
+            audio::-webkit-media-controls-timeline,
+            audio::-webkit-media-controls-current-time-display,
+            audio::-webkit-media-controls-time-remaining-display {
+                display: none !important;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+        
+        # Wyświetlamy piękny komunikat informacyjny dla ucznia
+        st.success(f"🎧 Trwa odsłuch egzaminacyjny (Próba {current_count}/2). Naciśnij guzik PLAY na odtwarzaczu poniżej, aby odsłuchać tekst z ElevenLabs:")
+        
+        # Uruchamiamy oficjalny odtwarzacz Streamlit – przeglądarka go NIE ZABLOKUJE!
+        st.audio(audio_url, format="audio/mpeg", autoplay=True)
+
+
 # Panel boczny
 st.sidebar.title("🎯 E8 English Diagnostic")
 st.sidebar.markdown("Wybierz sekcję egzaminu do ćwiczenia:")
