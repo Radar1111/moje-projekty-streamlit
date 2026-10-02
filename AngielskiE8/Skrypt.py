@@ -1,73 +1,79 @@
-import streamlit as st
-import streamlit.components.v1 as components
 import os
 import json
 import base64
+import streamlit as st
+import streamlit.components.v1 as components
+from huggingface_hub import hf_hub_download
 
 # Ustawienia strony
 st.set_page_config(page_title="E8 Angielski - Generator Diagnozy", layout="wide", page_icon="🇬🇧")
 
-def load_quiz_questions(file_path="diagnoza.json"):
+
+HF_TOKEN = os.environ.get("HF_TOKEN")
+
+REPO_ID = "Radar1111/AngielskiE8" 
+
+@st.cache_data
+def load_json_from_hf(file_name):
+    """Pobiera i ładuje plik JSON z prywatnego repozytorium Hugging Face"""
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        path = hf_hub_download(
+            repo_id=REPO_ID,
+            filename=file_name,
+            repo_type="dataset",
+            token=HF_TOKEN
+        )
+        with open(path, "r", encoding="utf-8") as f:
             return json.load(f)
-    except FileNotFoundError:
-        st.error(
-            f"Nie znaleziono pliku `{file_path}`. Upewnij się, że znajduje się w odpowiednim katalogu."
-        )
-        return []
-    except json.JSONDecodeError:
-        st.error(
-            f"Błąd struktury pliku `{file_path}`. Sprawdź, czy format JSON jest poprawny."
-        )
+    except Exception as e:
+        st.error(f"Nie udało się pobrać pliku `{file_name}` z Hugging Face. Szczegóły: {e}")
         return []
 
-def load_reading_data(file_path="teksty.json"):
+@st.cache_data
+def get_audio_path_from_hf(audio_name):
+    """Pobiera plik MP3 z HF i zwraca ścieżkę lokalną na serwerze Streamlit"""
+    if not audio_name:
+        return None
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        st.error(f"Nie znaleziono pliku `{file_path}`.")
-        return []
-    except json.JSONDecodeError:
-        st.error(f"Błąd formatu JSON w pliku `{file_path}`.")
-        return []
+        path = hf_hub_download(
+            repo_id=REPO_ID,
+            filename=audio_name,
+            repo_type="dataset",
+            token=HF_TOKEN
+        )
+        return path
+    except Exception as e:
+        # Jeśli nie znajdzie audio na HF, funkcja render_cke_audio automatycznie odpali demo
+        return None
 
-def load_listening_data(file_path="sluchanie.json"):
-    try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        st.error(f"Nie znaleziono pliku `{file_path}`.")
-        return []
-    except json.JSONDecodeError:
-        st.error(f"Błąd formatu JSON w pliku `{file_path}`.")
-        return []
+
+quiz_questions = load_json_from_hf("diagnoza.json")
+reading_data = load_json_from_hf("teksty.json")
+listening_data = load_json_from_hf("sluchanie.json")
+
 
 def render_cke_audio(audio_path, unique_id):
     # Domyślny link demo na wypadek, gdyby plik lokalny uległ uszkodzeniu lub zniknął
-    audio_source = (
-        "https://soundhelix.com"
-    )
+    audio_source = "https://soundhelix.com"
 
     # Sprawdzamy czy plik fizycznie istnieje i czy ścieżka nie jest pusta
     if audio_path and os.path.exists(audio_path):
         try:
             with open(audio_path, "rb") as f:
                 audio_bytes = f.read()
-            # Kodowanie binarne do formatu Base64 
+            # Kodowanie binarne do formatu Base64 akceptowanego przez przeglądarki
             b64_audio = base64.b64encode(audio_bytes).decode("utf-8")
             audio_source = f"data:audio/mp3;base64,{b64_audio}"
         except Exception as e:
             st.error(
-                f"Błąd odczytu pliku audio `{audio_path}`. Załadowano plik demonstracyjny. Szczegóły: {e}"
+                f"Błąd odczytu pliku audio. Załadowano plik demonstracyjny. Szczegóły: {e}"
             )
     else:
         st.caption(
-            f"ℹ️ Brak lokalnego pliku `{audio_path}` w katalogu projektu. System automatycznie uruchomił audio testowe online."
+            f"ℹ️ Brak pliku audio w chmurze lub repozytorium. System automatycznie uruchomił audio testowe online."
         )
 
-   
+    # Wykorzystujemy st.session_state do bezpiecznego liczenia odsłuchów
     state_key = f"listen_count_{unique_id}"
     if state_key not in st.session_state:
         st.session_state[state_key] = 0
@@ -86,10 +92,14 @@ def render_cke_audio(audio_path, unique_id):
     elif current_count == 1:
         st.warning("⚠️ Dostępne odtworzenia nagrania: 1/2 (Ostatnia szansa)")
 
-   
+    # Bezpieczny guzik sterowany przez serwer Streamlit
     if st.button("▶️ Uruchom nagranie (Zlicza odsłuch)", key=f"btn_{unique_id}"):
         st.session_state[state_key] += 1
         st.rerun()
+
+    # Wyświetlenie odtwarzacza audio po zaliczeniu kliknięcia
+    if current_count > 0:
+        st.audio(audio_source, format="audio/mp3"
 
     
     if current_count > 0:
