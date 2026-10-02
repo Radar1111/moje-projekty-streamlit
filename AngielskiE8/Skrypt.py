@@ -291,13 +291,18 @@ elif menu == "🎧 Słuchanie (ElevenLabs Player)":
             None,
         )
 
-        if selected_task:
-           
+       if selected_task:
             st.markdown("**Tekst dla ElevenLabs:**")
             st.code(selected_task["elevenlabs_script"])
 
             
-            render_cke_audio(selected_task["audio_path"], selected_task["id"])
+            nazwa_pliku_mp3 = selected_task.get("audio_file") or selected_task.get("audio_path")
+            
+            
+            sciezka_na_serwerze = get_audio_path_from_hf(nazwa_pliku_mp3)
+
+           
+            render_cke_audio(sciezka_na_serwerze, selected_task["id"])
 
 
             with st.form(key=f"form_listen_{selected_task['id']}"):
