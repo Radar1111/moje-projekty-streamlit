@@ -53,25 +53,17 @@ listening_data = load_json_from_hf("sluchanie.json")
 
 
 def render_cke_audio(audio_path, unique_id):
-    # Domyślny link demo, gdyby coś poszło nie tak
-    audio_source_html = "https://soundhelix.com"
-
-    # Sprawdzamy czy plik fizycznie istnieje na serwerze
-    if audio_path and os.path.exists(audio_path):
-        try:
-            with open(audio_path, "rb") as f:
-                audio_bytes = f.read()
-            # Kodujemy surowe bajty z HF do Base64, aby odtwarzacz HTML je zrozumiał
-            b64_audio = base64.b64encode(audio_bytes).decode("utf-8")
-            audio_source_html = f"data:audio/mpeg;base64,{b64_audio}"
-        except Exception as e:
-            st.error(
-                f"Błąd odczytu pliku audio. Załadowano plik demonstracyjny. Szczegóły: {e}"
-            )
+    # 1. GENEROWANIE BEZPIECZNEGO LINKU URL Z HF ZAMIAST BASE64/SUROWYCH BAJTÓW
+    # Wykorzystujemy oficjalną strukturę linków Hugging Face dla prywatnych repozytoriów
+    if audio_path:
+        # Wyciągamy z lokalnej ścieżki cache właściwą nazwę pliku audio (np. sluchanie_1.mp3.mp3)
+        nazwa_pliku = os.path.basename(audio_path)
+        
+        # Tworzymy bezpośredni link url pobierania, doklejając Twój token autoryzacyjny
+        audio_source_html = f"https://huggingface.co{REPO_ID}/resolve/main/audio/{nazwa_pliku}?download=true&token={HF_TOKEN}"
     else:
-        st.caption(
-            f"ℹ️ Ładowanie pliku audio z chmury Hugging Face..."
-        )
+        # Awaryjny link testowy online, jeśli ścieżka z HF nie istnieje
+        audio_source_html = "https://soundhelix.com"
 
     # Wykorzystujemy st.session_state do bezpiecznego liczenia odsłuchów
     state_key = f"listen_count_{unique_id}"
@@ -125,7 +117,7 @@ def render_cke_audio(audio_path, unique_id):
           <audio id="audio_{unique_id}" src="{audio_source_html}" autoplay controls controlsList="nodownload"></audio>
         </div>
         """
-        components.html(html_code, height=110) # Zwiększyłem wysokość do 110, żeby ramka się nie obcinała
+        components.html(html_code, height=110)
 
 # Panel boczny
 st.sidebar.title("🎯 E8 English Diagnostic")
