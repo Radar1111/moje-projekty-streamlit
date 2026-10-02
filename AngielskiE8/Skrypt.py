@@ -169,7 +169,7 @@ elif menu == "🤖 Szybki Quiz Diagnostyczny":
     )
 
     # Wczytanie pytań z zewnętrznego pliku JSON
-    questions = load_quiz_questions()
+    questions = quiz_questions
 
     if questions:
         # Dynamiczne renderowanie każdego pytania z pliku JSON
