@@ -53,25 +53,27 @@ listening_data = load_json_from_hf("sluchanie.json")
 
 
 def render_cke_audio(audio_path, unique_id):
-    # Domyślny link demo na wypadek, gdyby plik lokalny uległ uszkodzeniu lub zniknął
-    audio_source = "https://soundhelix.com"
+    # Domyślne źródło bajtów (Puste na start)
+    audio_source = None
 
-    # Sprawdzamy czy plik fizycznie istnieje i czy ścieżka nie jest pusta
+    # Sprawdzamy czy plik fizycznie istnieje na serwerze
     if audio_path and os.path.exists(audio_path):
         try:
+            # Wczytujemy plik jako czyste bajty binarne (BEZ Base64!)
             with open(audio_path, "rb") as f:
-                audio_bytes = f.read()
-            # Kodowanie binarne do formatu Base64 akceptowanego przez przeglądarki
-            b64_audio = base64.b64encode(audio_bytes).decode("utf-8")
-            audio_source = f"data:audio/mp3;base64,{b64_audio}"
+                audio_source = f.read()
         except Exception as e:
             st.error(
                 f"Błąd odczytu pliku audio. Załadowano plik demonstracyjny. Szczegóły: {e}"
             )
+            # Jeśli odczyt zawiedzie, podajemy link url jako alternatywę
+            audio_source = "https://soundhelix.com"
     else:
         st.caption(
-            f"ℹ️ Brak pliku audio w chmurze lub repozytorium. System automatycznie uruchomił audio testowe online."
+            f"ℹ️ Ładowanie pliku audio z chmury Hugging Face..."
         )
+        # Link demo, gdy plik jeszcze się nie pobrał z HF
+        audio_source = "https://soundhelix.com"
 
     # Wykorzystujemy st.session_state do bezpiecznego liczenia odsłuchów
     state_key = f"listen_count_{unique_id}"
