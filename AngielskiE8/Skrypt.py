@@ -53,27 +53,25 @@ listening_data = load_json_from_hf("sluchanie.json")
 
 
 def render_cke_audio(audio_path, unique_id):
-    # Domyślne źródło bajtów (Puste na start)
-    audio_source = None
+    # Domyślny link demo, gdyby coś poszło nie tak
+    audio_source_html = "https://soundhelix.com"
 
     # Sprawdzamy czy plik fizycznie istnieje na serwerze
     if audio_path and os.path.exists(audio_path):
         try:
-            # Wczytujemy plik jako czyste bajty binarne (BEZ Base64!)
             with open(audio_path, "rb") as f:
-                audio_source = f.read()
+                audio_bytes = f.read()
+            # Kodujemy surowe bajty z HF do Base64, aby odtwarzacz HTML je zrozumiał
+            b64_audio = base64.b64encode(audio_bytes).decode("utf-8")
+            audio_source_html = f"data:audio/mpeg;base64,{b64_audio}"
         except Exception as e:
             st.error(
                 f"Błąd odczytu pliku audio. Załadowano plik demonstracyjny. Szczegóły: {e}"
             )
-            # Jeśli odczyt zawiedzie, podajemy link url jako alternatywę
-            audio_source = "https://soundhelix.com"
     else:
         st.caption(
             f"ℹ️ Ładowanie pliku audio z chmury Hugging Face..."
         )
-        # Link demo, gdy plik jeszcze się nie pobrał z HF
-        audio_source = "https://soundhelix.com"
 
     # Wykorzystujemy st.session_state do bezpiecznego liczenia odsłuchów
     state_key = f"listen_count_{unique_id}"
@@ -99,14 +97,11 @@ def render_cke_audio(audio_path, unique_id):
         st.session_state[state_key] += 1
         st.rerun()
 
-    # Wyświetlenie odtwarzacza audio po zaliczeniu kliknięcia
-    if current_count > 0:
-        st.audio(audio_source, format="audio/mp3")
-
-    
+    # WYŚWIETLENIE STYLIZOWANEGO ODTWARZACZA HTML
     if current_count > 0:
         html_code = f"""
         <style>
+          /* Ukrywamy oś czasu oraz przycisk pobierania, tak jak na egzaminie CKE */
           audio::-internal-media-controls-download-button,
           audio::-webkit-media-controls-timeline,
           audio::-webkit-media-controls-current-time-display,
@@ -127,11 +122,10 @@ def render_cke_audio(audio_path, unique_id):
           <p style="margin: 0 0 8px 0; color: #31333F; font-weight: bold; font-size: 14px;">
             Odtwarzacz Egzaminacyjny CKE (Trwa odsłuch {current_count}/2):
           </p>
-          <audio id="audio_{unique_id}" src="{audio_source}" autoplay controls controlsList="nodownload"></audio>
+          <audio id="audio_{unique_id}" src="{audio_source_html}" autoplay controls controlsList="nodownload"></audio>
         </div>
         """
-        components.html(html_code, height=90)
-
+        components.html(html_code, height=110) # Zwiększyłem wysokość do 110, żeby ramka się nie obcinała
 
 # Panel boczny
 st.sidebar.title("🎯 E8 English Diagnostic")
