@@ -259,7 +259,7 @@ elif menu == "🎧 Słuchanie (ElevenLabs Player)":
     )
 
     # Wczytanie zadań słuchowych z JSON
-    all_listening_tasks = load_listening_data()
+    all_listening_tasks = listening_data
 
     if all_listening_tasks:
        
