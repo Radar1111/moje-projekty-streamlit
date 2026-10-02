@@ -31,28 +31,23 @@ def load_json_from_hf(file_name):
 
 @st.cache_data
 def get_audio_path_from_hf(audio_name):
-    """Pobiera plik MP3 z HF i wyświetla na ekranie status pobierania"""
+    """Pobiera plik MP3 z folderu 'audio' na HF i zwraca ścieżkę lokalną"""
     if not audio_name:
-        st.warning("⚠️ Funkcja nie otrzymała nazwy pliku audio z bazy JSON!")
         return None
     try:
+        # Łączymy nazwę folderu z nazwą przekazaną z JSON (np. "audio/sluchanie_1.mp3.mp3")
+        full_hf_path = f"audio/{audio_name}"
+        
         path = hf_hub_download(
             repo_id=REPO_ID,
-            filename=audio_name,
+            filename=full_hf_path,
             repo_type="dataset",
             token=HF_TOKEN
         )
-        
-        # 🟢 TEST: Informacja wizualna na stronie, że plik istnieje i został pobrany
-        if path and os.path.exists(path):
-            st.success(f"✅ Sukces! Plik `{audio_name}` został pobrany z HF i zapisany na serwerze pod ścieżką: {path}")
         return path
-        
     except Exception as e:
-        # 🔴 TEST: Wyświetlenie dokładnego błędu, jeśli pobieranie się nie powiodło
-        st.error(f"❌ Błąd pobierania pliku `{audio_name}` z Hugging Face. Szczegóły błędu: {e}")
+        st.error(f"❌ Błąd pobierania pliku `{audio_name}` z Hugging Face. Szczegóły: {e}")
         return None
-
 
 quiz_questions = load_json_from_hf("diagnoza.json")
 reading_data = load_json_from_hf("teksty.json")
