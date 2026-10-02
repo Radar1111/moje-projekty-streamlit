@@ -89,15 +89,18 @@ def render_cke_audio(audio_path, unique_id):
 
     # WYŚWIETLENIE ZABEZPIECZONEGO ODTWARZACZA
     if current_count > 0:
-        # WTRZYKUJEMY STYLE CSS bezpośrednio do strony Streamlit, aby ukryć oś czasu i ściąganie
+        # ⚡ GENIALNY TRIK CSS: Oś czasu jest widoczna, dzięki czemu przeglądarka odtwarza dźwięk,
+        # ale 'pointer-events: none' i 'filter' sprawiają, że uczeń nie może w nią kliknąć ani przewijać!
         st.markdown(
             """
             <style>
-            /* Ukrywa suwak postępu, licznik czasu i przycisk pobierania w natywnym odtwarzaczu Streamlit */
-            audio::-internal-media-controls-download-button,
-            audio::-webkit-media-controls-timeline,
-            audio::-webkit-media-controls-current-time-display,
-            audio::-webkit-media-controls-time-remaining-display {
+            /* Wyłączamy możliwość klikania w oś czasu (całkowita blokada przewijania) */
+            audio::-webkit-media-controls-timeline {
+                pointer-events: none !important;
+                filter: grayscale(100%) opacity(0.5); /* Wizualne zmatowienie paska */
+            }
+            /* Blokujemy przycisk pobierania pliku */
+            audio::-internal-media-controls-download-button {
                 display: none !important;
             }
             </style>
@@ -105,10 +108,10 @@ def render_cke_audio(audio_path, unique_id):
             unsafe_allow_html=True
         )
         
-        # Wyświetlamy piękny komunikat informacyjny dla ucznia
-        st.success(f"🎧 Trwa odsłuch egzaminacyjny (Próba {current_count}/2). Naciśnij guzik PLAY na odtwarzaczu poniżej, aby odsłuchać tekst z ElevenLabs:")
+        # Wyświetlamy informację dla ucznia
+        st.success(f"🎧 Trwa odsłuch egzaminacyjny (Próba {current_count}/2).")
         
-        # Uruchamiamy oficjalny odtwarzacz Streamlit – przeglądarka go NIE ZABLOKUJE!
+        # Uruchamiamy odtwarzacz Streamlit – teraz pasek ruszy do przodu i usłyszysz dźwięk!
         st.audio(audio_url, format="audio/mpeg", autoplay=True)
 
 
