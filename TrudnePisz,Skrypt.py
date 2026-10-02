@@ -39,6 +39,8 @@ def load_quiz_data():
         st.error(f"Nie udało się pobrać bazy danych z Hugging Face: {e}")
         return []
 
+pelna_baza = load_quiz_data()
+
 if not pelna_baza:
     st.error(
         "Baza znaków jest pusta lub nie udało się jej pobrać z Hugging Face Datasets! "
