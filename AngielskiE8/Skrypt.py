@@ -36,7 +36,7 @@ def get_audio_path_from_hf(audio_name):
         return None
     try:
         # Łączymy nazwę folderu z nazwą przekazaną z JSON (teraz to: "audio/sluchanie_1.mp3")
-        full_hf_path = f"audio/{audio_name}"
+        full_hf_path = audio_name
         
         path = hf_hub_download(
             repo_id=REPO_ID,
