@@ -31,23 +31,26 @@ def load_json_from_hf(file_name):
 
 @st.cache_data
 def get_audio_path_from_hf(audio_name):
-    """Pobiera plik MP3 z folderu 'audio' na HF i zwraca ścieżkę lokalną na serwerze Streamlit"""
+    """Pobiera plik MP3 z HF i wyświetla na ekranie status pobierania"""
     if not audio_name:
+        st.warning("⚠️ Funkcja nie otrzymała nazwy pliku audio z bazy JSON!")
         return None
     try:
-        # POPRAWKA: Łączymy nazwę folderu z nazwą pliku (np. "audio/sluchanie_1.mp3.mp3")
-        full_hf_path = f"audio/{audio_name}"
-        
         path = hf_hub_download(
             repo_id=REPO_ID,
-            filename=full_hf_path,  # ✅ Teraz pobiera z właściwego folderu na HF
+            filename=audio_name,
             repo_type="dataset",
             token=HF_TOKEN
         )
+        
+        # 🟢 TEST: Informacja wizualna na stronie, że plik istnieje i został pobrany
+        if path and os.path.exists(path):
+            st.success(f"✅ Sukces! Plik `{audio_name}` został pobrany z HF i zapisany na serwerze pod ścieżką: {path}")
         return path
+        
     except Exception as e:
-        # Wypisujemy błąd w konsoli Streamlit (widoczny w logach dla Ciebie), ułatwi to diagnozę
-        print(f"Błąd pobierania audio z HF: {e}")
+        # 🔴 TEST: Wyświetlenie dokładnego błędu, jeśli pobieranie się nie powiodło
+        st.error(f"❌ Błąd pobierania pliku `{audio_name}` z Hugging Face. Szczegóły błędu: {e}")
         return None
 
 
