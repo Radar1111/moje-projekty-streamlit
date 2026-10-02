@@ -281,27 +281,29 @@ elif menu == "🎧 Słuchanie (ElevenLabs Player)":
     if all_listening_tasks:
        
         listening_options = [task["title_menu"] for task in all_listening_tasks]
+        # Wybór zadania przez użytkownika
         sluchanie_wybor = st.selectbox(
             "Wybierz zadanie ze słuchu:", listening_options
         )
 
-        
+        # Wyszukanie wybranego zadania w bazie danych
         selected_task = next(
             (t for t in all_listening_tasks if t["title_menu"] == sluchanie_wybor),
             None,
         )
 
-       if selected_task:
+        # Poniższa linia 'if' musi zaczynać się od dokładnie 8 spacji:
+        if selected_task:
             st.markdown("**Tekst dla ElevenLabs:**")
             st.code(selected_task["elevenlabs_script"])
 
-            
+            # Pobieramy czystą nazwę pliku z bazy JSON
             nazwa_pliku_mp3 = selected_task.get("audio_file") or selected_task.get("audio_path")
             
-            
+            # Wywołujemy pobieranie z Hugging Face
             sciezka_na_serwerze = get_audio_path_from_hf(nazwa_pliku_mp3)
 
-           
+            # Przekazujemy ściągniętą ścieżkę do odtwarzacza CKE
             render_cke_audio(sciezka_na_serwerze, selected_task["id"])
 
 
