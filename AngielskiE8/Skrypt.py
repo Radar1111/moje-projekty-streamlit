@@ -58,11 +58,13 @@ def render_cke_audio(audio_path, unique_id):
     # Domyślny, zapasowy link do nagrania, jeśli plik na HF zniknie
     audio_url = "https://soundhelix.com"
 
-    # 1. GENEROWANIE BEZPIECZNEGO LINKU DO PRYWATNEGO REPOZYTORIUM HF
+    # GENEROWANIE BEZPIECZNEGO LINKU DO PRYWATNEGO REPOZYTORIUM HF (GŁÓWNY KATALOG)
     if audio_path:
+        # Wyciągamy samą nazwę pliku (np. sluchanie_1.mp3)
         nazwa_pliku = os.path.basename(audio_path)
-        # Prawidłowy link URL kierujący do folderu audio w chmurze
-        audio_url = f"https://huggingface.co/datasets/{REPO_ID}/resolve/main/{nazwa_pliku}?download=true&token={HF_TOKEN}"
+        
+        # Tworzymy bezpośredni link WWW do głównego poziomu repozytorium HF
+        audio_url = f"https://huggingface.co{REPO_ID}/resolve/main/{nazwa_pliku}?download=true&token={HF_TOKEN}"
     else:
         st.caption("ℹ️ Ładowanie pliku audio z chmury Hugging Face...")
 
@@ -88,11 +90,11 @@ def render_cke_audio(audio_path, unique_id):
         st.session_state[state_key] += 1
         st.rerun()
 
-    # Wyświetlenie zabezpieczonego odtwarzacza HTML po kliknięciu przycisku
+    # WYŚWIETLENIE STYLIZOWANEGO ODTWARZACZA HTML
     if current_count > 0:
         html_code = f"""
         <style>
-          /* Blokujemy oszukiwanie: ukrywamy oś czasu, czas trwania i pobieranie */
+          /* Ukrywamy oś czasu, czas trwania i pobieranie */
           audio::-internal-media-controls-download-button,
           audio::-webkit-media-controls-timeline,
           audio::-webkit-media-controls-current-time-display,
@@ -127,16 +129,14 @@ def render_cke_audio(audio_path, unique_id):
           <p style="margin: 0 0 10px 0; color: #31333F; font-weight: bold; font-size: 14px;">
             Odtwarzacz Egzaminacyjny CKE (Odsłuch {current_count}/2):
           </p>
-          <!-- audio z id, załadowane z bezpiecznego URL -->
+          <!-- POPRAWKA: Przekazujemy poprawne źródło audio_url zmienione z audio_source -->
           <audio id="audio_{unique_id}" src="{audio_url}" controlsList="nodownload" style="width: 100%; max-width: 300px;"></audio>
           <div style="margin-top: 8px;">
             <button class="custom-play-btn" onclick="document.getElementById('audio_{unique_id}').play()">🎵 Włącz dźwięk</button>
           </div>
         </div>
         """
-        # Wysokość 140 pozwala na ładne wyświetlenie ramki i przycisku włączenia dźwięku
         components.html(html_code, height=140)
-
 # Panel boczny
 st.sidebar.title("🎯 E8 English Diagnostic")
 st.sidebar.markdown("Wybierz sekcję egzaminu do ćwiczenia:")
