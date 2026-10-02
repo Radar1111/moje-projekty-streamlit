@@ -57,19 +57,21 @@ listening_data = load_json_from_hf("sluchanie.json")
 
 
 def render_cke_audio(audio_path, unique_id):
-    # 1. GENEROWANIE BEZPIECZNEGO LINKU URL Z HF ZAMIAST BASE64/SUROWYCH BAJTÓW
-    # Wykorzystujemy oficjalną strukturę linków Hugging Face dla prywatnych repozytoriów
+    # Domyślny, zapasowy link do nagrania, jeśli plik na HF zniknie
+    audio_url = "https://soundhelix.com"
+
+    # 1. GENEROWANIE BEZPIECZNEGO LINKU DO PRYWATNEGO REPOZYTORIUM HF
     if audio_path:
-        # Wyciągamy z lokalnej ścieżki cache właściwą nazwę pliku audio (np. sluchanie_1.mp3.mp3)
+        # Wyciągamy czystą nazwę pliku z pobranej ścieżki (np. sluchanie_1.mp3.mp3)
         nazwa_pliku = os.path.basename(audio_path)
         
-        # Tworzymy bezpośredni link url pobierania, doklejając Twój token autoryzacyjny
-        audio_source_html = f"https://huggingface.co{REPO_ID}/resolve/main/audio/{nazwa_pliku}?download=true&token={HF_TOKEN}"
+        # Tworzymy bezpośredni link WWW, doklejając Twój token. 
+        # Przeglądarka bez problemu poradzi sobie ze strumieniowaniem z tego adresu URL!
+        audio_url = f"https://huggingface.co{REPO_ID}/resolve/main/audio/{nazwa_pliku}?download=true&token={HF_TOKEN}"
     else:
-        # Awaryjny link testowy online, jeśli ścieżka z HF nie istnieje
-        audio_source_html = "https://soundhelix.com"
+        st.caption("ℹ️ Ładowanie pliku audio z chmury Hugging Face...")
 
-    # Wykorzystujemy st.session_state do bezpiecznego liczenia odsłuchów
+    # Zliczanie odsłuchów w st.session_state
     state_key = f"listen_count_{unique_id}"
     if state_key not in st.session_state:
         st.session_state[state_key] = 0
@@ -77,27 +79,25 @@ def render_cke_audio(audio_path, unique_id):
     current_count = st.session_state[state_key]
 
     if current_count >= 2:
-        st.error(
-            "🚫 Wykorzystałeś limit 2 odsłuchów wymagany na prawdziwym egzaminie CKE!"
-        )
+        st.error("🚫 Wykorzystałeś limit 2 odsłuchów wymagany na prawdziwym egzaminie CKE!")
         return
 
-    # Komunikaty wizualne o dostępności prób
+    # Komunikaty o dostępnych próbach
     if current_count == 0:
         st.info("🎵 Dostępne odtworzenia nagrania: 2/2")
     elif current_count == 1:
         st.warning("⚠️ Dostępne odtworzenia nagrania: 1/2 (Ostatnia szansa)")
 
-    # Bezpieczny guzik sterowany przez serwer Streamlit
+    # Guzik aktywujący odtwarzacz
     if st.button("▶️ Uruchom nagranie (Zlicza odsłuch)", key=f"btn_{unique_id}"):
         st.session_state[state_key] += 1
         st.rerun()
 
-    # WYŚWIETLENIE STYLIZOWANEGO ODTWARZACZA HTML
+    # Wyświetlenie zabezpieczonego odtwarzacza HTML po kliknięciu przycisku
     if current_count > 0:
         html_code = f"""
         <style>
-          /* Ukrywamy oś czasu oraz przycisk pobierania, tak jak na egzaminie CKE */
+          /* Blokujemy oszukiwanie: ukrywamy oś czasu, czas trwania i pobieranie */
           audio::-internal-media-controls-download-button,
           audio::-webkit-media-controls-timeline,
           audio::-webkit-media-controls-current-time-display,
@@ -112,16 +112,35 @@ def render_cke_audio(audio_path, unique_id):
             text-align: center;
             max-width: 400px;
             margin-bottom: 15px;
+            border: 1px solid #d1d5db;
+          }}
+          .custom-play-btn {{
+            background-color: #ff4b4b;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+          }}
+          .custom-play-btn:hover {{
+            background-color: #e04141;
           }}
         </style>
         <div class="player-box">
-          <p style="margin: 0 0 8px 0; color: #31333F; font-weight: bold; font-size: 14px;">
-            Odtwarzacz Egzaminacyjny CKE (Trwa odsłuch {current_count}/2):
+          <p style="margin: 0 0 10px 0; color: #31333F; font-weight: bold; font-size: 14px;">
+            Odtwarzacz Egzaminacyjny CKE (Odsłuch {current_count}/2):
           </p>
-          <audio id="audio_{unique_id}" src="{audio_source_html}" autoplay controls controlsList="nodownload"></audio>
+          <!-- audio z id, załadowane z bezpiecznego URL -->
+          <audio id="audio_{unique_id}" src="{audio_url}" controlsList="nodownload" style="width: 100%; max-width: 300px;"></audio>
+          <div style="margin-top: 8px;">
+            <button class="custom-play-btn" onclick="document.getElementById('audio_{unique_id}').play()">🎵 Włącz dźwięk</button>
+          </div>
         </div>
         """
-        components.html(html_code, height=110)
+        # Wysokość 140 pozwala na ładne wyświetlenie ramki i przycisku włączenia dźwięku
+        components.html(html_code, height=140)
 
 # Panel boczny
 st.sidebar.title("🎯 E8 English Diagnostic")
