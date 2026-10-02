@@ -31,19 +31,23 @@ def load_json_from_hf(file_name):
 
 @st.cache_data
 def get_audio_path_from_hf(audio_name):
-    """Pobiera plik MP3 z HF i zwraca ścieżkę lokalną na serwerze Streamlit"""
+    """Pobiera plik MP3 z folderu 'audio' na HF i zwraca ścieżkę lokalną na serwerze Streamlit"""
     if not audio_name:
         return None
     try:
+        # POPRAWKA: Łączymy nazwę folderu z nazwą pliku (np. "audio/sluchanie_1.mp3.mp3")
+        full_hf_path = f"audio/{audio_name}"
+        
         path = hf_hub_download(
             repo_id=REPO_ID,
-            filename=audio_name,
+            filename=full_hf_path,  # ✅ Teraz pobiera z właściwego folderu na HF
             repo_type="dataset",
             token=HF_TOKEN
         )
         return path
     except Exception as e:
-        # Jeśli nie znajdzie audio na HF, funkcja render_cke_audio automatycznie odpali demo
+        # Wypisujemy błąd w konsoli Streamlit (widoczny w logach dla Ciebie), ułatwi to diagnozę
+        print(f"Błąd pobierania audio z HF: {e}")
         return None
 
 
