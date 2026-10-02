@@ -275,6 +275,9 @@ elif menu == "🎧 Słuchanie (ElevenLabs Player)":
     # Wczytanie zadań słuchowych z JSON
     all_listening_tasks = listening_data
 
+    st.write("### 🔍 TEST BAZY SŁUCHANIA:")
+st.write(all_listening_tasks)
+
     if all_listening_tasks:
        
         listening_options = [task["title_menu"] for task in all_listening_tasks]
