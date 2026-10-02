@@ -8,3 +8,5 @@ sympy
 ephem
 streamlit-drawable-canvas
 gTTS
+opencv-python-headless
+pillow
