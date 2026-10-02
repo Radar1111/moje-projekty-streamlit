@@ -60,11 +60,8 @@ def render_cke_audio(audio_path, unique_id):
 
     # 1. GENEROWANIE BEZPIECZNEGO LINKU DO PRYWATNEGO REPOZYTORIUM HF
     if audio_path:
-        # Wyciągamy czystą nazwę pliku z pobranej ścieżki (np. sluchanie_1.mp3.mp3)
         nazwa_pliku = os.path.basename(audio_path)
-        
-        # Tworzymy bezpośredni link WWW, doklejając Twój token. 
-        # Przeglądarka bez problemu poradzi sobie ze strumieniowaniem z tego adresu URL!
+        # Prawidłowy link URL kierujący do folderu audio w chmurze
         audio_url = f"https://huggingface.co{REPO_ID}/resolve/main/audio/{nazwa_pliku}?download=true&token={HF_TOKEN}"
     else:
         st.caption("ℹ️ Ładowanie pliku audio z chmury Hugging Face...")
@@ -270,8 +267,7 @@ elif menu == "🎧 Słuchanie (ElevenLabs Player)":
     # Wczytanie zadań słuchowych z JSON
     all_listening_tasks = listening_data
 
-    st.write("### 🔍 TEST BAZY SŁUCHANIA:")
-    st.write(all_listening_tasks)
+    
 
     if all_listening_tasks:
        
