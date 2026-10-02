@@ -55,15 +55,22 @@ listening_data = load_json_from_hf("sluchanie.json")
 
 
 def render_cke_audio(audio_path, unique_id):
-    # Domyślny, zapasowy link do nagrania, jeśli plik na HF zniknie
-    audio_url = "https://soundhelix.com"
+    # Domyślne źródło – czyste bajty (puste na start)
+    audio_bytes_data = None
 
-    # GENEROWANIE BEZPIECZNEGO LINKU DO PRYWATNEGO REPOZYTORIUM HF
-    if audio_path:
-        nazwa_pliku = os.path.basename(audio_path)
-        audio_url = f"https://huggingface.co{REPO_ID}/resolve/main/{nazwa_pliku}?download=true&token={HF_TOKEN}"
+    # Sprawdzamy czy pobrany z HF plik fizycznie istnieje w pamięci lokalnej serwera
+    if audio_path and os.path.exists(audio_path):
+        try:
+            # Wczytujemy plik MP3 jako czyste bajty binarne prosto z dysku
+            with open(audio_path, "rb") as f:
+                audio_bytes_data = f.read()
+        except Exception as e:
+            st.error(f"Błąd odczytu pliku z pamięci serwera: {e}")
+            # Jeśli odczyt zawiedzie, podajemy link url jako alternatywę
+            audio_bytes_data = "https://soundhelix.com"
     else:
-        st.caption("ℹ️ Ładowanie pliku audio z chmury Hugging Face...")
+        st.caption("ℹ️ Trwa ładowanie nagrania z chmury Hugging Face...")
+        audio_bytes_data = "https://soundhelix.com"
 
     # Zliczanie odsłuchów w st.session_state
     state_key = f"listen_count_{unique_id}"
@@ -88,18 +95,17 @@ def render_cke_audio(audio_path, unique_id):
         st.rerun()
 
     # WYŚWIETLENIE ZABEZPIECZONEGO ODTWARZACZA
-    if current_count > 0:
-        # ⚡ GENIALNY TRIK CSS: Oś czasu jest widoczna, dzięki czemu przeglądarka odtwarza dźwięk,
-        # ale 'pointer-events: none' i 'filter' sprawiają, że uczeń nie może w nią kliknąć ani przewijać!
+    if current_count > 0 and audio_bytes_data is not None:
+        # Wstrzykujemy blokadę klikania w oś czasu za pomocą CSS
         st.markdown(
             """
             <style>
-            /* Wyłączamy możliwość klikania w oś czasu (całkowita blokada przewijania) */
+            /* Zamrażamy oś czasu, żeby uczeń nie mógł w nią kliknąć ani przewijać */
             audio::-webkit-media-controls-timeline {
                 pointer-events: none !important;
-                filter: grayscale(100%) opacity(0.5); /* Wizualne zmatowienie paska */
+                filter: grayscale(100%) opacity(0.6);
             }
-            /* Blokujemy przycisk pobierania pliku */
+            /* Całkowicie usuwamy przycisk pobierania pliku */
             audio::-internal-media-controls-download-button {
                 display: none !important;
             }
@@ -108,11 +114,11 @@ def render_cke_audio(audio_path, unique_id):
             unsafe_allow_html=True
         )
         
-        # Wyświetlamy informację dla ucznia
         st.success(f"🎧 Trwa odsłuch egzaminacyjny (Próba {current_count}/2).")
         
-        # Uruchamiamy odtwarzacz Streamlit – teraz pasek ruszy do przodu i usłyszysz dźwięk!
-        st.audio(audio_url, format="audio/mpeg", autoplay=True)
+        # Uruchamiamy odtwarzacz Streamlit karmiąc go surowymi bajtami
+        # Używamy format="audio/mpeg", co idealnie współgra z formatem MP3
+        st.audio(audio_bytes_data, format="audio/mpeg", autoplay=True)
 
 
 # Panel boczny
