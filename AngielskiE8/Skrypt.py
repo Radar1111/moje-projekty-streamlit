@@ -35,7 +35,7 @@ def get_audio_path_from_hf(audio_name):
     if not audio_name:
         return None
     try:
-        # Łączymy nazwę folderu z nazwą przekazaną z JSON (teraz to: "audio/sluchanie_1.mp3")
+       
         full_hf_path = audio_name
         
         path = hf_hub_download(
@@ -55,13 +55,13 @@ listening_data = load_json_from_hf("sluchanie.json")
 
 
 def render_cke_audio(audio_path, unique_id):
-    # Domyślne źródło – czyste bajty (puste na start)
+    
     audio_bytes_data = None
 
-    # Sprawdzamy czy pobrany z HF plik fizycznie istnieje w pamięci lokalnej serwera
+   
     if audio_path and os.path.exists(audio_path):
         try:
-            # Wczytujemy plik MP3 jako czyste bajty binarne prosto z dysku
+            
             with open(audio_path, "rb") as f:
                 audio_bytes_data = f.read()
         except Exception as e:
@@ -116,8 +116,7 @@ def render_cke_audio(audio_path, unique_id):
         
         st.success(f"🎧 Trwa odsłuch egzaminacyjny (Próba {current_count}/2).")
         
-        # Uruchamiamy odtwarzacz Streamlit karmiąc go surowymi bajtami
-        # Używamy format="audio/mpeg", co idealnie współgra z formatem MP3
+       
         st.audio(audio_bytes_data, format="audio/mpeg", autoplay=True)
 
 
@@ -256,29 +255,29 @@ elif menu == "🎧 Słuchanie (ElevenLabs Player)":
     if all_listening_tasks:
        
         listening_options = [task["title_menu"] for task in all_listening_tasks]
-        # Wybór zadania przez użytkownika
+        
         sluchanie_wybor = st.selectbox(
             "Wybierz zadanie ze słuchu:", listening_options
         )
 
-        # Wyszukanie wybranego zadania w bazie danych
+        
         selected_task = next(
             (t for t in all_listening_tasks if t["title_menu"] == sluchanie_wybor),
             None,
         )
 
-        # Poniższa linia 'if' musi zaczynać się od dokładnie 8 spacji:
+       
         if selected_task:
             st.markdown("**Tekst dla ElevenLabs:**")
             st.code(selected_task["elevenlabs_script"])
 
-            # Pobieramy czystą nazwę pliku z bazy JSON
+            
             nazwa_pliku_mp3 = selected_task.get("audio_file") or selected_task.get("audio_path")
             
-            # Wywołujemy pobieranie z Hugging Face
+            
             sciezka_na_serwerze = get_audio_path_from_hf(nazwa_pliku_mp3)
 
-            # Przekazujemy ściągniętą ścieżkę do odtwarzacza CKE
+            
             render_cke_audio(sciezka_na_serwerze, selected_task["id"])
 
 
