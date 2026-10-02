@@ -276,7 +276,7 @@ elif menu == "🎧 Słuchanie (ElevenLabs Player)":
     all_listening_tasks = listening_data
 
     st.write("### 🔍 TEST BAZY SŁUCHANIA:")
-st.write(all_listening_tasks)
+    st.write(all_listening_tasks)
 
     if all_listening_tasks:
        
