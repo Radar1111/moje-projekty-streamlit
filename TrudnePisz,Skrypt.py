@@ -40,7 +40,10 @@ def load_quiz_data():
         return []
 
 if not pelna_baza:
-    st.error("Nie znaleziono pliku baza_znakow.json lub plik jest pusty! Upewnij się, że plik znajduje się w tym samym folderze co skrypt.")
+    st.error(
+        "Baza znaków jest pusta lub nie udało się jej pobrać z Hugging Face Datasets! "
+        "Sprawdź, czy sekret HF_TOKEN jest poprawny oraz czy repo_id i filename są prawidłowo wpisane w kodzie."
+    )
     st.stop()
 
 # Wybór języka
