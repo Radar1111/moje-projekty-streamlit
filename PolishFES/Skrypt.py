@@ -286,3 +286,9 @@ st.caption("---")
 st.caption("🤖 Powered by Google Text-to-Speech (gTTS). For testing purposes only.")
 st.caption(
     "🤖 *Note: This is a Beta version using a basic voice for testing. Realistic AI voices from ElevenLabs are coming soon!*")
+
+# STOPKA
+st.divider()
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
