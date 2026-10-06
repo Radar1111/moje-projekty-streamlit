@@ -243,3 +243,9 @@ elif opcja == "Obliczanie kątów":
             ax.set_aspect("equal")
             ax.axis('off')  # Ukrywamy osie wykresu
             st.pyplot(fig)
+
+# --- STOPKA ---
+st.divider()
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
