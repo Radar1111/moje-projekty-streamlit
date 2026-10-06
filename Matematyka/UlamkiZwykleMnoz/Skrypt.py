@@ -252,3 +252,9 @@ if st.checkbox("Pokaż wyjaśnienie krok po kroku"):
 if st.button("Następne zadanie ➡️"):
     st.session_state.random_seed = random.randint(1, 100000)
     st.rerun()
+
+# STOPKA
+st.divider()
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
