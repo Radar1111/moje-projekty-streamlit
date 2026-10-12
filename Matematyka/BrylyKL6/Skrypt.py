@@ -4,7 +4,7 @@ import numpy as np
 import plotly.graph_objects as object_3d
 from streamlit_drawable_canvas import st_canvas
 
-# --- KONFIGURACJA STRONY ---
+# Konfig strony
 st.set_page_config(
     page_title="Matma3D: Bryły Klasa 6", page_icon="📐", layout="wide"
 )
@@ -20,7 +20,7 @@ def wyswietl_sekcje_wsparcia():
 
     LINK_DO_KAWY = "https://buycoffee.to/gigawiedza"
 
-    # Separator odcinający treść edukacyjną
+    
     st.divider()
 
     # Expander na dole strony
@@ -29,7 +29,7 @@ def wyswietl_sekcje_wsparcia():
             st.write("Aby wejść, potwierdź że jesteś osobą dorosłą:")
             pytanie = f"Ile to jest {st.session_state.num1} + {st.session_state.num2}?"
 
-            # Użycie unikalnego klucza w widgetach zapobiega konfliktom w Streamlit
+            
             odpowiedz_rodzica = st.number_input(pytanie, step=1, value=0, key="footer_parent_input")
 
             if st.button("Zatwierdź", key="footer_parent_btn", use_container_width=True):
@@ -142,7 +142,7 @@ def rysuj_graniastoslup_n(n, h=5, promien=3):
     return fig
 
 
-# Inicjalizacja punktów w session_state
+# Inicjalizacja punktów i streak w session_state
 if "punkty" not in st.session_state:
     st.session_state.punkty = 0
 if "streak" not in st.session_state:
@@ -207,10 +207,10 @@ with zakladka_pisz:
     st.button("Wyczyść notatnik 🧹", on_click=czysc_notatnik)
 
     
-# --- GŁÓWNA TREŚĆ ---
+# Treść
 st.title("🚀 Wizualne Bryły 3D dla Klasy 6")
 
-# --- DZIAŁ 1: PROSTOPADŁOŚCIANY ---
+# Prostopadłościan
 
 if dzial == "1. Prostopadłościany":
     karta_nauka, karta_quiz = st.tabs(["📚 Nauka krok po kroku", "🎯 Trening (Quiz)"])
@@ -292,7 +292,7 @@ if dzial == "1. Prostopadłościany":
             del st.session_state.b_typ
             st.rerun()
 
-# --- DZIAŁ 2: GRANIASTOSŁUPY O DOWOLNEJ PODSTAWIE ---
+# Graniastoslup o dowolnej podstawie
 elif dzial == "2. Graniastosłupy (Dowolna podstawa)":
     karta_g_nauka, karta_g_quiz = st.tabs(["📚 Magiczny Generator Brył", "🎯 Wyzwanie Mistrza Krawędzi"])
 
@@ -391,7 +391,7 @@ elif dzial == "2. Graniastosłupy (Dowolna podstawa)":
                     st.error(f"❌ Niestety to błąd. Prawidłowy wynik to: {st.session_state.b_poprawna_odp}")
 
         with col_q2:
-            # WYŚWIETLANIE MODELU: Pokazuje się dla zadań obliczeniowych (pole/objętość)
+            # Pokazuje się dla zadań obliczeniowych (pole/objętość)
             if st.session_state.b_typ != "wierzcholki":
                 st.write("📐 Podgląd proporcji bryły z zadania:")
                 st.plotly_chart(
@@ -401,9 +401,9 @@ elif dzial == "2. Graniastosłupy (Dowolna podstawa)":
                 st.info(
                     "💡 W tym pytaniu musisz wykazać się wyobraźnią! Model 3D ukrył się, żeby nie podpowiadać za bardzo. 😉")
 
-            # Przycisk przejścia do kolejnego pytania
+            
             if st.button("Następne zadanie ➡️", key="next_b", use_container_width=True):
-                # Czyszczenie stanu przed nowym zadaniem
+                
                 del st.session_state.b_typ
                 if "b_poprawna_odp" in st.session_state:
                     del st.session_state.b_poprawna_odp
