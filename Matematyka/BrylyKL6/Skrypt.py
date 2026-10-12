@@ -189,10 +189,16 @@ with zakladka_pisz:
     st.button("Wyczyść notatnik 🧹", on_click=czysc_notatnik)
 with st.sidebar:
     wyswietl_sekcje_wsparcia()
+    
 # --- GŁÓWNA TREŚĆ ---
 st.title("🚀 Wizualne Bryły 3D dla Klasy 6")
 
 # --- DZIAŁ 1: PROSTOPADŁOŚCIANY ---
+dzial = st.sidebar.selectbox(
+    "📚 Wybierz temat lekcji:",
+    ["1. Prostopadłościany", "2. Graniastosłupy (Dowolna podstawa)"]
+)
+
 if dzial == "1. Prostopadłościany":
     karta_nauka, karta_quiz = st.tabs(["📚 Nauka krok po kroku", "🎯 Trening (Quiz)"])
 
