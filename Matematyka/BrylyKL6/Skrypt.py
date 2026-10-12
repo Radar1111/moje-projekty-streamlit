@@ -148,6 +148,10 @@ if "punkty" not in st.session_state:
 if "streak" not in st.session_state:
     st.session_state.streak = 0
 
+with st.sidebar:
+    st.header("🤖 Panel Sterowania")
+    dzial = st.selectbox("Wybierz dział matematyki:", ["1. Prostopadłościany", "2. Graniastosłupy (Dowolna podstawa)"])
+
 #  📝 MULTI-BRUDNOPIS W SIDEBARZE (TEKST + RYSOWANIE)
 st.sidebar.markdown("---")
 st.sidebar.header("📝 Brudnopis Ucznia")
@@ -194,10 +198,6 @@ with st.sidebar:
 st.title("🚀 Wizualne Bryły 3D dla Klasy 6")
 
 # --- DZIAŁ 1: PROSTOPADŁOŚCIANY ---
-dzial = st.sidebar.selectbox(
-    "📚 Wybierz temat lekcji:",
-    ["1. Prostopadłościany", "2. Graniastosłupy (Dowolna podstawa)"]
-)
 
 if dzial == "1. Prostopadłościany":
     karta_nauka, karta_quiz = st.tabs(["📚 Nauka krok po kroku", "🎯 Trening (Quiz)"])
