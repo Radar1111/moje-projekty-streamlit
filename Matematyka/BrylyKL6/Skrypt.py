@@ -152,6 +152,20 @@ with st.sidebar:
     st.header("🤖 Panel Sterowania")
     dzial = st.selectbox("Wybierz dział matematyki:", ["1. Prostopadłościany", "2. Graniastosłupy (Dowolna podstawa)"])
 
+    st.write("---")
+    st.subheader("🏆 Twoje Statystyki:")
+    col_p1, col_p2 = st.columns(2)
+    col_p1.metric("Punkty", st.session_state.punkty)
+    col_p2.metric("Seria 🔥", st.session_state.streak)
+
+    if st.button("Zresetuj punkty 🔄"):
+        st.session_state.punkty = 0
+        st.session_state.streak = 0
+        st.rerun()
+
+with st.sidebar:
+    wyswietl_sekcje_wsparcia()
+
 #  📝 MULTI-BRUDNOPIS W SIDEBARZE (TEKST + RYSOWANIE)
 st.sidebar.markdown("---")
 st.sidebar.header("📝 Brudnopis Ucznia")
@@ -191,8 +205,7 @@ with zakladka_pisz:
         height=180
     )
     st.button("Wyczyść notatnik 🧹", on_click=czysc_notatnik)
-with st.sidebar:
-    wyswietl_sekcje_wsparcia()
+
     
 # --- GŁÓWNA TREŚĆ ---
 st.title("🚀 Wizualne Bryły 3D dla Klasy 6")
