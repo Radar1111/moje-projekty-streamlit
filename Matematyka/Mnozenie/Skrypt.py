@@ -1,101 +1,206 @@
 import streamlit as st
 import random
+import re
 
 
-# FUNKCJE POMOCNICZE
+# FUNKCJE POMOCNICZE 
 
-def generuj_zadanie():
-    # Losujemy liczby przyjazne dla 4. klasy
-    a, b, c = random.randint(2, 9), random.randint(2, 9), random.randint(5, 20)
-    operacja = random.choice(['+', '-'])
-    if operacja == '+':
-        zadanie = f"{c} + {a} * {b}"
-        wynik = c + (a * b)
-    else:
-        # Zapewniamy, żeby wynik nie był ujemny
-        wynik_mnozenia = a * b
-        start = wynik_mnozenia + random.randint(1, 10)
-        zadanie = f"{start} - {a} * {b}"
-        wynik = start - (a * b)
-    return zadanie, wynik
+def generuj_zadanie_krok_po_kroku(klasa=4):
+    """Generuje zadanie oraz listę kroków obliczeniowych."""
+    kroki = []
 
-
-def generuj_zadanie_klasa5():
-    # Losujemy trudniejsze liczby (mnożenie do 20) oraz dodajemy nawiasy
-    typ = random.choice(['mnozenie_duze', 'z_nawiasem'])
-
-    if typ == 'mnozenie_duze':
-        # Mnożenie liczby do 20 przez liczbę jednocyfrową (np. 14 * 7 + 15)
-        a = random.randint(11, 20)
-        b = random.randint(3, 9)
-        c = random.randint(10, 50)
+    if klasa == 4:
+        a, b, c = random.randint(2, 9), random.randint(2, 9), random.randint(5, 20)
         operacja = random.choice(['+', '-'])
 
         if operacja == '+':
-            zadanie = f"{a} * {b} + {c}"
-            wynik = (a * b) + c
+            zadanie = f"{c} + {a} * {b}"
+            mnozenie = a * b
+            wynik = c + mnozenie
+
+            kroki.append(f"Najpierw wykonujemy mnożenie: **{a} * {b} = {mnozenie}**")
+            kroki.append(f"Zapisujemy działanie po pierwszym kroku: **{c} + {mnozenie}**")
+            kroki.append(f"Na koniec dodajemy: **{c} + {mnozenie} = {wynik}**")
         else:
-            zadanie = f"{a} * {b} - {c}"
-            wynik = (a * b) - c
+            mnozenie = a * b
+            start = mnozenie + random.randint(1, 10)
+            zadanie = f"{start} - {a} * {b}"
+            wynik = start - mnozenie
 
-    else:
-        # Działanie z nawiasem (wymuszenie pierwszeństwa) np. (12 + 8) * 13
-        a = random.randint(5, 20)
-        b = random.randint(2, 15)
-        c = random.randint(2, 20)  # Mnożnik do 20
+            kroki.append(f"Najpierw wykonujemy mnożenie: **{a} * {b} = {mnozenie}**")
+            kroki.append(f"Zapisujemy działanie po pierwszym kroku: **{start} - {mnozenie}**")
+            kroki.append(f"Na koniec odejmujemy: **{start} - {mnozenie} = {wynik}**")
 
-        operacja_w_nawiasie = random.choice(['+', '-'])
-        if operacja_w_nawiasie == '+':
-            zadanie = f"({a} + {b}) * {c}"
-            wynik = (a + b) * c
-        else:
-            # Zabezpieczenie przed ujemnym wynikiem w nawiasie
-            if a < b:
-                a, b = b, a
-            zadanie = f"({a} - {b}) * {c}"
-            wynik = (a - b) * c
+    else:  # Klasa 5
+        typ = random.choice(['mnozenie_duze', 'z_nawiasem'])
 
-    return zadanie, wynik
+        if typ == 'mnozenie_duze':
+            a, b, c = random.randint(11, 20), random.randint(3, 9), random.randint(10, 50)
+            operacja = random.choice(['+', '-'])
+            mnozenie = a * b
 
+            if operacja == '+':
+                zadanie = f"{a} * {b} + {c}"
+                wynik = mnozenie + c
+                kroki.append(f"Najpierw mnożymy większe liczby: **{a} * {b} = {mnozenie}**")
+                kroki.append(f"Następnie dodajemy: **{mnozenie} + {c} = {wynik}**")
+            else:
+                zadanie = f"{a} * {b} - {c}"
+                wynik = mnozenie - c
+                kroki.append(f"Najpierw mnożymy większe liczby: **{a} * {b} = {mnozenie}**")
+                kroki.append(f"Następnie odejmujemy: **{mnozenie} - {c} = {wynik}**")
+
+        else:  # z nawiasem
+            a, b, c = random.randint(5, 20), random.randint(2, 15), random.randint(2, 20)
+            operacja_w_nawiasie = random.choice(['+', '-'])
+
+            if operacja_w_nawiasie == '+':
+                zadanie = f"({a} + {b}) * {c}"
+                nawias = a + b
+                wynik = nawias * c
+                kroki.append(f"Najważniejszy jest nawias! Obliczamy to, co w środku: **{a} + {b} = {nawias}**")
+                kroki.append(f"Zastępujemy nawias wynikiem i mnożymy przez resztę: **{nawias} * {c} = {wynik}**")
+            else:
+                if a < b: a, b = b, a
+                zadanie = f"({a} - {b}) * {c}"
+                nawias = a - b
+                wynik = nawias * c
+                kroki.append(f"Najważniejszy jest nawias! Obliczamy to, co w środku: **{a} - {b} = {nawias}**")
+                kroki.append(f"Zastępujemy nawias wynikiem i mnożymy przez resztę: **{nawias} * {c} = {wynik}**")
+
+    return zadanie, wynik, kroki
+
+
+def rozwiaz_krok_po_kroku_manualnie(tekst):
+    """
+    Zaawansowany parser, który potrafi rozwiązać KAŻDE standardowe działanie
+    krok po kroku, dynamicznie podmieniając obliczone fragmenty.
+    """
+    # Czyszczenie wpisu
+    tekst = tekst.replace(' ', '').replace(':', '/').replace(',', '.')
+
+    # Zzabezpieczenie na wypadek 'x'
+    tekst = tekst.replace('x', '*')
+
+    kroki = []
+    dzialanie_aktualne = tekst
+
+    # Pętla wykonuje się, dopóki w tekście są jakiekolwiek znaki działań
+    
+    licznik_bezpieczenstwa = 0
+    while błędy := any(c in dzialanie_aktualne for c in ['+', '-', '*', '/']) and licznik_bezpieczenstwa < 10:
+        licznik_bezpieczenstwa += 1
+
+        # Ignorujemy sytuację, gdy została już tylko jedna liczba ujemna (np. "-5")
+        if re.match(r"^-\d+(\.\d+)?$", dzialanie_aktualne):
+            break
+
+        # Krok 1: Szukamy nawiasów najgłębiej osadzonych
+        nawiasy = re.search(r"\(([^()]+)\)", dzialanie_aktualne)
+        if nawiasy:
+            wnetrze = nawiasy.group(1)
+            # Wewnątrz nawiasu też obowiązuje kolejność (mnożenie/dzielenie przed dodawaniem)
+            sub_kroki, wynik_nawiasu = rozwiaz_krok_po_kroku_manualnie(wnetrze)
+
+            wzorzec_do_zamiany = f"({wnetrze})"
+            dzialanie_stare = dzialanie_aktualne
+            dzialanie_aktualne = dzialanie_aktualne.replace(wzorzec_do_zamiany, str(wynik_nawiasu), 1)
+
+            kroki.append(f"Najpierw obliczamy środek nawiasu **({wnetrze})** = **{wynik_nawiasu}**")
+            kroki.append(f"Nasze działanie wygląda teraz tak: **{dzialanie_aktualne}**")
+            continue
+
+        # KROK 2: Mnożenie i dzielenie (od lewej do prawej)
+        mnoz_dziel = re.search(r"(\d+(?:\.\d+)?)([\*/])(\d+(?:\.\d+)?)", dzialanie_aktualne)
+        if mnoz_dziel:
+            num1 = float(mnoz_dziel.group(1)) if '.' in mnoz_dziel.group(1) else int(mnoz_dziel.group(1))
+            znak = mnoz_dziel.group(2)
+            num2 = float(mnoz_dziel.group(3)) if '.' in mnoz_dziel.group(3) else int(mnoz_dziel.group(3))
+
+            if znak == '*':
+                wynik_czesciowy = num1 * num2
+                nazwa_dzialania = "mnożenie"
+            else:
+                wynik_czesciowy = num1 / num2
+                nazwa_dzialania = "dzielenie"
+
+            caly_wzorzec = mnoz_dziel.group(0)
+            dzialanie_aktualne = dzialanie_aktualne.replace(caly_wzorzec, str(wynik_czesciowy), 1)
+
+            kroki.append(f"Wykonujemy **{nazwa_dzialania}**: {num1} {znak} {num2} = **{wynik_czesciowy}**")
+            kroki.append(f"Nasze działanie wygląda teraz tak: **{dzialanie_aktualne}**")
+            continue
+
+        # KROK 3: Dodawanie i odejmowanie (od lewej do prawej)
+        # Uwzględniamy opcjonalny minus na początku pierwszej liczby
+        dodaj_odej = re.search(r"(-?\d+(?:\.\d+)?)([+-])(\d+(?:\.\d+)?)", dzialanie_aktualne)
+        if dodaj_odej:
+            num1 = float(dodaj_odej.group(1)) if '.' in dodaj_odej.group(1) else int(dodaj_odej.group(1))
+            znak = dodaj_odej.group(2)
+            num2 = float(dodaj_odej.group(3)) if '.' in dodaj_odej.group(3) else int(dodaj_odej.group(3))
+
+            if znak == '+':
+                wynik_czesciowy = num1 + num2
+                nazwa_dzialania = "dodawanie"
+            else:
+                wynik_czesciowy = num1 - num2
+                nazwa_dzialania = "odejmowanie"
+
+            caly_wzorzec = dodaj_odej.group(0)
+            dzialanie_aktualne = dzialanie_aktualne.replace(caly_wzorzec, str(wynik_czesciowy), 1)
+
+            kroki.append(f"Wykonujemy **{nazwa_dzialania}**: {num1} {znak} {num2} = **{wynik_czesciowy}**")
+            if any(c in dzialanie_aktualne for c in ['+', '-', '*', '/']) and not re.match(r"^-\d+(\.\d+)?$",
+                                                                                           dzialanie_aktualne):
+                kroki.append(f"Nasze działanie wygląda teraz tak: **{dzialanie_aktualne}**")
+            continue
+
+        break
+
+    # Koncowy wynik formatowany
+    ostateczny_wynik = eval(tekst)
+    if isinstance(ostateczny_wynik, float) and ostateczny_wynik.is_integer():
+        ostateczny_wynik = int(ostateczny_wynik)
+
+    return kroki, ostateczny_wynik
 
 # INICJALIZACJA STANU
 if 'zadanie' not in st.session_state:
-    st.session_state.zadanie, st.session_state.wynik = generuj_zadanie()
+    st.session_state.zadanie, st.session_state.wynik, st.session_state.kroki = generuj_zadanie_krok_po_kroku(klasa=4)
 if 'zadanie5' not in st.session_state:
-    st.session_state.zadanie5, st.session_state.wynik5 = generuj_zadanie_klasa5()
+    st.session_state.zadanie5, st.session_state.wynik5, st.session_state.kroki5 = generuj_zadanie_krok_po_kroku(klasa=5)
 if 'punkty' not in st.session_state:
     st.session_state.punkty = 0
 if 'punkty5' not in st.session_state:
     st.session_state.punkty5 = 0
+if 'pokaz_wyjasnienie_k4' not in st.session_state:
+    st.session_state.pokaz_wyjasnienie_k4 = False
+if 'pokaz_wyjasnienie_k5' not in st.session_state:
+    st.session_state.pokaz_wyjasnienie_k5 = False
 
 # INTERFEJS
-st.title("🧮 Kolejność Działań")
+st.title("🧮 Kolejność Działań z Wyjaśnieniami")
 
-# Trzy zakładki
-tab1, tab2, tab3 = st.tabs(["📖 Tryb Nauki", "🏅 Quiz (Klasa 4)", "🏆 Quiz (Klasa 5 - do 20)"])
+tab1, tab2, tab3 = st.tabs(["📖 Tryb Nauki", "🏅 Quiz (Klasa 4)", "🏆 Quiz (Klasa 5)"])
 
-# NAUKA
+# 1. NAUKA
 with tab1:
     st.header("Cierpliwy Korepetytor")
-    st.write("Wpisz przykład z zeszytu, a ja pokażę Ci jak go rozwiązać.")
+    st.write("Wpisz przykład, a ja rozpiszę go na kroki.")
 
-    przyklad = st.text_input("Twoje działanie (używaj * dla mnożenia):", placeholder="np. 4 + 5 * 2")
+    przyklad = st.text_input("Twoje działanie (np. 4 + 5 * 2 lub (10 - 2) * 3):", placeholder="Wpisz tutaj...")
 
     if przyklad:
         try:
-            # Prosta zamiana polskiego zapisu na matematyczny
-            czyste_dzialanie = przyklad.replace(':', '/').replace(',', '.')
-            wynik_nauka = eval(czyste_dzialanie)
+            kroki_nauka, wynik_nauka = rozwiaz_krok_po_kroku_manualnie(przyklad)
+            st.info("### 📝 Rozwiązanie krok po kroku:")
+            for i, krok in enumerate(kroki_nauka, 1):
+                st.write(f"{i}. {krok}")
+            st.success(f"Ostateczny wynik: **{wynik_nauka}**")
+        except Exception:
+            st.error("Coś poszło nie tak. Upewnij się, że wpisałeś poprawne liczby i znaki (+, -, *).")
 
-            st.info("### Jak to obliczyć?")
-            st.write("1. Najpierw sprawdź czy są **nawiasy**.")
-            st.write("2. Wykonaj **mnożenie i dzielenie**.")
-            st.write("3. Na koniec zrób **dodawanie i odejmowanie**.")
-            st.success(f"Wynik Twojego działania to: **{wynik_nauka}**")
-        except:
-            st.error("Oj, nie rozumiem tego zapisu. Sprawdź czy nie ma tam błędu!")
-
-# QUIZ KLASA 4
+# 2. QUIZ KLASA 4
 with tab2:
     st.header("Sprawdź co potrafisz - Klasa 4")
     st.write(f"Twoje punkty: ⭐ **{st.session_state.punkty}**")
@@ -113,19 +218,28 @@ with tab2:
                 st.success("Brawo! Poprawnie!")
                 st.balloons()
                 st.session_state.punkty += 1
+                st.session_state.pokaz_wyjasnienie_k4 = False
             else:
-                st.error(f"Niestety nie. Poprawny wynik to: {st.session_state.wynik}")
-                st.session_state.punkty = 0  # Reset punktów przy błędzie
+                st.error("Niestety to zły wynik. Zobacz poniżej, jak należało to obliczyć.")
+                st.session_state.punkty = 0
+                st.session_state.pokaz_wyjasnienie_k4 = True
 
     with col2:
         if st.button("Następne zadanie ➡️", key="btn_next_k4"):
-            st.session_state.zadanie, st.session_state.wynik = generuj_zadanie()
+            st.session_state.zadanie, st.session_state.wynik, st.session_state.kroki = generuj_zadanie_krok_po_kroku(
+                klasa=4)
+            st.session_state.pokaz_wyjasnienie_k4 = False
             st.rerun()
 
-# QUIZ KLASA 5 
+    # Wyświetlanie kroków po błędzie
+    if st.session_state.pokaz_wyjasnienie_k4:
+        st.warning("### 💡 Wyjaśnienie:")
+        for k in st.session_state.kroki:
+            st.write(k)
+
+# 3. QUIZ KLASA 5
 with tab3:
     st.header("Wyzwanie dla mistrzów - Klasa 5")
-    st.write("Tutaj mnożymy do 20 i uważamy na nawiasy!")
     st.write(f"Twoje punkty: 🔥 **{st.session_state.punkty5}**")
 
     st.subheader(f"Ile to jest?")
@@ -138,17 +252,26 @@ with tab3:
     with col1_5:
         if st.button("Sprawdź odpowiedź", key="btn_check_k5"):
             if odp5 == st.session_state.wynik5:
-                st.success("Genialnie! Klasa 5 to dla Ciebie błahostka! 🎉")
+                st.success("Genialnie! Klasa 5 opanowana! 🎉")
                 st.snow()
                 st.session_state.punkty5 += 1
+                st.session_state.pokaz_wyjasnienie_k5 = False
             else:
-                st.error(f"Blisko! Prawidłowa odpowiedź to: {st.session_state.wynik5}")
+                st.error("Ups! Popełniłeś błąd. Zobacz wyjaśnienie poniżej.")
                 st.session_state.punkty5 = 0
+                st.session_state.pokaz_wyjasnienie_k5 = True
 
     with col2_5:
         if st.button("Następne zadanie ➡️", key="btn_next_k5"):
-            st.session_state.zadanie5, st.session_state.wynik5 = generuj_zadanie_klasa5()
+            st.session_state.zadanie5, st.session_state.wynik5, st.session_state.kroki5 = generuj_zadanie_krok_po_kroku(
+                klasa=5)
+            st.session_state.pokaz_wyjasnienie_k5 = False
             st.rerun()
+
+    if st.session_state.pokaz_wyjasnienie_k5:
+        st.warning("### 💡 Wyjaśnienie:")
+        for k in st.session_state.kroki5:
+            st.write(k)
 
 st.divider()
 st.caption("Najcierpliwszy portal do matematyki")
