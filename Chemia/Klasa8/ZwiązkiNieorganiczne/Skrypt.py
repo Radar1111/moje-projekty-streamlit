@@ -160,7 +160,7 @@ elif temat == "3. Kwasy Tlenowe i Beztlenowe":
           
           $$SO_3 + H_2O \\rightarrow H_2SO_4$$
         * **Właściwości:** Oleista, bezbarwna ciecz, znacznie cięższa od wody. **Silnie higroskopijny** (zwęgla substancje organiczne, wyciągając z nich wodę!).
-        * **⚠️ PAMIĘTAJ CHEMIE MŁODY: WLEWAJ ZAWSZE KWAS DO WODY!** (Inaczej woda gwałtownie zawrze i pryśnie).
+        * **⚠️ PAMIĘTAJ CHEMIKU MŁODY: WLEWAJ ZAWSZE KWAS DO WODY!** (Inaczej woda gwałtownie zawrze i pryśnie).
         * **Zastosowanie:** Akumulatory samochodowe, produkcja nawozów, środków piorących, sztucznych włókien.
         """)
 
