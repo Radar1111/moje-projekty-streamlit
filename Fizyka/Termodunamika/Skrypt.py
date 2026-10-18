@@ -79,7 +79,7 @@ elif podrozdzial == "2. Sposoby Przepływu Ciepła":
         * **Dobrzy przewodnicy:** miedź, aluminium, żelazo.
         * **Izolatory (źli przewodnicy):** drewno, styropian, powietrze.
         """)
-        st.image("https://unsplash.com", caption="Metalowy garnek szybko przewodzi ciepło do potrawy", width=400)
+        st.image(caption="Metalowy garnek szybko przewodzi ciepło do potrawy", width=400)
 
     with tab2:
         st.subheader("Konwekcja")
@@ -99,15 +99,15 @@ elif podrozdzial == "2. Sposoby Przepływu Ciepła":
 elif podrozdzial == "3. Ciepło Właściwe (Kalkulator)":
     st.header("🧮 3. Ciepło Właściwe")
     st.write("""
-    **Ciepło właściwe ($c$)** to ilość ciepła potrzebna do podniesienia temperatury $1\text{ kg}$ danej substancji o $1^\circ\text{C}$ (lub $1\text{ K}$).
+    **Ciepło właściwe ($c$)** to ilość ciepła potrzebna do podniesienia temperatury $1\\text{ kg}$ danej substancji o $1^\circ\\text{C}$ (lub $1\\text{ K}$).
 
     Wzór na ilość dostarczonego/oddanego ciepła:
-    $$Q = m \cdot c \cdot \Delta T$$
+    $$Q = m \\cdot c \\cdot \\Delta T$$
     Gdzie:
     * $Q$ – ilość ciepła [J]
     * $m$ – masa substancji [kg]
     * $c$ – ciepło właściwe [J/(kg·°C)]
-    * $\Delta T$ – zmiana temperatury [°C]
+    * $\\Delta T$ – zmiana temperatury [°C]
     """)
 
     st.subheader("📊 Interaktywny Kalkulator Ciepła")
