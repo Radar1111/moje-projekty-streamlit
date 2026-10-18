@@ -79,7 +79,7 @@ elif podrozdzial == "2. Sposoby Przepływu Ciepła":
         * **Dobrzy przewodnicy:** miedź, aluminium, żelazo.
         * **Izolatory (źli przewodnicy):** drewno, styropian, powietrze.
         """)
-        st.image(caption="Metalowy garnek szybko przewodzi ciepło do potrawy", width=400)
+        
 
     with tab2:
         st.subheader("Konwekcja")
