@@ -102,7 +102,9 @@ elif podrozdzial == "3. Ciepło Właściwe (Kalkulator)":
     **Ciepło właściwe ($c$)** to ilość ciepła potrzebna do podniesienia temperatury $1\\text{ kg}$ danej substancji o $1^\circ\\text{C}$ (lub $1\\text{ K}$).
 
     Wzór na ilość dostarczonego/oddanego ciepła:
+    
     $$Q = m \\cdot c \\cdot \\Delta T$$
+    
     Gdzie:
     * $Q$ – ilość ciepła [J]
     * $m$ – masa substancji [kg]
