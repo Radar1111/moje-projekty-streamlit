@@ -350,6 +350,6 @@ elif opcja == "Interaktywny Quiz (Ćwiczenia)":
             st.info(f"Mnożymy wszystko razem: **{cale_nww}**. Wynik końcowy NWW = **{poprawne_nww}**.")
 
         # Przycisk przejścia dalej
-    st.write("")
-    if st.button("Następne zadanie ➡️"):
-        nowe_zadanie()
+        st.write("")
+        if st.button("Następne zadanie ➡️"):
+            nowe_zadanie()
