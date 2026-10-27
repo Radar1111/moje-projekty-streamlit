@@ -87,7 +87,7 @@ lang_map = {
     "Angielski": {"slowo": "angielsk", "wymowa": "angielsk_wym"},
     "Niemiecki": {"slowo": "niemiecki", "wymowa": "niemiecki_wym"},
     "Hiszpanski": {"slowo": "hiszpanski", "wymowa": "hiszpanski_wym"},
-    "Wloski": {"slowo": "wloski", "wymowa": "wloski_wym"},
+    "Włoski": {"slowo": "wloski", "wymowa": "wloski_wym"},
     "Francuski": {"slowo": "francuski", "fancy_wym": "francuski_wym"}
 }
 
