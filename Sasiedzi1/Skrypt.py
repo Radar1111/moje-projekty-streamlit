@@ -268,12 +268,20 @@ with tab_zdania:
     )
     baza_zdania = baza_zdania.dropna(subset=["rozdzial"])
 
-    min_r = int(baza_zdania["rozdzial"].min())
-    max_r = int(baza_zdania["rozdzial"].max())
+    if baza_zdania["rozdzial"].dropna().empty:
+        st.error(
+            "Kolumna 'rozdzial' nie zawiera żadnych poprawnych wartości liczbowych!"
+        )
+    else:
+        min_r = int(baza_zdania["rozdzial"].min())
+        max_r = int(baza_zdania["rozdzial"].max())
 
-    nr_roz = min_r
-    if min_r < max_r:
-        nr_roz = st.slider("Wybierz rozdzial", min_r, max_r, key="s_slider")
+        nr_roz = min_r
+        if min_r < max_r:
+            nr_roz = st.slider("Wybierz rozdzial", min_r, max_r, key="s_slider")
+
+        # [TUTAJ DALEJ TWÓJ KOD: Filtrujemy dane dla wybranego rozdziału...]
+        dane_roz = baza_zdania[baza_zdania["rozdzial"] == nr_roz]
 
     # Filtrujemy dane dla wybranego rozdziału
     dane_roz = baza_zdania[baza_zdania["rozdzial"] == nr_roz]
