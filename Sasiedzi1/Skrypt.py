@@ -282,7 +282,7 @@ with tab_zdania:
 
             dane_roz = baza_zdania[baza_zdania['rozdzial'] == nr_roz]
         # UNIKALNY KLUCZ: "mode_s_w"
-        tryb_s = st.radio("Wybierz tryb pracy:", ["Nauka", "Quiz"], horizontal=True, key="mode_s_w")
+        tryb_s = st.radio("Wybierz tryb pracy:", ["Nauka", "Quiz"], horizontal=True, key="mode_s_w_zdania")
 
         czysty_jezyk = kolumna_jezyk.get("slowo") if isinstance(kolumna_jezyk, dict) else kolumna_jezyk
         kolumna_wymowa = kolumna_jezyk.get("wymowa") if isinstance(kolumna_jezyk, dict) else f"{czysty_jezyk}_wym"
