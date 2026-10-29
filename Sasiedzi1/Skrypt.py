@@ -260,22 +260,17 @@ with tab_slowka:
                             del st.session_state.opcje_abcd_w
                             st.rerun()
 with tab_zdania:
-    if baza_zdania.empty:
-        st.warning("Tabela jest pusta. Sprawdz komunikat bledu powyzej.")
+    # Zmiana warunku na sprawdzenie liczby wierszy
+    if len(baza_zdania) == 0:
+        st.warning("Tabela nie zawiera żadnych wierszy z danymi. Sprawdź plik CSV lub filtry powyżej.")
     else:
-        # --- TYMCZASOWY DEBUGGER ---
-        st.write("Format kolumn przed konwersją:", baza_zdania.columns.tolist())
-        st.write("Pierwsze wiersze kolumny rozdzial:", baza_zdania['rozdzial'].head())
-        # ---------------------------
-        # 1. Konwersja i usuwanie NaN
         baza_zdania['rozdzial'] = pd.to_numeric(baza_zdania['rozdzial'], errors='coerce')
         baza_zdania = baza_zdania.dropna(subset=['rozdzial'])
         
-        # 2. DODATKOWE ZABEZPIECZENIE: Sprawdzenie, czy po czyszczeniu cokolwiek zostało
-        if baza_zdania.empty:
-            st.error("Błąd: Kolumna 'rozdzial' nie zawiera żadnych poprawnych numerów rozdziałów.")
+        if len(baza_zdania) == 0:
+            st.error("Błąd: Po oczyszczeniu danych kolumna 'rozdzial' nie zawiera żadnych poprawnych numerów rozdziałów.")
         else:
-            # Teraz wywołanie min() i max() jest w 100% bezpieczne
+            # Bezpieczne wywołanie min() i max()
             min_r = int(baza_zdania['rozdzial'].min())
             max_r = int(baza_zdania['rozdzial'].max())
 
