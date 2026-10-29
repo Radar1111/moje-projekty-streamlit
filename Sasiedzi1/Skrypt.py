@@ -64,9 +64,12 @@ def load_sentences():
         return dane
         
     except Exception as e:
-        # W razie jakiegokolwiek innego błędu, Streamlit pokaże go na ekranie, ułatwiając debugowanie
         st.error(f"Błąd krytyczny pobierania zdań: {e}")
-        return pd.DataFrame(columns=['rozdzial', 'polski', 'czeski', 'słowacki', 'węgierski', 'rumuński', 'łotewski'])
+        # Zwracamy pełną strukturę (12 kolumn), aby zapobiec przesunięciu danych
+        return pd.DataFrame(columns=[
+            'rozdzial', 'polski', 'czeski', 'czeski_wym', 'słowacki', 'słowacki_wym',
+            'węgierski', 'węgierski_wym', 'rumuński', 'rumuński_wym', 'łotewski', 'łotewski_wym'
+        ])
 
 # Wywołanie funkcji
 baza_slowa = load_words()
