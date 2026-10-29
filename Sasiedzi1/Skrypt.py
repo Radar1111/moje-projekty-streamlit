@@ -259,7 +259,10 @@ with tab_slowka:
                         if st.button("Nastepne pytanie", use_container_width=True, type="primary", key="next_btn_w"):
                             del st.session_state.opcje_abcd_w
                             st.rerun()
-else:
+with tab_zdania:
+    if baza_zdania.empty:
+        st.warning("Tabela zdań jest pusta lub plik CSV nie został wczytany.")
+    else:
         # --- FIX DLA ZŁOŻONEGO INDEKSU / KOLUMN ---
         # 1. Jeśli indeks jest krotką (MultiIndex), resetujemy go do zwykłych liczb 0, 1, 2...
         if isinstance(baza_zdania.index, pd.MultiIndex) or (
@@ -303,6 +306,31 @@ else:
                     "Wybierz rozdzial", min_r, max_r, key="s_slider"
                 )
 
+            dane_roz = baza_zdania[baza_zdania["rozdzial"] == nr_roz]
+            # ... [Dalsza część kodu quizu/nauki] ...
+
+
+        # Konwersja na liczby
+        baza_zdania["rozdzial"] = pd.to_numeric(
+            baza_zdania["rozdzial"], errors="coerce"
+        )
+        baza_zdania = baza_zdania.dropna(subset=["rozdzial"])
+
+        if baza_zdania["rozdzial"].empty:
+            st.error(
+                "Kolumna 'rozdzial' nie zawiera żadnych poprawnych wartości liczbowych!"
+            )
+        else:
+            min_r = int(baza_zdania["rozdzial"].min())
+            max_r = int(baza_zdania["rozdzial"].max())
+
+            nr_roz = min_r
+            if min_r < max_r:
+                nr_roz = st.slider(
+                    "Wybierz rozdzial", min_r, max_r, key="s_slider"
+                )
+
+            # Filtrujemy dane dla wybranego rozdziału
             dane_roz = baza_zdania[baza_zdania["rozdzial"] == nr_roz]
 
 
