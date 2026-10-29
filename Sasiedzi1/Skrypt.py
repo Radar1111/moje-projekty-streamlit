@@ -263,33 +263,41 @@ with tab_zdania:
     if baza_zdania.empty:
         st.warning("Tabela zdań jest pusta lub plik CSV nie został wczytany.")
     else:
+        # --- KOD DIAGNOSTYCZNY (Wewnątrz bloku else) ---
         st.subheader("Diagnoza kolumny 'rozdzial'")
-st.write("Dostępne kolumny w pliku:", list(baza_zdania.columns))
-if "rozdzial" in baza_zdania.columns:
-    st.write("Pierwsze 5 wartości w kolumnie:")
-    st.write(baza_zdania["rozdzial"].head().to_dict())
-    st.write("Typ danych kolumny:", str(baza_zdania["rozdzial"].dtype))
-else:
-    st.error("UWAGA: Brak kolumny o dokładnej nazwie 'rozdzial'!")
+        st.write("Dostępne kolumny w pliku:", list(baza_zdania.columns))
+
+        if "rozdzial" in baza_zdania.columns:
+            st.write("Pierwsze 5 wartości w kolumnie:")
+            st.write(baza_zdania["rozdzial"].head().to_dict())
+            st.write("Typ danych kolumny:", str(baza_zdania["rozdzial"].dtype))
+        else:
+            st.error("UWAGA: Brak kolumny o dokładnej nazwie 'rozdzial'!")
+        # -----------------------------------------------
+
+        # Konwersja na liczby
         baza_zdania["rozdzial"] = pd.to_numeric(
             baza_zdania["rozdzial"], errors="coerce"
-    )
-    baza_zdania = baza_zdania.dropna(subset=["rozdzial"])
-
-    if baza_zdania["rozdzial"].dropna().empty:
-        st.error(
-            "Kolumna 'rozdzial' nie zawiera żadnych poprawnych wartości liczbowych!"
         )
-    else:
-        min_r = int(baza_zdania["rozdzial"].min())
-        max_r = int(baza_zdania["rozdzial"].max())
+        baza_zdania = baza_zdania.dropna(subset=["rozdzial"])
 
-        nr_roz = min_r
-        if min_r < max_r:
-            nr_roz = st.slider("Wybierz rozdzial", min_r, max_r, key="s_slider")
+        if baza_zdania["rozdzial"].empty:
+            st.error(
+                "Kolumna 'rozdzial' nie zawiera żadnych poprawnych wartości liczbowych!"
+            )
+        else:
+            min_r = int(baza_zdania["rozdzial"].min())
+            max_r = int(baza_zdania["rozdzial"].max())
 
-        # [TUTAJ DALEJ TWÓJ KOD: Filtrujemy dane dla wybranego rozdziału...]
-        dane_roz = baza_zdania[baza_zdania["rozdzial"] == nr_roz]
+            nr_roz = min_r
+            if min_r < max_r:
+                nr_roz = st.slider(
+                    "Wybierz rozdzial", min_r, max_r, key="s_slider"
+                )
+
+            # Filtrujemy dane dla wybranego rozdziału
+            dane_roz = baza_zdania[baza_zdania["rozdzial"] == nr_roz]
+
 
     # Filtrujemy dane dla wybranego rozdziału
     dane_roz = baza_zdania[baza_zdania["rozdzial"] == nr_roz]
