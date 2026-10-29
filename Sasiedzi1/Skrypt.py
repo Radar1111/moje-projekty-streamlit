@@ -261,10 +261,10 @@ with tab_slowka:
                             st.rerun()
 with tab_zdania:
     if baza_zdania.empty:
-    st.warning("Tabela zdań jest pusta lub plik CSV nie został wczytany.")
+        st.warning("Tabela zdań jest pusta lub plik CSV nie został wczytany.")
     else:
-    baza_zdania["rozdzial"] = pd.to_numeric(
-        baza_zdania["rozdzial"], errors="coerce"
+        baza_zdania["rozdzial"] = pd.to_numeric(
+            baza_zdania["rozdzial"], errors="coerce"
     )
     baza_zdania = baza_zdania.dropna(subset=["rozdzial"])
 
