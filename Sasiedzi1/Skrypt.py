@@ -260,25 +260,29 @@ with tab_slowka:
                             del st.session_state.opcje_abcd_w
                             st.rerun()
 with tab_zdania:
-    if baza_zdania.empty:
+    # 1. WYMUSZAMY ŚWIEŻE WCZYTANIE PLIKU TYLKO DLA TEJ ZAKŁADKI
+    # Zmień "nazwa_pliku_ze_zdaniami.csv" na dokładną nazwę pliku na dysku/serwerze
+    baza_zdania_izolowana = pd.read_csv("nazwa_pliku_ze_zdaniami.csv", encoding="utf-8-sig")
+
+    if baza_zdania_izolowana.empty:
         st.warning("Tabela ze zdaniami jest pusta. Sprawdź plik wejściowy.")
     else:
-        # Bezpieczna konwersja typów danych
-        baza_zdania['rozdzial'] = pd.to_numeric(baza_zdania['rozdzial'], errors='coerce')
-        baza_zdania = baza_zdania.dropna(subset=['rozdzial'])
+        # Bezpieczna konwersja typów danych na odizolowanej zmiennej
+        baza_zdania_izolowana['rozdzial'] = pd.to_numeric(baza_zdania_izolowana['rozdzial'], errors='coerce')
+        baza_zdania_izolowana = baza_zdania_izolowana.dropna(subset=['rozdzial'])
         
-        if baza_zdania.empty:
-            st.error("Błąd: Kolumna 'rozdzial' w bazie zdań nie zawiera poprawnych numerów.")
+        if baza_zdania_izolowana.empty:
+            st.error("Krytyczny błąd: Kolumna 'rozdzial' nadal nie zawiera cyfr. Upewnij się, czy wczytujesz właściwy plik z dysku.")
         else:
-            min_r = int(baza_zdania['rozdzial'].min())
-            max_r = int(baza_zdania['rozdzial'].max())
+            min_r = int(baza_zdania_izolowana['rozdzial'].min())
+            max_r = int(baza_zdania_izolowana['rozdzial'].max())
 
             nr_roz = min_r
             # UNIKALNY KLUCZ: "s_slider_z"
             if min_r < max_r:
                 nr_roz = st.slider("Wybierz rozdzial", min_r, max_r, key="s_slider_z")
 
-            dane_roz = baza_zdania[baza_zdania['rozdzial'] == nr_roz]
+            dane_roz = baza_zdania_izolowana[baza_zdania_izolowana['rozdzial'] == nr_roz]
             # UNIKALNY KLUCZ: "mode_s_z"
             tryb_s = st.radio("Wybierz tryb pracy:", ["Nauka", "Quiz"], horizontal=True, key="mode_s_z")
 
@@ -298,11 +302,9 @@ with tab_zdania:
                     st.error(f"Nie znaleziono kolumny '{czysty_jezyk}' w pliku CSV. Dostępne kolumny: {list(dane_roz.columns)}")
             
             else: # TRYB QUIZ (ABCD)
-                # Inicjalizacja osobnych liczników dla ZDAŃ (total_z, score_z)
                 if 'total_z' not in st.session_state: st.session_state.total_z = 0
                 if 'score_z' not in st.session_state: st.session_state.score_z = 0
 
-                # Losowanie nowego zdania - UNIKALNE KLUCZE stanu z końcówką _z
                 if st.session_state.get('last_id_z') != nr_roz or 'opcje_abcd_z' not in st.session_state:
                     if dane_roz.empty:
                         st.error("Brak danych dla tego rozdziału!")
@@ -338,7 +340,6 @@ with tab_zdania:
                         for idx, opcja in enumerate(opcje):
                             target_col = col1 if idx % 2 == 0 else col2
                             
-                            # UNIKALNY KLUCZ PRZYCISKÓW: "btn_opt_z_{idx}"
                             if target_col.button(opcja, use_container_width=True, key=f"btn_opt_z_{idx}", disabled=st.session_state.odpowiedziano_z):
                                 st.session_state.wybrana_odp_z = opcja
                                 st.session_state.odpowiedziano_z = True
@@ -347,7 +348,6 @@ with tab_zdania:
                                 if opcja.lower() == st.session_state.poprawna_odp_z.lower():
                                     st.session_state.score_z += 1
 
-                        # Wyświetlenie informacji zwrotnej
                         if st.session_state.wybrana_odp_z is not None:
                             user_ans = st.session_state.wybrana_odp_z
                             poprawna = st.session_state.poprawna_odp_z
@@ -359,7 +359,6 @@ with tab_zdania:
                             
                             st.write(f"Twój wynik w quizie zdań: {st.session_state.score_z} / {st.session_state.total_z}")
 
-                            # UNIKALNY KLUCZ PRZYCISKU DALEJ: "next_btn_z"
                             if st.button("Nastepne pytanie", use_container_width=True, type="primary", key="next_btn_z"):
                                 del st.session_state.opcje_abcd_z
                                 st.rerun()
