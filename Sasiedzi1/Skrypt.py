@@ -260,10 +260,15 @@ with tab_slowka:
                             del st.session_state.opcje_abcd_w
                             st.rerun()
 with tab_zdania:
-    # Zmiana warunku na sprawdzenie liczby wierszy
     if len(baza_zdania) == 0:
-        st.warning("Tabela nie zawiera żadnych wierszy z danymi. Sprawdź plik CSV lub filtry powyżej.")
+        st.warning("Tabela nie zawiera żadnych wierszy z danymi.")
     else:
+        # --- ROZBUDOWANY DEBUGGER SUROWYCH DANYCH ---
+        st.write("Liczba wszystkich wierszy w tabeli:", len(baza_zdania))
+        st.write("Typ danych kolumny rozdzial:", str(baza_zdania['rozdzial'].dtype))
+        st.write("Pierwsze 3 surowe wartości z kolumny rozdzial (jako lista):", baza_zdania['rozdzial'].head(3).tolist())
+        # --------------------------------------------
+
         baza_zdania['rozdzial'] = pd.to_numeric(baza_zdania['rozdzial'], errors='coerce')
         baza_zdania = baza_zdania.dropna(subset=['rozdzial'])
         
