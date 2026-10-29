@@ -261,107 +261,153 @@ with tab_slowka:
                             st.rerun()
 with tab_zdania:
     if baza_zdania.empty:
-        st.warning("Tabela zdań jest pusta lub plik CSV nie został wczytany.")
+    st.warning("Tabela zdań jest pusta lub plik CSV nie został wczytany.")
+else:
+    baza_zdania["rozdzial"] = pd.to_numeric(
+        baza_zdania["rozdzial"], errors="coerce"
+    )
+    baza_zdania = baza_zdania.dropna(subset=["rozdzial"])
+
+    min_r = int(baza_zdania["rozdzial"].min())
+    max_r = int(baza_zdania["rozdzial"].max())
+
+    nr_roz = min_r
+    if min_r < max_r:
+        nr_roz = st.slider("Wybierz rozdzial", min_r, max_r, key="s_slider")
+
+    # Filtrujemy dane dla wybranego rozdziału
+    dane_roz = baza_zdania[baza_zdania["rozdzial"] == nr_roz]
+
+    tryb_s = st.radio(
+        "Wybierz tryb pracy:", ["Nauka", "Quiz"], horizontal=True, key="mode_s"
+    )
+
+    # Bezpieczne pobranie nazw kolumn
+    czysty_jezyk = (
+        kolumna_jezyk.get("slowo")
+        if isinstance(kolumna_jezyk, dict)
+        else kolumna_jezyk
+    )
+    kolumna_wymowa = (
+        kolumna_jezyk.get("wymowa")
+        if isinstance(kolumna_jezyk, dict)
+        else f"{czysty_jezyk}_wym"
+    )
+
+    if tryb_s == "Nauka":
+        kolumny_do_tabeli = ["polski"]
+        if czysty_jezyk in dane_roz.columns:
+            kolumny_do_tabeli.append(czysty_jezyk)
+        if kolumna_wymowa in dane_roz.columns:
+            kolumny_do_tabeli.append(kolumna_wymowa)
+
+        if len(kolumny_do_tabeli) > 1:
+            st.table(dane_roz[kolumny_do_tabeli])
+        else:
+            st.error(
+                f"Nie znaleziono kolumny '{czysty_jezyk}' w pliku CSV. Dostępne kolumny: {list(dane_roz.columns)}"
+            )
+
     else:
-        baza_zdania['rozdzial'] = pd.to_numeric(baza_zdania['rozdzial'], errors='coerce')
-        baza_zdania = baza_zdania.dropna(subset=['rozdzial'])
-        
-        min_r = int(baza_zdania['rozdzial'].min())
-        max_r = int(baza_zdania['rozdzial'].max())
+        # --- TRYB QUIZ (ABCD) ---
 
-        nr_roz = min_r
-        if min_r < max_r:
-            nr_roz = st.slider("Wybierz rozdzial", min_r, max_r, key="s_slider")
+        # Inicjalizacja liczników globalnych
+        if "total" not in st.session_state:
+            st.session_state.total = 0
+        if "score" not in st.session_state:
+            st.session_state.score = 0
 
-        # Filtrujemy dane dla wybranego rozdziału
-        dane_roz = baza_zdania[baza_zdania['rozdzial'] == nr_roz]
-        tryb_s = st.radio("Wybierz tryb pracy:", ["Nauka", "Quiz"], horizontal=True, key="mode_s")
+        # Resetowanie stanu quizu przy zmianie rozdziału
+        if st.session_state.get("last_id") != nr_roz:
+            st.session_state.last_id = nr_roz
+            st.session_state.odpowiedziano = False
+            st.session_state.wybrana_odp = None
+            if "opcje_abcd" in st.session_state:
+                del st.session_state.opcje_abcd
 
-        # Bezpieczne pobranie nazw kolumn ze słownika lang_map
-        czysty_jezyk = kolumna_jezyk.get("slowo") if isinstance(kolumna_jezyk, dict) else kolumna_jezyk
-        kolumna_wymowa = kolumna_jezyk.get("wymowa") if isinstance(kolumna_jezyk, dict) else f"{czysty_jezyk}_wym"
+        if dane_roz.empty:
+            st.error("Brak danych dla tego rozdziału!")
+        else:
+            # Losowanie nowego pytania i generowanie opcji (tylko raz na pytanie)
+            if "opcje_abcd" not in st.session_state:
+                st.session_state.slowo_id = random.choice(dane_roz.index)
+                poprawna = str(
+                    dane_roz.loc[st.session_state.slowo_id, czysty_jezyk]
+                ).strip()
 
-        if tryb_s == "Nauka":
-            kolumny_do_tabeli = ['polski']
-            if czysty_jezyk in dane_roz.columns:
-                kolumny_do_tabeli.append(czysty_jezyk)
-            if kolumna_wymowa in dane_roz.columns:
-                kolumny_do_tabeli.append(kolumna_wymowa)
+                inne_slowa = (
+                    dane_roz[czysty_jezyk].dropna().astype(str).str.strip().unique()
+                )
+                inne_slowa = [s for s in inne_slowa if s.lower() != poprawna.lower()]
 
-            if len(kolumny_do_tabeli) > 1:
-                st.table(dane_roz[kolumny_do_tabeli])
-            else:
-                st.error(f"Nie znaleziono kolumny '{czysty_jezyk}' w pliku CSV. Dostępne kolumny: {list(dane_roz.columns)}")
-        
-        else: # TRYB QUIZ (ABCD)
-            # Inicjalizacja liczników globalnych, jeśli nie istnieją
-            if 'total' not in st.session_state: st.session_state.total = 0
-            if 'score' not in st.session_state: st.session_state.score = 0
+                liczba_blednych = min(3, len(inne_slowa))
+                bledne = random.sample(inne_slowa, liczba_blednych)
 
-            # Losowanie nowego pytania
-            if st.session_state.get('last_id') != nr_roz or 'opcje_abcd' not in st.session_state:
-                if dane_roz.empty:
-                    st.error("Brak danych dla tego rozdziału!")
-                else:
-                    # Losujemy z ZDAŃ przypisanych do tego rozdziału (dane_roz)
-                    st.session_state.slowo_id = random.choice(dane_roz.index)
-                    st.session_state.last_id = nr_roz
-                    
-                    # Pobranie poprawnej odpowiedzi z tabeli zdań rozdziału
-                    poprawna = str(dane_roz.loc[st.session_state.slowo_id, czysty_jezyk]).strip()
-                    
-                    # Pobranie innych opcji do zrobienia z nich błędnych odpowiedzi
-                    inne_slowa = dane_roz[czysty_jezyk].dropna().astype(str).str.strip().unique()
-                    inne_slowa = [s for s in inne_slowa if s.lower() != poprawna.lower()]
-                    
-                    liczba_blednych = min(3, len(inne_slowa))
-                    bledne = random.sample(inne_slowa, liczba_blednych) if liczba_blednych > 0 else []
-                    
-                    wszystkie_opcje = bledne + [poprawna]
-                    random.shuffle(wszystkie_opcje)
-                    
-                    st.session_state.opcje_abcd = wszystkie_opcje
-                    st.session_state.poprawna_odp = poprawna
-                    st.session_state.wybrana_odp = None
-                    st.session_state.odpowiedziano = False # Flaga blokująca ponowne naliczanie punktów
+                wszystkie_opcje = bledne + [poprawna]
+                random.shuffle(wszystkie_opcje)
 
-            if 'slowo_id' in st.session_state and st.session_state.slowo_id in dane_roz.index:
-                slowo_pl = dane_roz.loc[st.session_state.slowo_id, 'polski']
+                st.session_state.opcje_abcd = wszystkie_opcje
+                st.session_state.poprawna_odp = poprawna
+                st.session_state.wybrana_odp = None
+                st.session_state.odpowiedziano = False
+
+            # Pobranie pytania
+            if (
+                "slowo_id" in st.session_state
+                and st.session_state.slowo_id in dane_roz.index
+            ):
+                slowo_pl = dane_roz.loc[st.session_state.slowo_id, "polski"]
 
                 with st.container(border=True):
-                    st.subheader(f"Jak przetlumaczysz: {slowo_pl}?")
+                    st.subheader(f"Jak przetłumaczysz: **{slowo_pl}**?")
+
+                    # Definiujemy funkcję callback dla obsługi kliknięcia przycisku
+                    def obsluga_klikniecia(wybrany_wariant):
+                        st.session_state.wybrana_odp = wybrany_wariant
+                        st.session_state.odpowiedziano = True
+                        st.session_state.total += 1
+                        if (
+                            wybrany_wariant.lower()
+                            == st.session_state.poprawna_odp.lower()
+                        ):
+                            st.session_state.score += 1
 
                     col1, col2 = st.columns(2)
                     opcje = st.session_state.opcje_abcd
-                    
+
                     for idx, opcja in enumerate(opcje):
                         target_col = col1 if idx % 2 == 0 else col2
-                        
-                        # Przycisk staje się nieaktywny (disabled) po wybraniu odpowiedzi
-                        if target_col.button(opcja, use_container_width=True, key=f"btn_opt_{idx}", disabled=st.session_state.odpowiedziano):
-                            st.session_state.wybrana_odp = opcja
-                            st.session_state.odpowiedziano = True
-                            
-                            # Jednorazowe naliczenie punktów zaraz po kliknięciu
-                            st.session_state.total += 1
-                            if opcja.lower() == st.session_state.poprawna_odp.lower():
-                                st.session_state.score += 1
+                        target_col.button(
+                            opcja,
+                            use_container_width=True,
+                            key=f"btn_opt_{idx}",
+                            disabled=st.session_state.odpowiedziano,
+                            on_click=obsluga_klikniecia,
+                            args=(opcja,),
+                        )
 
-                    # Wyświetlenie wyniku walidacji
+                    # Wyświetlenie wyniku walidacji po kliknięciu
                     if st.session_state.wybrana_odp is not None:
                         user_ans = st.session_state.wybrana_odp
                         poprawna = st.session_state.poprawna_odp
-                        
-                        if user_ans.lower() == poprawna.lower():
-                            st.success(f"Prawidlowo! Wynik: {poprawna}")
-                        else:
-                            st.error(f"Blad. Twoja odpowiedź: '{user_ans}'. Prawidlowa odpowiedz to: {poprawna}")
-                        
-                        st.write(f"Twój aktualny wynik: {st.session_state.score} / {st.session_state.total}")
 
-                        # Przycisk do przejścia do kolejnego pytania
-                        if st.button("Nastepne pytanie", use_container_width=True, type="primary"):
-                            # Usuwamy klucz, aby przy kolejnym przebiegu wylosować nowe słowo
+                        if user_ans.lower() == poprawna.lower():
+                            st.success(f"Prawidłowo! Odpowiedź to: **{poprawna}**")
+                        else:
+                            st.error(
+                                f"Błąd. Twoja odpowiedź: '{user_ans}'. Prawidłowa odpowiedź to: **{poprawna}**"
+                            )
+
+                        st.write(
+                            f"Twój aktualny wynik: **{st.session_state.score} / {st.session_state.total}**"
+                        )
+
+                        # Przycisk "Następne pytanie" pojawia się DOPIERO PO udzieleniu odpowiedzi
+                        if st.button(
+                            "Następne pytanie ➡️",
+                            use_container_width=True,
+                            type="primary",
+                        ):
                             del st.session_state.opcje_abcd
                             st.rerun()
 
