@@ -59,7 +59,7 @@ def load_sentences():
         )
         
         # Odczyt pliku przez Pandas
-        dane = pd.read_csv(lokalna_sciezka, sep=',', encoding='utf-8-sig', index_col=0)
+        dane = pd.read_csv(lokalna_sciezka, sep=',', encoding='utf-8-sig')
         dane.columns = dane.columns.str.strip()
         return dane
         
@@ -260,117 +260,109 @@ with tab_slowka:
                             del st.session_state.opcje_abcd_w
                             st.rerun()
 with tab_zdania:
-    if len(baza_zdania) == 0:
-        st.warning("Tabela nie zawiera żadnych wierszy z danymi.")
+    if baza_zdania.empty:
+        st.warning("Tabela ze zdaniami jest pusta. Sprawdź plik wejściowy.")
     else:
-        # --- ROZBUDOWANY DEBUGGER SUROWYCH DANYCH ---
-        st.write("Liczba wszystkich wierszy w tabeli:", len(baza_zdania))
-        st.write("Typ danych kolumny rozdzial:", str(baza_zdania['rozdzial'].dtype))
-        st.write("Pierwsze 3 surowe wartości z kolumny rozdzial (jako lista):", baza_zdania['rozdzial'].head(3).tolist())
-        # --------------------------------------------
-
+        # Bezpieczna konwersja typów danych
         baza_zdania['rozdzial'] = pd.to_numeric(baza_zdania['rozdzial'], errors='coerce')
         baza_zdania = baza_zdania.dropna(subset=['rozdzial'])
         
-        if len(baza_zdania) == 0:
-            st.error("Błąd: Po oczyszczeniu danych kolumna 'rozdzial' nie zawiera żadnych poprawnych numerów rozdziałów.")
+        if baza_zdania.empty:
+            st.error("Błąd: Kolumna 'rozdzial' w bazie zdań nie zawiera poprawnych numerów.")
         else:
-            # Bezpieczne wywołanie min() i max()
             min_r = int(baza_zdania['rozdzial'].min())
             max_r = int(baza_zdania['rozdzial'].max())
 
             nr_roz = min_r
-            # UNIKALNY KLUCZ: "s_slider_w"
+            # UNIKALNY KLUCZ: "s_slider_z"
             if min_r < max_r:
-                nr_roz = st.slider("Wybierz rozdzial", min_r, max_r, key="s_slider_w")
+                nr_roz = st.slider("Wybierz rozdzial", min_r, max_r, key="s_slider_z")
 
             dane_roz = baza_zdania[baza_zdania['rozdzial'] == nr_roz]
-        # UNIKALNY KLUCZ: "mode_s_w"
-        tryb_s = st.radio("Wybierz tryb pracy:", ["Nauka", "Quiz"], horizontal=True, key="mode_s_w_zdania")
+            # UNIKALNY KLUCZ: "mode_s_z"
+            tryb_s = st.radio("Wybierz tryb pracy:", ["Nauka", "Quiz"], horizontal=True, key="mode_s_z")
 
-        czysty_jezyk = kolumna_jezyk.get("zdanie") if isinstance(kolumna_jezyk, dict) else kolumna_jezyk
-        kolumna_wymowa = kolumna_jezyk.get("wymowa") if isinstance(kolumna_jezyk, dict) else f"{czysty_jezyk}_wym"
+            czysty_jezyk = kolumna_jezyk.get("slowo") if isinstance(kolumna_jezyk, dict) else kolumna_jezyk
+            kolumna_wymowa = kolumna_jezyk.get("wymowa") if isinstance(kolumna_jezyk, dict) else f"{czysty_jezyk}_wym"
 
-        if tryb_s == "Nauka":
-            kolumny_do_tabeli = ['polski']
-            if czysty_jezyk in dane_roz.columns:
-                kolumny_do_tabeli.append(czysty_jezyk)
-            if kolumna_wymowa in dane_roz.columns:
-                kolumny_do_tabeli.append(kolumna_wymowa)
+            if tryb_s == "Nauka":
+                kolumny_do_tabeli = ['polski']
+                if czysty_jezyk in dane_roz.columns:
+                    kolumny_do_tabeli.append(czysty_jezyk)
+                if kolumna_wymowa in dane_roz.columns:
+                    kolumny_do_tabeli.append(kolumna_wymowa)
 
-            if len(kolumny_do_tabeli) > 1:
-                st.table(dane_roz[kolumny_do_tabeli])
-            else:
-                st.error(f"Nie znaleziono kolumny '{czysty_jezyk}' w pliku CSV. Dostępne kolumny: {list(dane_roz.columns)}")
-        
-        else: # TRYB QUIZ (ABCD)
-            # Inicjalizacja liczników w st.session_state (jeśli nie istnieją)
-            if 'total' not in st.session_state: st.session_state.total = 0
-            if 'score' not in st.session_state: st.session_state.score = 0
-
-            # Losowanie nowego słowa - UNIKALNE KLUCZE stanu dla słówek
-            if st.session_state.get('last_id_w') != nr_roz or 'opcje_abcd_w' not in st.session_state:
-                if dane_roz.empty:
-                    st.error("Brak danych dla tego rozdziału!")
+                if len(kolumny_do_tabeli) > 1:
+                    st.table(dane_roz[kolumny_do_tabeli])
                 else:
-                    st.session_state.slowo_id_w = random.choice(dane_roz.index)
-                    st.session_state.last_id_w = nr_roz
-                    
-                    poprawna = str(dane_roz.loc[st.session_state.slowo_id_w, czysty_jezyk]).strip()
-                    
-                    inne_slowa = dane_roz[czysty_jezyk].dropna().astype(str).str.strip().unique()
-                    inne_slowa = [s for s in inne_slowa if s.lower() != poprawna.lower()]
-                    
-                    liczba_blednych = min(3, len(inne_slowa))
-                    bledne = random.sample(inne_slowa, liczba_blednych) if liczba_blednych > 0 else []
-                    
-                    wszystkie_opcje = bledne + [poprawna]
-                    random.shuffle(wszystkie_opcje)
-                    
-                    st.session_state.opcje_abcd_w = wszystkie_opcje
-                    st.session_state.poprawna_odp_w = poprawna
-                    st.session_state.wybrana_odp_w = None
-                    st.session_state.odpowiedziano_w = False # Blokada wielokrotnego zliczania
+                    st.error(f"Nie znaleziono kolumny '{czysty_jezyk}' w pliku CSV. Dostępne kolumny: {list(dane_roz.columns)}")
+            
+            else: # TRYB QUIZ (ABCD)
+                # Inicjalizacja osobnych liczników dla ZDAŃ (total_z, score_z)
+                if 'total_z' not in st.session_state: st.session_state.total_z = 0
+                if 'score_z' not in st.session_state: st.session_state.score_z = 0
 
-            if 'slowo_id_w' in st.session_state and st.session_state.slowo_id_w in dane_roz.index:
-                slowo_pl = dane_roz.loc[st.session_state.slowo_id_w, 'polski']
-
-                with st.container(border=True):
-                    st.subheader(f"Jak przetlumaczysz: {slowo_pl}?")
-
-                    col1, col2 = st.columns(2)
-                    opcje = st.session_state.opcje_abcd_w
-                    
-                    for idx, opcja in enumerate(opcje):
-                        target_col = col1 if idx % 2 == 0 else col2
+                # Losowanie nowego zdania - UNIKALNE KLUCZE stanu z końcówką _z
+                if st.session_state.get('last_id_z') != nr_roz or 'opcje_abcd_z' not in st.session_state:
+                    if dane_roz.empty:
+                        st.error("Brak danych dla tego rozdziału!")
+                    else:
+                        st.session_state.slowo_id_z = random.choice(dane_roz.index)
+                        st.session_state.last_id_z = nr_roz
                         
-                        # Przyciski blokują się po jednym kliknięciu. UNIKALNY KLUCZ: "btn_opt_w_{idx}"
-                        if target_col.button(opcja, use_container_width=True, key=f"btn_opt_w_{idx}", disabled=st.session_state.odpowiedziano_w):
-                            st.session_state.wybrana_odp_w = opcja
-                            st.session_state.odpowiedziano_w = True
+                        poprawna = str(dane_roz.loc[st.session_state.slowo_id_z, czysty_jezyk]).strip()
+                        
+                        inne_slowa = dane_roz[czysty_jezyk].dropna().astype(str).str.strip().unique()
+                        inne_slowa = [s for s in inne_slowa if s.lower() != poprawna.lower()]
+                        
+                        liczba_blednych = min(3, len(inne_slowa))
+                        bledne = random.sample(inne_slowa, liczba_blednych) if liczba_blednych > 0 else []
+                        
+                        wszystkie_opcje = bledne + [poprawna]
+                        random.shuffle(wszystkie_opcje)
+                        
+                        st.session_state.opcje_abcd_z = wszystkie_opcje
+                        st.session_state.poprawna_odp_z = poprawna
+                        st.session_state.wybrana_odp_z = None
+                        st.session_state.odpowiedziano_z = False
+
+                if 'slowo_id_z' in st.session_state and st.session_state.slowo_id_z in dane_roz.index:
+                    slowo_pl = dane_roz.loc[st.session_state.slowo_id_z, 'polski']
+
+                    with st.container(border=True):
+                        st.subheader(f"Jak przetlumaczysz: {slowo_pl}?")
+
+                        col1, col2 = st.columns(2)
+                        opcje = st.session_state.opcje_abcd_z
+                        
+                        for idx, opcja in enumerate(opcje):
+                            target_col = col1 if idx % 2 == 0 else col2
                             
-                            # Bezpieczne, jednorazowe naliczenie punktów
-                            st.session_state.total += 1
-                            if opcja.lower() == st.session_state.poprawna_odp_w.lower():
-                                st.session_state.score += 1
+                            # UNIKALNY KLUCZ PRZYCISKÓW: "btn_opt_z_{idx}"
+                            if target_col.button(opcja, use_container_width=True, key=f"btn_opt_z_{idx}", disabled=st.session_state.odpowiedziano_z):
+                                st.session_state.wybrana_odp_z = opcja
+                                st.session_state.odpowiedziano_z = True
+                                
+                                st.session_state.total_z += 1
+                                if opcja.lower() == st.session_state.poprawna_odp_z.lower():
+                                    st.session_state.score_z += 1
 
-                    # Wyświetlenie informacji zwrotnej
-                    if st.session_state.wybrana_odp_w is not None:
-                        user_ans = st.session_state.wybrana_odp_w
-                        poprawna = st.session_state.poprawna_odp_w
-                        
-                        if user_ans.lower() == poprawna.lower():
-                            st.success(f"Prawidlowo! Wynik: {poprawna}")
-                        else:
-                            st.error(f"Blad. Twoja odpowiedź: '{user_ans}'. Prawidlowa odpowiedz to: {poprawna}")
-                        
-                        st.write(f"Twój ogólny wynik: {st.session_state.score} / {st.session_state.total}")
+                        # Wyświetlenie informacji zwrotnej
+                        if st.session_state.wybrana_odp_z is not None:
+                            user_ans = st.session_state.wybrana_odp_z
+                            poprawna = st.session_state.poprawna_odp_z
+                            
+                            if user_ans.lower() == poprawna.lower():
+                                st.success(f"Prawidlowo! Wynik: {poprawna}")
+                            else:
+                                st.error(f"Blad. Twoja odpowiedź: '{user_ans}'. Prawidlowa odpowiedz to: {poprawna}")
+                            
+                            st.write(f"Twój wynik w quizie zdań: {st.session_state.score_z} / {st.session_state.total_z}")
 
-                        # Przycisk przejścia dalej. UNIKALNY KLUCZ: "next_btn_w"
-                        if st.button("Nastepne pytanie", use_container_width=True, type="primary", key="next_btn_w"):
-                            del st.session_state.opcje_abcd_w
-                            st.rerun()
-
+                            # UNIKALNY KLUCZ PRZYCISKU DALEJ: "next_btn_z"
+                            if st.button("Nastepne pytanie", use_container_width=True, type="primary", key="next_btn_z"):
+                                del st.session_state.opcje_abcd_z
+                                st.rerun()
 st.caption("Najcierpliwszy portal do nauki języków obcych")
 st.caption("Created by Radar | Software Development")
 st.caption("Grafika: Menorek | Youtuber")
