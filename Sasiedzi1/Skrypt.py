@@ -63,10 +63,10 @@ def load_sentences():
         dane.columns = dane.columns.str.strip()
         return dane
         
-    except Exception as e:
-        # W razie jakiegokolwiek innego błędu, Streamlit pokaże go na ekranie, ułatwiając debugowanie
-        st.error(f"Błąd krytyczny pobierania: {e}")
-        return pd.DataFrame(columns=['rozdzial', 'polski', 'czeski', 'słowacki', 'węgierski', 'rumuński', 'łotewski'])
+        except Exception as e:
+            # W razie jakiegokolwiek innego błędu, Streamlit pokaże go na ekranie, ułatwiając debugowanie
+            st.error(f"Błąd krytyczny pobierania: {e}")
+            return pd.DataFrame(columns=['rozdzial', 'polski', 'czeski', 'słowacki', 'węgierski', 'rumuński', 'łotewski'])
 
 # Wywołanie funkcji
 baza_slowa = load_words()
