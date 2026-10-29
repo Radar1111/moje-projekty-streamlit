@@ -263,18 +263,24 @@ with tab_zdania:
     if baza_zdania.empty:
         st.warning("Tabela jest pusta. Sprawdz komunikat bledu powyzej.")
     else:
+        # 1. Konwersja i usuwanie NaN
         baza_zdania['rozdzial'] = pd.to_numeric(baza_zdania['rozdzial'], errors='coerce')
         baza_zdania = baza_zdania.dropna(subset=['rozdzial'])
         
-        min_r = int(baza_zdania['rozdzial'].min())
-        max_r = int(baza_zdania['rozdzial'].max())
+        # 2. DODATKOWE ZABEZPIECZENIE: Sprawdzenie, czy po czyszczeniu cokolwiek zostało
+        if baza_zdania.empty:
+            st.error("Błąd: Kolumna 'rozdzial' nie zawiera żadnych poprawnych numerów rozdziałów.")
+        else:
+            # Teraz wywołanie min() i max() jest w 100% bezpieczne
+            min_r = int(baza_zdania['rozdzial'].min())
+            max_r = int(baza_zdania['rozdzial'].max())
 
-        nr_roz = min_r
-        # UNIKALNY KLUCZ: "s_slider_w"
-        if min_r < max_r:
-            nr_roz = st.slider("Wybierz rozdzial", min_r, max_r, key="s_slider_w")
+            nr_roz = min_r
+            # UNIKALNY KLUCZ: "s_slider_w"
+            if min_r < max_r:
+                nr_roz = st.slider("Wybierz rozdzial", min_r, max_r, key="s_slider_w")
 
-        dane_roz = baza_zdania[baza_zdania['rozdzial'] == nr_roz]
+            dane_roz = baza_zdania[baza_zdania['rozdzial'] == nr_roz]
         # UNIKALNY KLUCZ: "mode_s_w"
         tryb_s = st.radio("Wybierz tryb pracy:", ["Nauka", "Quiz"], horizontal=True, key="mode_s_w")
 
