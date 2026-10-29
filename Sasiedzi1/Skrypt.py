@@ -40,7 +40,7 @@ def load_words():
 
 # Wywołanie funkcji
 baza_slowa = load_words()
-baza_zdania = None()
+baza_zdania = None
 
 if 'score' not in st.session_state:
     st.session_state.score = 0
