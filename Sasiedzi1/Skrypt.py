@@ -39,7 +39,7 @@ def load_words():
         
 @st.cache_data(ttl=3600)
 def load_sentences():
-       try:
+    try:
         # Bezpieczne sprawdzenie i pobranie tokenu bez używania metody .get()
         token = None
         if "HF_TOKEN" in st.secrets:
@@ -63,10 +63,10 @@ def load_sentences():
         dane.columns = dane.columns.str.strip()
         return dane
         
-        except Exception as e:
-            # W razie jakiegokolwiek innego błędu, Streamlit pokaże go na ekranie, ułatwiając debugowanie
-            st.error(f"Błąd krytyczny pobierania: {e}")
-            return pd.DataFrame(columns=['rozdzial', 'polski', 'czeski', 'słowacki', 'węgierski', 'rumuński', 'łotewski'])
+    except Exception as e:
+        # W razie jakiegokolwiek innego błędu, Streamlit pokaże go na ekranie, ułatwiając debugowanie
+        st.error(f"Błąd krytyczny pobierania zdań: {e}")
+        return pd.DataFrame(columns=['rozdzial', 'polski', 'czeski', 'słowacki', 'węgierski', 'rumuński', 'łotewski'])
 
 # Wywołanie funkcji
 baza_slowa = load_words()
