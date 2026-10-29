@@ -39,24 +39,34 @@ def load_words():
         
 @st.cache_data(ttl=3600)
 def load_sentences():
-    # Sprawdzamy najpierw, czy plik w ogóle istnieje lokalnie, żeby uniknąć rzucania błędem w trybie deweloperskim
-    if not os.path.exists("jezyki_zdania.csv"):
-        return pd.DataFrame()  # Zwraca pustą tabelę, jeśli pliku jeszcze nie ma
+       try:
+        # Bezpieczne sprawdzenie i pobranie tokenu bez używania metody .get()
+        token = None
+        if "HF_TOKEN" in st.secrets:
+            token = st.secrets["HF_TOKEN"]
+        elif os.getenv("HF_TOKEN"):
+            token = os.getenv("HF_TOKEN")
         
-    try:
-        naglowki = list(pd.read_csv("jezyki_zdania.csv", nrows=0).columns)
-        dane = pd.read_csv(
-            "jezyki_zdania.csv",
-            sep=',',
-            encoding='utf-8-sig',
-            usecols=range(len(naglowki))
+        if not token:
+            st.warning("Brak tokenu HF_TOKEN w sekretach aplikacji (w pliku secrets.toml lub ustawieniach chmury).")
+
+        # Pobranie pliku z prywatnego repozytorium do cache lokalnego
+        lokalna_sciezka = hf_hub_download(
+            repo_id="Radar1111/Sasiedzi1",
+            filename="jezyki_zdania.csv",
+            repo_type="dataset",
+            token=token
         )
+        
+        # Odczyt pliku przez Pandas
+        dane = pd.read_csv(lokalna_sciezka, sep=',', encoding='utf-8-sig')
         dane.columns = dane.columns.str.strip()
         return dane
+        
     except Exception as e:
-        st.error(f"Problem z plikiem zdań: {e}")
-        return pd.DataFrame()
-
+        # W razie jakiegokolwiek innego błędu, Streamlit pokaże go na ekranie, ułatwiając debugowanie
+        st.error(f"Błąd krytyczny pobierania: {e}")
+        return pd.DataFrame(columns=['rozdzial', 'polski', 'czeski', 'słowacki', 'węgierski', 'rumuński', 'łotewski'])
 
 # Wywołanie funkcji
 baza_slowa = load_words()
