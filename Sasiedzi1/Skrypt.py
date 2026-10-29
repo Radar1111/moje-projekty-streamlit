@@ -262,7 +262,7 @@ with tab_slowka:
 with tab_zdania:
     if baza_zdania.empty:
     st.warning("Tabela zdań jest pusta lub plik CSV nie został wczytany.")
-else:
+    else:
     baza_zdania["rozdzial"] = pd.to_numeric(
         baza_zdania["rozdzial"], errors="coerce"
     )
