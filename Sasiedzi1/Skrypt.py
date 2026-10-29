@@ -263,6 +263,14 @@ with tab_zdania:
     if baza_zdania.empty:
         st.warning("Tabela zdań jest pusta lub plik CSV nie został wczytany.")
     else:
+        st.subheader("Diagnoza kolumny 'rozdzial'")
+st.write("Dostępne kolumny w pliku:", list(baza_zdania.columns))
+if "rozdzial" in baza_zdania.columns:
+    st.write("Pierwsze 5 wartości w kolumnie:")
+    st.write(baza_zdania["rozdzial"].head().to_dict())
+    st.write("Typ danych kolumny:", str(baza_zdania["rozdzial"].dtype))
+else:
+    st.error("UWAGA: Brak kolumny o dokładnej nazwie 'rozdzial'!")
         baza_zdania["rozdzial"] = pd.to_numeric(
             baza_zdania["rozdzial"], errors="coerce"
     )
