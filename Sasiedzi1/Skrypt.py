@@ -59,7 +59,7 @@ def load_sentences():
         )
         
         # Odczyt pliku przez Pandas
-        dane = pd.read_csv(lokalna_sciezka, sep=',', encoding='utf-8-sig')
+        dane = pd.read_csv(lokalna_sciezka, sep=',', encoding='utf-8-sig', index_col=False)
         dane.columns = dane.columns.str.strip()
         return dane
         
