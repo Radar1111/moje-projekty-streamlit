@@ -263,6 +263,10 @@ with tab_zdania:
     if baza_zdania.empty:
         st.warning("Tabela jest pusta. Sprawdz komunikat bledu powyzej.")
     else:
+        # --- TYMCZASOWY DEBUGGER ---
+        st.write("Format kolumn przed konwersją:", baza_zdania.columns.tolist())
+        st.write("Pierwsze wiersze kolumny rozdzial:", baza_zdania['rozdzial'].head())
+        # ---------------------------
         # 1. Konwersja i usuwanie NaN
         baza_zdania['rozdzial'] = pd.to_numeric(baza_zdania['rozdzial'], errors='coerce')
         baza_zdania = baza_zdania.dropna(subset=['rozdzial'])
