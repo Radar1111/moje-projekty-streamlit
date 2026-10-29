@@ -37,43 +37,10 @@ def load_words():
         st.error(f"Błąd krytyczny pobierania: {e}")
         return pd.DataFrame(columns=['rozdzial', 'polski', 'czeski', 'słowacki', 'węgierski', 'rumuński', 'łotewski'])
         
-@st.cache_data(ttl=3600)
-def load_sentences():
-    try:
-        # Bezpieczne sprawdzenie i pobranie tokenu bez używania metody .get()
-        token = None
-        if "HF_TOKEN" in st.secrets:
-            token = st.secrets["HF_TOKEN"]
-        elif os.getenv("HF_TOKEN"):
-            token = os.getenv("HF_TOKEN")
-        
-        if not token:
-            st.warning("Brak tokenu HF_TOKEN w sekretach aplikacji (w pliku secrets.toml lub ustawieniach chmury).")
-
-        # Pobranie pliku z prywatnego repozytorium do cache lokalnego
-        lokalna_sciezka = hf_hub_download(
-            repo_id="Radar1111/Sasiedzi1",
-            filename="jezyki_zdania.csv",
-            repo_type="dataset",
-            token=token
-        )
-        
-        # Odczyt pliku przez Pandas
-        dane = pd.read_csv(lokalna_sciezka, sep=',', encoding='utf-8-sig')
-        dane.columns = dane.columns.str.strip()
-        return dane
-        
-    except Exception as e:
-        st.error(f"Błąd krytyczny pobierania zdań: {e}")
-        # Zwracamy pełną strukturę (12 kolumn), aby zapobiec przesunięciu danych
-        return pd.DataFrame(columns=[
-            'rozdzial', 'polski', 'czeski', 'czeski_wym', 'słowacki', 'słowacki_wym',
-            'węgierski', 'węgierski_wym', 'rumuński', 'rumuński_wym', 'łotewski', 'łotewski_wym'
-        ])
 
 # Wywołanie funkcji
 baza_slowa = load_words()
-baza_zdania = load_sentences()
+baza_zdania = None()
 
 if 'score' not in st.session_state:
     st.session_state.score = 0
@@ -262,109 +229,7 @@ with tab_slowka:
                         if st.button("Nastepne pytanie", use_container_width=True, type="primary", key="next_btn_w"):
                             del st.session_state.opcje_abcd_w
                             st.rerun()
-with tab_zdania:
-    # 1. WYMUSZAMY ŚWIEŻE WCZYTANIE PLIKU TYLKO DLA TEJ ZAKŁADKI
-    # Zmień "nazwa_pliku_ze_zdaniami.csv" na dokładną nazwę pliku na dysku/serwerze
-    baza_zdania_izolowana = pd.read_csv("nazwa_pliku_ze_zdaniami.csv", encoding="utf-8-sig")
 
-    if baza_zdania_izolowana.empty:
-        st.warning("Tabela ze zdaniami jest pusta. Sprawdź plik wejściowy.")
-    else:
-        # Bezpieczna konwersja typów danych na odizolowanej zmiennej
-        baza_zdania_izolowana['rozdzial'] = pd.to_numeric(baza_zdania_izolowana['rozdzial'], errors='coerce')
-        baza_zdania_izolowana = baza_zdania_izolowana.dropna(subset=['rozdzial'])
-        
-        if baza_zdania_izolowana.empty:
-            st.error("Krytyczny błąd: Kolumna 'rozdzial' nadal nie zawiera cyfr. Upewnij się, czy wczytujesz właściwy plik z dysku.")
-        else:
-            min_r = int(baza_zdania_izolowana['rozdzial'].min())
-            max_r = int(baza_zdania_izolowana['rozdzial'].max())
-
-            nr_roz = min_r
-            # UNIKALNY KLUCZ: "s_slider_z"
-            if min_r < max_r:
-                nr_roz = st.slider("Wybierz rozdzial", min_r, max_r, key="s_slider_z")
-
-            dane_roz = baza_zdania_izolowana[baza_zdania_izolowana['rozdzial'] == nr_roz]
-            # UNIKALNY KLUCZ: "mode_s_z"
-            tryb_s = st.radio("Wybierz tryb pracy:", ["Nauka", "Quiz"], horizontal=True, key="mode_s_z")
-
-            czysty_jezyk = kolumna_jezyk.get("slowo") if isinstance(kolumna_jezyk, dict) else kolumna_jezyk
-            kolumna_wymowa = kolumna_jezyk.get("wymowa") if isinstance(kolumna_jezyk, dict) else f"{czysty_jezyk}_wym"
-
-            if tryb_s == "Nauka":
-                kolumny_do_tabeli = ['polski']
-                if czysty_jezyk in dane_roz.columns:
-                    kolumny_do_tabeli.append(czysty_jezyk)
-                if kolumna_wymowa in dane_roz.columns:
-                    kolumny_do_tabeli.append(kolumna_wymowa)
-
-                if len(kolumny_do_tabeli) > 1:
-                    st.table(dane_roz[kolumny_do_tabeli])
-                else:
-                    st.error(f"Nie znaleziono kolumny '{czysty_jezyk}' w pliku CSV. Dostępne kolumny: {list(dane_roz.columns)}")
-            
-            else: # TRYB QUIZ (ABCD)
-                if 'total_z' not in st.session_state: st.session_state.total_z = 0
-                if 'score_z' not in st.session_state: st.session_state.score_z = 0
-
-                if st.session_state.get('last_id_z') != nr_roz or 'opcje_abcd_z' not in st.session_state:
-                    if dane_roz.empty:
-                        st.error("Brak danych dla tego rozdziału!")
-                    else:
-                        st.session_state.slowo_id_z = random.choice(dane_roz.index)
-                        st.session_state.last_id_z = nr_roz
-                        
-                        poprawna = str(dane_roz.loc[st.session_state.slowo_id_z, czysty_jezyk]).strip()
-                        
-                        inne_slowa = dane_roz[czysty_jezyk].dropna().astype(str).str.strip().unique()
-                        inne_slowa = [s for s in inne_slowa if s.lower() != poprawna.lower()]
-                        
-                        liczba_blednych = min(3, len(inne_slowa))
-                        bledne = random.sample(inne_slowa, liczba_blednych) if liczba_blednych > 0 else []
-                        
-                        wszystkie_opcje = bledne + [poprawna]
-                        random.shuffle(wszystkie_opcje)
-                        
-                        st.session_state.opcje_abcd_z = wszystkie_opcje
-                        st.session_state.poprawna_odp_z = poprawna
-                        st.session_state.wybrana_odp_z = None
-                        st.session_state.odpowiedziano_z = False
-
-                if 'slowo_id_z' in st.session_state and st.session_state.slowo_id_z in dane_roz.index:
-                    slowo_pl = dane_roz.loc[st.session_state.slowo_id_z, 'polski']
-
-                    with st.container(border=True):
-                        st.subheader(f"Jak przetlumaczysz: {slowo_pl}?")
-
-                        col1, col2 = st.columns(2)
-                        opcje = st.session_state.opcje_abcd_z
-                        
-                        for idx, opcja in enumerate(opcje):
-                            target_col = col1 if idx % 2 == 0 else col2
-                            
-                            if target_col.button(opcja, use_container_width=True, key=f"btn_opt_z_{idx}", disabled=st.session_state.odpowiedziano_z):
-                                st.session_state.wybrana_odp_z = opcja
-                                st.session_state.odpowiedziano_z = True
-                                
-                                st.session_state.total_z += 1
-                                if opcja.lower() == st.session_state.poprawna_odp_z.lower():
-                                    st.session_state.score_z += 1
-
-                        if st.session_state.wybrana_odp_z is not None:
-                            user_ans = st.session_state.wybrana_odp_z
-                            poprawna = st.session_state.poprawna_odp_z
-                            
-                            if user_ans.lower() == poprawna.lower():
-                                st.success(f"Prawidlowo! Wynik: {poprawna}")
-                            else:
-                                st.error(f"Blad. Twoja odpowiedź: '{user_ans}'. Prawidlowa odpowiedz to: {poprawna}")
-                            
-                            st.write(f"Twój wynik w quizie zdań: {st.session_state.score_z} / {st.session_state.total_z}")
-
-                            if st.button("Nastepne pytanie", use_container_width=True, type="primary", key="next_btn_z"):
-                                del st.session_state.opcje_abcd_z
-                                st.rerun()
 st.caption("Najcierpliwszy portal do nauki języków obcych")
 st.caption("Created by Radar | Software Development")
 st.caption("Grafika: Menorek | Youtuber")
