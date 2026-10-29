@@ -259,23 +259,31 @@ with tab_slowka:
                         if st.button("Nastepne pytanie", use_container_width=True, type="primary", key="next_btn_w"):
                             del st.session_state.opcje_abcd_w
                             st.rerun()
-with tab_zdania:
-    if baza_zdania.empty:
-        st.warning("Tabela zdań jest pusta lub plik CSV nie został wczytany.")
-    else:
-        # --- KOD DIAGNOSTYCZNY (Wewnątrz bloku else) ---
-        st.subheader("Diagnoza kolumny 'rozdzial'")
-        st.write("Dostępne kolumny w pliku:", list(baza_zdania.columns))
+else:
+        # --- FIX DLA ZŁOŻONEGO INDEKSU / KOLUMN ---
+        # 1. Jeśli indeks jest krotką (MultiIndex), resetujemy go do zwykłych liczb 0, 1, 2...
+        if isinstance(baza_zdania.index, pd.MultiIndex) or (
+            not baza_zdania.empty
+            and isinstance(baza_zdania.index[0], tuple)
+        ):
+            baza_zdania = baza_zdania.reset_index(drop=True)
 
-        if "rozdzial" in baza_zdania.columns:
-            st.write("Pierwsze 5 wartości w kolumnie:")
-            st.write(baza_zdania["rozdzial"].head().to_dict())
-            st.write("Typ danych kolumny:", str(baza_zdania["rozdzial"].dtype))
-        else:
-            st.error("UWAGA: Brak kolumny o dokładnej nazwie 'rozdzial'!")
-        # -----------------------------------------------
+        # 2. Jeśli kolumny są krotkami (MultiIndex), bierzemy tylko pierwszy poziom nazwy
+        if isinstance(baza_zdania.columns, pd.MultiIndex):
+            baza_zdania.columns = [col[0] for col in baza_zdania.columns]
 
-        # Konwersja na liczby
+        # 3. Dodatkowo upewniamy się, że w danych nie ma ukrytych spacji, a wartości są czystym tekstem
+        baza_zdania["rozdzial"] = (
+            baza_zdania["rozdzial"].astype(str).str.strip()
+        )
+
+        # 4. Jeśli w pliku zamiast "1" jest np. "Rozdział 1", wyciągamy samą cyfrę
+        baza_zdania["rozdzial"] = baza_zdania["rozdzial"].str.extract(
+            r"(\d+)"
+        )
+        # ------------------------------------------
+
+        # Teraz bezpiecznie wykonujemy resztę Twojego kodu:
         baza_zdania["rozdzial"] = pd.to_numeric(
             baza_zdania["rozdzial"], errors="coerce"
         )
@@ -283,7 +291,7 @@ with tab_zdania:
 
         if baza_zdania["rozdzial"].empty:
             st.error(
-                "Kolumna 'rozdzial' nie zawiera żadnych poprawnych wartości liczbowych!"
+                "Kolumna 'rozdzial' nadal nie zawiera poprawnych wartości liczbowych po naprawie!"
             )
         else:
             min_r = int(baza_zdania["rozdzial"].min())
@@ -295,7 +303,6 @@ with tab_zdania:
                     "Wybierz rozdzial", min_r, max_r, key="s_slider"
                 )
 
-            # Filtrujemy dane dla wybranego rozdziału
             dane_roz = baza_zdania[baza_zdania["rozdzial"] == nr_roz]
 
 
