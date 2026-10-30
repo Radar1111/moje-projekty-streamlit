@@ -216,69 +216,82 @@ with tab_zdania:
     if baza_zdania.empty:
         st.warning("Tabela zdań jest pusta. Sprawdź plik jezyki_zdania.csv na HF.")
     else:
-        baza_zdania['rozdzial'] = pd.to_numeric(baza_zdania['rozdzial'], errors='coerce')
-        baza_zdania = baza_zdania.dropna(subset=['rozdzial'])
+        # 1. Standaryzacja nazw kolumn na małe litery i usunięcie spacji (częsty problem w CSV)
+        baza_zdania.columns = baza_zdania.columns.str.strip().str.lower()
         
-        min_r_z = int(baza_zdania['rozdzial'].min())
-        max_r_z = int(baza_zdania['rozdzial'].max())
+        # 2. Konwersja na liczby i usunięcie wierszy bez prawidłowego rozdziału
+        baza_zdania['rozdzial'] = pd.to_numeric(baza_zdania['rozdzial'], errors='coerce')
+        dane_z_wazne = baza_zdania.dropna(subset=['rozdzial'])
+        
+        if dane_z_wazne.empty:
+            st.error("Brak poprawnych numerów rozdziałów w pliku ze zdaniami! Upewnij się, że kolumna nazywa się 'rozdzial' i zawiera liczby.")
+        else:
+            # 3. Bezpieczne pobranie min i max z oczyszczonej serii danych
+            min_r_z = int(dane_z_wazne['rozdzial'].min())
+            max_r_z = int(dane_z_wazne['rozdzial'].max())
 
-        nr_roz_z = min_r_z
-        if min_r_z < max_r_z:
-            nr_roz_z = st.slider("Wybierz rozdział (Zdania)", min_r_z, max_r_z, key="s_slider_z")
+            nr_roz_z = min_r_z
+            if min_r_z < max_r_z:
+                nr_roz_z = st.slider("Wybierz rozdział (Zdania)", min_r_z, max_r_z, key="s_slider_z")
 
-        dane_roz_z = baza_zdania[baza_zdania['rozdzial'] == nr_roz_z]
-        tryb_z = st.radio("Wybierz tryb pracy (Zdania):", ["Nauka", "Quiz"], horizontal=True, key="mode_z_w")
+            dane_roz_z = dane_z_wazne[dane_z_wazne['rozdzial'] == nr_roz_z]
+            tryb_z = st.radio("Wybierz tryb pracy (Zdania):", ["Nauka", "Quiz"], horizontal=True, key="mode_z_w")
 
-        if tryb_z == "Nauka":
-            kolumny_do_tabeli_z = ['polski']
-            if czysty_jezyk in dane_roz_z.columns: 
-                kolumny_do_tabeli_z.append(czysty_jezyk)
-            if kolumna_wymowa in dane_roz_z.columns: 
-                kolumny_do_tabeli_z.append(kolumna_wymowa)
-            st.table(dane_roz_z[kolumny_do_tabeli_z])
-            
-        else: # QUIZ ZDANIA
-            if dane_roz_z.empty:
-                st.error("Brak danych dla tego rozdziału!")
-            else:
-                if st.session_state.get('last_id_z') != nr_roz_z:
-                    st.session_state.last_id_z = nr_roz_z
-                    if 'opcje_abcd_z' in st.session_state: 
-                        del st.session_state.opcje_abcd_z
-                    st.session_state.quiz_answered_z = False
+            # Dopasowanie klucza języka do małych liter (ponieważ zrobiliśmy .str.lower() na kolumnach)
+            czysty_jezyk_lower = czysty_jezyk.lower() if czysty_jezyk else ""
+            kolumna_wymowa_lower = kolumna_wymowa.lower() if kolumna_wymowa else ""
 
-                if 'opcje_abcd_z' not in st.session_state:
-                    wybrany_wiersz_z = dane_roz_z.sample(n=1).iloc[0]
-                    st.session_state.pytanie_pl_z = str(wybrany_wiersz_z['polski']).strip()
-                    st.session_state.poprawna_odp_z = str(wybrany_wiersz_z[czysty_jezyk]).strip()
-                    
-                    pula_z = dane_roz_z[czysty_jezyk].dropna().astype(str).str.strip().unique()
-                    bledne_z = [o for o in pula_z if o.lower() != st.session_state.poprawna_odp_z.lower()]
-                    wylosowane_bledne_z = random.sample(bledne_z, min(3, len(bledne_z))) if bledne_z else []
-                    
-                    wszystkie_opcje_z = wylosowane_bledne_z + [st.session_state.poprawna_odp_z]
-                    random.shuffle(wszystkie_opcje_z)
-                    st.session_state.opcje_abcd_z = wszystkie_opcje_z
-                    st.session_state.quiz_answered_z = False
+            if tryb_z == "Nauka":
+                kolumny_do_tabeli_z = ['polski']
+                if czysty_jezyk_lower in dane_roz_z.columns: 
+                    kolumny_do_tabeli_z.append(czysty_jezyk_lower)
+                if kolumna_wymowa_lower in dane_roz_z.columns: 
+                    kolumny_do_tabeli_z.append(kolumna_wymowa_lower)
+                st.table(dane_roz_z[kolumny_do_tabeli_z])
+                
+            else: # QUIZ ZDANIA
+                if dane_roz_z.empty:
+                    st.error("Brak danych dla tego rozdziału!")
+                else:
+                    if st.session_state.get('last_id_z') != nr_roz_z:
+                        st.session_state.last_id_z = nr_roz_z
+                        if 'opcje_abcd_z' in st.session_state: 
+                            del st.session_state.opcje_abcd_z
+                        st.session_state.quiz_answered_z = False
 
-                st.subheader(f"Jak przetłumaczysz zdanie: **{st.session_state.pytanie_pl_z}**?")
+                    if 'opcje_abcd_z' not in st.session_state:
+                        # Poprawione losowanie pojedynczego wiersza za pomocą .sample(1).iloc[0]
+                        wybrany_wiersz_z = dane_roz_z.sample(n=1).iloc[0]
+                        st.session_state.pytanie_pl_z = str(wybrany_wiersz_z['polski']).strip()
+                        st.session_state.poprawna_odp_z = str(wybrany_wiersz_z[czysty_jezyk_lower]).strip()
+                        
+                        pula_z = dane_roz_z[czysty_jezyk_lower].dropna().astype(str).str.strip().unique()
+                        bledne_z = [o for o in pula_z if o.lower() != st.session_state.poprawna_odp_z.lower()]
+                        wylosowane_bledne_z = random.sample(bledne_z, min(3, len(bledne_z))) if bledne_z else []
+                        
+                        wszystkie_opcje_z = wylosowane_bledne_z + [st.session_state.poprawna_odp_z]
+                        random.shuffle(wszystkie_opcje_z)
+                        st.session_state.opcje_abcd_z = wszystkie_opcje_z
+                        st.session_state.quiz_answered_z = False
 
-                with st.form(key="quiz_form_z"):
-                    wybrana_odp_z = st.radio("Wybierz odpowiedź:", st.session_state.opcje_abcd_z, key="radio_odp_z")
-                    if st.form_submit_button("Sprawdź", use_container_width=True) and not st.session_state.quiz_answered_z:
-                        st.session_state.total += 1
-                        st.session_state.quiz_answered_z = True
-                        if wybrana_odp_z == st.session_state.poprawna_odp_z:
-                            st.session_state.score += 1
-                            st.success("🎉 Poprawna odpowiedź!")
-                        else:
-                            st.error(f"❌ Błąd! Poprawna odpowiedź to: {st.session_state.poprawna_odp_z}")
+                    st.subheader(f"Jak przetłumaczysz zdanie: **{st.session_state.pytanie_pl_z}**?")
 
-                if st.session_state.quiz_answered_z and st.button("Następne zdanie ➡️", use_container_width=True):
-                    if 'opcje_abcd_z' in st.session_state: 
-                        del st.session_state.opcje_abcd_z
-                    st.session_state.quiz_answered_z = False
-                    st.rerun()
+                    with st.form(key="quiz_form_z"):
+                        wybrana_odp_z = st.radio("Wybierz odpowiedź:", st.session_state.opcje_abcd_z, key="radio_odp_z")
+                        if st.form_submit_button("Sprawdź", use_container_width=True) and not st.session_state.quiz_answered_z:
+                            st.session_state.total += 1
+                            st.session_state.quiz_answered_z = True
+                            if wybrana_odp_z == st.session_state.poprawna_odp_z:
+                                st.session_state.score += 1
+                                st.success("🎉 Poprawna odpowiedź!")
+                            else:
+                                st.error(f"❌ Błąd! Poprawna odpowiedź to: {st.session_state.poprawna_odp_z}")
+
+                    if st.session_state.quiz_answered_z and st.button("Następne zdanie ➡️", use_container_width=True):
+                        if 'opcje_abcd_z' in st.session_state: 
+                            del st.session_state.opcje_abcd_z
+                        st.session_state.quiz_answered_z = False
+                        st.rerun()
 
 st.caption("Najcierpliwszy portal do nauki języków obcych")
 st.caption("Created by Radar | Software Development")
