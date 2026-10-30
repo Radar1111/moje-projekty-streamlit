@@ -70,7 +70,7 @@ def load_sentences():
 
 # Wywołanie funkcji
 baza_slowa = load_words()
-baza_zdania = None
+baza_zdania = load_sentences()
 
 if 'score' not in st.session_state:
     st.session_state.score = 0
