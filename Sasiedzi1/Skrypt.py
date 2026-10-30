@@ -37,38 +37,11 @@ def load_words():
         st.error(f"Błąd krytyczny pobierania: {e}")
         return pd.DataFrame(columns=['rozdzial', 'polski', 'czeski', 'słowacki', 'węgierski', 'rumuński', 'łotewski'])
         
-def load_sentences():
-    try:
-        token = None
-        if "HF_TOKEN" in st.secrets:
-            token = st.secrets["HF_TOKEN"]
-        elif os.getenv("HF_TOKEN"):
-            token = os.getenv("HF_TOKEN")
-        
-        if not token:
-            st.warning("Brak tokenu HF_TOKEN w sekretach aplikacji.")
 
-        lokalna_sciezka = hf_hub_download(
-            repo_id="Radar1111/Sasiedzi1",
-            filename="jezyki_zdania.csv",
-            repo_type="dataset",
-            token=token
-        )
-        
-        dane = pd.read_csv(lokalna_sciezka, sep=',', encoding='utf-8-sig')
-        
-        # Bardzo dokładne oczyszczenie nagłówków z ukrytych znaków i spacji
-        dane.columns = dane.columns.str.strip().str.replace('﻿', '', regex=False)
-        return dane
-        
-    except Exception as e:
-        st.error(f"Błąd krytyczny pobierania zdań: {e}")
-        return pd.DataFrame(columns=['rozdzial', 'polski', 'czeski'])
-        
 
 # Wywołanie funkcji
 baza_slowa = load_words()
-baza_zdania = load_sentences()
+baza_zdania = None
 
 if 'score' not in st.session_state:
     st.session_state.score = 0
@@ -258,82 +231,7 @@ with tab_slowka:
                             del st.session_state.opcje_abcd_w
                             st.rerun()
 
-with tab_zdania:
-    # 1. Wyciągamy czysty tekst ze słownika kolumna_jezyk
-    czysty_jezyk_z = kolumna_jezyk.get("slowo") if isinstance(kolumna_jezyk, dict) else kolumna_jezyk
-    kolumna_wymowa_z = kolumna_jezyk.get("wymowa") if isinstance(kolumna_jezyk, dict) else f"{czysty_jezyk_z}_wym"
 
-    # 2. Tworzymy lokalną kopię danych roboczych, aby nie uszkodzić bazy globalnej
-    df_zdania_robocze = baza_zdania.copy()
-
-    if df_zdania_robocze.empty:
-        st.warning("Tabela zdań jest pusta lub plik CSV nie został wczytany.")
-    elif czysty_jezyk_z not in df_zdania_robocze.columns:
-        st.error(f"Nie znaleziono kolumny '{czysty_jezyk_z}' w pliku zdań. Dostępne kolumny: {list(df_zdania_robocze.columns)}")
-    else:
-        # 3. Bezpieczna konwersja na liczby na kopii danych
-        df_zdania_robocze['rozdzial'] = pd.to_numeric(df_zdania_robocze['rozdzial'], errors='coerce')
-        df_zdania_robocze = df_zdania_robocze.dropna(subset=['rozdzial'])
-
-        # 4. Wyznaczenie zakresu suwaka
-        min_z = int(df_zdania_robocze['rozdzial'].min())
-        max_z = int(df_zdania_robocze['rozdzial'].max())
-
-        nr_roz_z = min_z
-        if min_z < max_z:
-            nr_roz_z = st.slider("Wybierz rozdział dla zdań", min_z, max_z, key="z_slider")
-
-        # Filtrowanie wybranego rozdziału
-        dane_roz_z = df_zdania_robocze[df_zdania_robocze['rozdzial'] == nr_roz_z]
-        
-        if dane_roz_z.empty:
-            st.info(f"Brak zdań przypisanych do rozdziału {nr_roz_z}.")
-        else:
-            tryb_z = st.radio("Wybierz tryb pracy dla zdań:", ["Nauka", "Quiz ABCD"], horizontal=True, key="mode_z")
-
-            if tryb_z == "Nauka":
-                widoczne_kolumny_z = ['polski', czysty_jezyk_z]
-                if kolumna_wymowa_z in dane_roz_z.columns:
-                    widoczne_kolumny_z.append(kolumna_wymowa_z)
-                st.table(dane_roz_z[widoczne_kolumny_z])
-            else:
-                # TRYB QUIZ ABCD
-                if (st.session_state.get('last_id_z') != nr_roz_z or
-                        st.session_state.get('last_lang_z') != czysty_jezyk_z or
-                        st.session_state.get('zdanie_id') not in dane_roz_z.index):
-                    st.session_state.zdanie_id = random.choice(dane_roz_z.index)
-                    st.session_state.last_id_z = nr_roz_z
-                    st.session_state.last_lang_z = czysty_jezyk_z  
-                    poprawna_z = str(df_zdania_robocze.loc[st.session_state.zdanie_id, czysty_jezyk_z]).strip()
-                    st.session_state.opcje_z = generuj_opcje(dane_roz_z, poprawna_z, czysty_jezyk_z)
-
-                zdanie_pl = df_zdania_robocze.loc[st.session_state.zdanie_id, 'polski']
-                poprawna_z = str(df_zdania_robocze.loc[st.session_state.zdanie_id, czysty_jezyk_z]).strip()
-
-                with st.container(border=True):
-                    st.subheader(f"Jak przetłumaczysz zdanie: {zdanie_pl}?")
-
-                    wybor_z = st.radio("Wybierz poprawna odpowiedz:", st.session_state.opcje_z, key="radio_z", index=None)
-
-                    c1, c2 = st.columns(2)
-                    if c1.button("Sprawdź", key="chk_z", use_container_width=True, disabled=(wybor_z is None)):
-                        st.session_state.total += 1
-                        if wybor_z == poprawna_z:
-                            st.success(f"Prawidłowo! Odpowiedź to: {poprawna_z}")
-                            st.session_state.score += 1
-                        else:
-                            st.error(f"Błąd. Twoja odpowiedź: {wybor_z}. Prawidłowa to: {poprawna_z}")
-
-                        st.session_state.zdanie_id = random.choice(dane_roz_z.index)
-                        poprawna_nowa_z = str(df_zdania_robocze.loc[st.session_state.zdanie_id, czysty_jezyk_z]).strip()
-                        st.session_state.opcje_z = generuj_opcje(dane_roz_z, poprawna_nowa_z, czysty_jezyk_z)
-                        st.rerun()
-
-                    if c2.button("Następne (Pomiń)", key="nxt_z", use_container_width=True):
-                        st.session_state.zdanie_id = random.choice(dane_roz_z.index)
-                        poprawna_nowa_z = str(df_zdania_robocze.loc[st.session_state.zdanie_id, czysty_jezyk_z]).strip()
-                        st.session_state.opcje_z = generuj_opcje(dane_roz_z, poprawna_nowa_z, czysty_jezyk_z)
-                        st.rerun()
 st.caption("Najcierpliwszy portal do nauki języków obcych")
 st.caption("Created by Radar | Software Development")
 st.caption("Grafika: Menorek | Youtuber")
