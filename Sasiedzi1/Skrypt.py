@@ -39,7 +39,6 @@ def load_words():
         
 def load_sentences():
     try:
-        # Bezpieczne sprawdzenie i pobranie tokenu bez używania metody .get()
         token = None
         if "HF_TOKEN" in st.secrets:
             token = st.secrets["HF_TOKEN"]
@@ -47,9 +46,8 @@ def load_sentences():
             token = os.getenv("HF_TOKEN")
         
         if not token:
-            st.warning("Brak tokenu HF_TOKEN w sekretach aplikacji (w pliku secrets.toml lub ustawieniach chmury).")
+            st.warning("Brak tokenu HF_TOKEN w sekretach aplikacji.")
 
-        # Pobranie pliku z prywatnego repozytorium do cache lokalnego
         lokalna_sciezka = hf_hub_download(
             repo_id="Radar1111/Sasiedzi1",
             filename="jezyki_zdania.csv",
@@ -57,15 +55,15 @@ def load_sentences():
             token=token
         )
         
-        # Odczyt pliku przez Pandas
         dane = pd.read_csv(lokalna_sciezka, sep=',', encoding='utf-8-sig')
-        dane.columns = dane.columns.str.strip()
+        
+        # Bardzo dokładne oczyszczenie nagłówków z ukrytych znaków i spacji
+        dane.columns = dane.columns.str.strip().str.replace('﻿', '', regex=False)
         return dane
         
     except Exception as e:
-        # W razie jakiegokolwiek innego błędu, Streamlit pokaże go na ekranie, ułatwiając debugowanie
-        st.error(f"Błąd krytyczny pobierania: {e}")
-        return pd.DataFrame(columns=['rozdzial', 'polski', 'czeski', 'słowacki', 'węgierski', 'rumuński', 'łotewski'])
+        st.error(f"Błąd krytyczny pobierania zdań: {e}")
+        return pd.DataFrame(columns=['rozdzial', 'polski', 'czeski'])
         
 
 # Wywołanie funkcji
