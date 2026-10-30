@@ -271,64 +271,78 @@ with tab_zdania:
     elif czysty_jezyk_z not in baza_zdania.columns:
         st.error(f"Nie znaleziono kolumny '{czysty_jezyk_z}' w pliku zdań.")
     else:
+        # 1. Konwersja na liczby i usunięcie pustych wartości
         baza_zdania['rozdzial'] = pd.to_numeric(baza_zdania['rozdzial'], errors='coerce')
         baza_zdania = baza_zdania.dropna(subset=['rozdzial'])
 
-        min_z = int(baza_zdania['rozdzial'].min())
-        max_z = int(baza_zdania['rozdzial'].max())
+        # Domyślne wartości na wypadek braku rozdziałów
+        min_z = 1
+        max_z = 1
+
+        # 2. BEZPIECZNE SPRAWDZENIE: Wyznaczamy min i max tylko, jeśli tabela nie jest pusta
+        if not baza_zdania.empty:
+            min_z = int(baza_zdania['rozdzial'].min())
+            max_z = int(baza_zdania['rozdzial'].max())
 
         nr_roz_z = min_z
+        
+        # Wyświetlamy suwak tylko, jeśli mamy do wyboru różne rozdziały
         if min_z < max_z:
             nr_roz_z = st.slider("Wybierz rozdział", min_z, max_z, key="z_slider")
+        elif baza_zdania.empty:
+            st.warning("Brak poprawnych numerów rozdziałów w pliku zdań.")
 
         dane_roz_z = baza_zdania[baza_zdania['rozdzial'] == nr_roz_z]
-        tryb_z = st.radio("Wybierz tryb pracy:", ["Nauka", "Quiz ABCD"], horizontal=True, key="mode_z")
-
-        if tryb_z == "Nauka":
-            # POPRAWKA: Używamy czystego tekstu jako nazwy kolumny
-            widoczne_kolumny_z = ['polski', czysty_jezyk_z]
-            if kolumna_wymowa_z in dane_roz_z.columns:
-                widoczne_kolumny_z.append(kolumna_wymowa_z)
-            st.table(dane_roz_z[widoczne_kolumny_z])
+        
+        # 3. Dodatkowe zabezpieczenie przed pustym rozdziałem
+        if dane_roz_z.empty:
+            st.info("Brak zdań przypisanych do tego rozdziału.")
         else:
-            # POPRAWKA: Porównujemy tekst (czysty_jezyk_z) w session_state zamiast słownika
-            if (st.session_state.get('last_id_z') != nr_roz_z or
-                    st.session_state.get('last_lang_z') != czysty_jezyk_z or
-                    st.session_state.get('zdanie_id') not in dane_roz_z.index):
-                st.session_state.zdanie_id = random.choice(dane_roz_z.index)
-                st.session_state.last_id_z = nr_roz_z
-                st.session_state.last_lang_z = czysty_jezyk_z  # Zapisujemy czysty tekst
+            tryb_z = st.radio("Wybierz tryb pracy:", ["Nauka", "Quiz ABCD"], horizontal=True, key="mode_z")
+
+            if tryb_z == "Nauka":
+                widoczne_kolumny_z = ['polski', czysty_jezyk_z]
+                if kolumna_wymowa_z in dane_roz_z.columns:
+                    widoczne_kolumny_z.append(kolumna_wymowa_z)
+                st.table(dane_roz_z[widoczne_kolumny_z])
+            else:
+                # POPRAWKA: Sprawdzamy czy zmienił się rozdział LUB język LUB nie ma wylosowanego zdania
+                if (st.session_state.get('last_id_z') != nr_roz_z or
+                        st.session_state.get('last_lang_z') != czysty_jezyk_z or
+                        st.session_state.get('zdanie_id') not in dane_roz_z.index):
+                    st.session_state.zdanie_id = random.choice(dane_roz_z.index)
+                    st.session_state.last_id_z = nr_roz_z
+                    st.session_state.last_lang_z = czysty_jezyk_z  
+                    poprawna_z = str(baza_zdania.loc[st.session_state.zdanie_id, czysty_jezyk_z]).strip()
+                    st.session_state.opcje_z = generuj_opcje(dane_roz_z, poprawna_z, czysty_jezyk_z)
+
+                zdanie_pl = baza_zdania.loc[st.session_state.zdanie_id, 'polski']
                 poprawna_z = str(baza_zdania.loc[st.session_state.zdanie_id, czysty_jezyk_z]).strip()
-                st.session_state.opcje_z = generuj_opcje(dane_roz_z, poprawna_z, czysty_jezyk_z)
 
-            zdanie_pl = baza_zdania.loc[st.session_state.zdanie_id, 'polski']
-            poprawna_z = str(baza_zdania.loc[st.session_state.zdanie_id, czysty_jezyk_z]).strip()
+                with st.container(border=True):
+                    st.subheader(f"Jak przetłumaczysz zdanie: {zdanie_pl}?")
 
-            with st.container(border=True):
-                st.subheader(f"Jak przetłumaczysz zdanie: {zdanie_pl}?")
+                    wybor_z = st.radio("Wybierz poprawna odpowiedz:", st.session_state.opcje_z, key="radio_z", index=None)
 
-                wybor_z = st.radio("Wybierz poprawna odpowiedz:", st.session_state.opcje_z, key="radio_z", index=None)
+                    c1, c2 = st.columns(2)
+                    if c1.button("Sprawdź", key="chk_z", use_container_width=True, disabled=(wybor_z is None)):
+                        st.session_state.total += 1
+                        if wybor_z == poprawna_z:
+                            st.success(f"Prawidłowo! Odpowiedź to: {poprawna_z}")
+                            st.session_state.score += 1
+                        else:
+                            st.error(f"Błąd. Twoja odpowiedź: {wybor_z}. Prawidłowa to: {poprawna_z}")
 
-                c1, c2 = st.columns(2)
-                if c1.button("Sprawdź", key="chk_z", use_container_width=True, disabled=(wybor_z is None)):
-                    st.session_state.total += 1
-                    if wybor_z == poprawna_z:
-                        st.success(f"Prawidłowo! Odpowiedź to: {poprawna_z}")
-                        st.session_state.score += 1
-                    else:
-                        st.error(f"Błąd. Twoja odpowiedź: {wybor_z}. Prawidłowa to: {poprawna_z}")
+                        st.session_state.zdanie_id = random.choice(dane_roz_z.index)
+                        poprawna_nowa_z = str(baza_zdania.loc[st.session_state.zdanie_id, czysty_jezyk_z]).strip()
+                        st.session_state.opcje_z = generuj_opcje(dane_roz_z, poprawna_nowa_z, czysty_jezyk_z)
+                        st.rerun()
 
-                    st.session_state.zdanie_id = random.choice(dane_roz_z.index)
-                    poprawna_nowa_z = str(baza_zdania.loc[st.session_state.zdanie_id, czysty_jezyk_z]).strip()
-                    st.session_state.opcje_z = generuj_opcje(dane_roz_z, poprawna_nowa_z, czysty_jezyk_z)
-                    st.rerun()
-
-                if c2.button("Następne (Pomiń)", key="nxt_z", use_container_width=True):
-                    st.session_state.zdanie_id = random.choice(dane_roz_z.index)
-                    poprawna_nowa_z = str(baza_zdania.loc[st.session_state.zdanie_id, czysty_jezyk_z]).strip()
-                    st.session_state.opcje_z = generuj_opcje(dane_roz_z, poprawna_nowa_z, czysty_jezyk_z)
-                    st.rerun()
-
+                    if c2.button("Następne (Pomiń)", key="nxt_z", use_container_width=True):
+                        st.session_state.zdanie_id = random.choice(dane_roz_z.index)
+                        poprawna_nowa_z = str(baza_zdania.loc[st.session_state.zdanie_id, czysty_jezyk_z]).strip()
+                        st.session_state.opcje_z = generuj_opcje(dane_roz_z, poprawna_nowa_z, czysty_jezyk_z)
+                        st.rerun()
 st.caption("Najcierpliwszy portal do nauki języków obcych")
 st.caption("Created by Radar | Software Development")
 st.caption("Grafika: Menorek | Youtuber")
