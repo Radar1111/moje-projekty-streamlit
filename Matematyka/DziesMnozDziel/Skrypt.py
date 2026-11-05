@@ -205,6 +205,12 @@ if st.button("Sprawdź odpowiedź", type="primary"):
 if st.checkbox("Pokaż wyjaśnienie krok po kroku"):
     st.info(wyjasnienie)
 
+# --- STOPKA ---
+st.divider()
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
+
 # Przycisk nowego zadania
 if st.button("Następne zadanie ➡️"):
     generuj_nowe_zadanie()
