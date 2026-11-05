@@ -325,3 +325,9 @@ elif menu == "📝 Quiz Sprawdzający":
             st.info(f"Dobry wynik! Przejrzyj jeszcze raz pytania, w których pojawił się błąd: {bledne_pytania}")
         else:
             st.warning(f"Warto jeszcze poćwiczyć teorię. Błędy pojawiły się w pytaniach: {bledne_pytania}")
+
+# --- STOPKA ---
+st.divider()
+st.caption("Created by Radar | Software Development")
+st.caption("Grafika: Menorek | Youtuber")
+st.caption("Tester: Bat0nik")
