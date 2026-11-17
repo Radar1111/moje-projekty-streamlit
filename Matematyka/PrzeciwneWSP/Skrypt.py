@@ -72,9 +72,9 @@ def napraw_skladnie(tekst):
     return tekst
 
 
-# =========================================================================
+
 # 📝 MULTI-BRUDNOPIS W SIDEBARZE
-# =========================================================================
+
 st.sidebar.header("📝 Brudnopis Ucznia")
 from streamlit_drawable_canvas import st_canvas
 
@@ -110,9 +110,9 @@ with zakladka_pisz:
     )
     st.button("Wyczyść notatnik 🧹", on_click=czysc_notatnik, use_container_width=True)
 
-# =========================================================================
-# 🧮 GŁÓWNA LOGIKA MATEMATYCZNA
-# =========================================================================
+
+# 🧮 GŁÓWNA LOGIKA 
+
 x, y = sp.symbols('x y')
 
 st.write("Wpisz równania w postaci standardowej (przyrównane do zera).")
@@ -145,12 +145,12 @@ if st.button("Rozwiąż układ metodą przeciwnych współczynników", type="pri
         b2 = eq2.coeff(y)
         c2 = eq2.subs({x: 0, y: 0})
 
-        # =========================================================================
-        # KROK 1: Analiza i doprowadzenie do przeciwnych współczynników
-        # =========================================================================
+        
+        # Analiza i doprowadzenie do przeciwnych współczynników
+        
         st.subheader("📝 Krok 1: Szukanie przeciwnych współczynników")
 
-        # Wskazówka dydaktyczna dla użytkownika
+        # Wskazówka dydaktyczna 
         with st.expander("💡 Wskazówka: Dlaczego najpierw usuwamy zmienną y?"):
             st.write(
                 "W metodzie przeciwnych współczynników kolejność eliminacji niewiadomych **nie ma znaczenia** – "
@@ -163,7 +163,7 @@ if st.button("Rozwiąż układ metodą przeciwnych współczynników", type="pri
 
         if W == 0:
             Wx = c1 * b2 - c2 * b1
-            Wy = a1 * c2 - a2 * c1  # Poprawiono literówkę oraz wzór (a1 zamiast a2)
+            Wy = a1 * c2 - a2 * c1  )
             if Wx == 0 and Wy == 0:
                 st.error("Układ ma nieskończenie wiele rozwiązań (układ tożsamościowy).")
             else:
@@ -173,7 +173,7 @@ if st.button("Rozwiąż układ metodą przeciwnych współczynników", type="pri
 
             # Sprawdzamy, czy układ ma obie zmienne w obu równaniach, czy jedna już jest wyeliminowana
             if b1 != 0 and b2 != 0:
-                # Celujemy w eliminację zmiennej y
+                # Eliminacja zmiennej y
                 # Szukamy najmniejszej wspólnej wielokrotności (NWW) dla współczynników przy y
                 nww_y = sp.lcm(abs(b1), abs(b2))
 
@@ -194,9 +194,9 @@ if st.button("Rozwiąż układ metodą przeciwnych współczynników", type="pri
                 st.latex(
                     r"\begin{cases} " + sp.latex(eq1_nowe) + r" = 0 \\ " + sp.latex(eq2_nowe) + r" = 0 \end{cases}")
 
-                # =========================================================================
-                # KROK 2: Dodawanie równań stronami i wyznaczenie x
-                # =========================================================================
+                
+                # Dodawanie równań stronami i wyznaczenie x
+                
                 st.subheader("➕ Krok 2: Dodawanie równań stronami")
                 rownanie_x = sp.simplify(eq1_nowe + eq2_nowe)
                 st.write("Po dodaniu obu równań stronami zmienna $y$ się redukuje i otrzymujemy:")
@@ -206,9 +206,9 @@ if st.button("Rozwiąż układ metodą przeciwnych współczynników", type="pri
                 rozw_x = sp.solve(rownanie_x, x)[0]
                 st.latex(f"x = {sp.latex(rozw_x)}")
 
-                # =========================================================================
-                # KROK 3: Podstawienie x i wyznaczenie y
-                # =========================================================================
+                
+                # Podstawienie x i wyznaczenie y
+                
                 st.subheader("🔄 Krok 3: Obliczenie drugiej niewiadomej ($y$)")
                 rownanie_y = eq1.subs(x, rozw_x)
                 st.write("Podstawiamy obliczony $x$ do pierwszego równania wyjściowego:")
@@ -224,9 +224,9 @@ if st.button("Rozwiąż układ metodą przeciwnych współczynników", type="pri
                 rozw_x = rozwiazanie[x]
                 rozw_y = rozwiazanie[y]
 
-            # =========================================================================
-            # KROK 4: Podsumowanie wyniku
-            # =========================================================================
+            
+            # Podsumowanie wyniku
+            
             st.subheader("✅ Ostateczne rozwiązanie układu:")
             st.success(f"Rozwiązaniem układu równań jest para liczb: **x = {rozw_x}** oraz **y = {rozw_y}**")
             st.latex(r"\begin{cases} x = " + sp.latex(rozw_x) + r" \\ y = " + sp.latex(rozw_y) + r" \end{cases}")
