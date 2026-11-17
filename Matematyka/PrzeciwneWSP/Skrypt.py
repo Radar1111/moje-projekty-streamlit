@@ -163,7 +163,7 @@ if st.button("Rozwiąż układ metodą przeciwnych współczynników", type="pri
 
         if W == 0:
             Wx = c1 * b2 - c2 * b1
-            Wy = a1 * c2 - a2 * c1  )
+            Wy = a1 * c2 - a2 * c1  
             if Wx == 0 and Wy == 0:
                 st.error("Układ ma nieskończenie wiele rozwiązań (układ tożsamościowy).")
             else:
