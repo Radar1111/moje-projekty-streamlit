@@ -6,7 +6,7 @@ from streamlit_drawable_canvas import st_canvas
 
 # Konfig strony
 st.set_page_config(
-    page_title="Matma3D: Bryły Klasa 6", page_icon="📐", layout="wide"
+    page_title="Matma3D: Bryły", page_icon="📐", layout="wide"
 )
 
 def wyswietl_sekcje_wsparcia():
@@ -208,7 +208,7 @@ with zakladka_pisz:
 
     
 # Treść
-st.title("🚀 Wizualne Bryły 3D dla Klasy 6")
+st.title("🚀 Wizualne Bryły 3D")
 
 # Prostopadłościan
 
